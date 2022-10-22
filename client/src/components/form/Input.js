@@ -20,7 +20,7 @@ const Input = ({
       type={type}
       placeholder={placeholder}
       id={name}
-      className={`w-full p-5 transition-all border rounded-xl ${
+      className={`w-full px-5 py-4 transition-all border rounded-lg ${
         error
           ? "border-errorColor bg-red-50"
           : "border-strock focus:border-primary"

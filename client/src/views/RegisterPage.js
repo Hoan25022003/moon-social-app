@@ -140,7 +140,11 @@ const RegisterPage = () => {
           </RadioGroup>
         </FormGroup>
         <div className="text-center">
-          <ButtonGradient type="submit" isLoading={isSubmitting}>
+          <ButtonGradient
+            className="w-[60%] py-[14px] text-[22px] leading-9 font-semibold"
+            type="submit"
+            isLoading={isSubmitting}
+          >
             Sign up
           </ButtonGradient>
           <p className="mt-3 text-sm font-normal">

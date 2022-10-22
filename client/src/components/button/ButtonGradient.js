@@ -8,16 +8,25 @@ const ButtonGradient = ({
   children,
   onClick = () => {},
   type = "button",
+  theme = 1,
   isLoading = false,
 }) => {
+  switch (theme) {
+    case 1:
+      className += " from-thirdColor to-primary";
+      break;
+
+    default:
+      break;
+  }
   return (
     <Button
       variant="contained"
       type={type}
       onClick={onClick}
-      className={`py-[14px] text-[22px] w-[60%] leading-9 font-semibold bg-gradient-to-r from-thirdColor to-primary rounded-xl duration-200 ${
+      className={`bg-gradient-to-r rounded-xl duration-200 ${className} ${
         isLoading && "pointer-events-none opacity-40"
-      } ${className}`}
+      }`}
     >
       {isLoading ? <LoadingSpin></LoadingSpin> : children}
     </Button>
@@ -30,6 +39,7 @@ ButtonGradient.propTypes = {
   type: PropTypes.oneOf(["button", "submit"]),
   isLoading: PropTypes.bool,
   onClick: PropTypes.func,
+  theme: PropTypes.number,
 };
 
 export default ButtonGradient;

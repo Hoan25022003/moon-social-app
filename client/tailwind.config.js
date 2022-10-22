@@ -18,7 +18,7 @@ module.exports = {
         darkRed: "#422C32",
         iconColor: "#A2A2A8",
         whiteSoft: "#FCFBFF",
-        graySoft: "#FCFCFC",
+        graySoft: "#E7E7E8",
         strock: "#ddd",
         lite: "#f9f9f9",
         text1: "#171725",

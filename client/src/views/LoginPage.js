@@ -70,7 +70,11 @@ const LoginPage = () => {
           )}
         </FormGroup>
         <div className="mt-8 text-center">
-          <ButtonGradient type="submit" isLoading={isSubmitting}>
+          <ButtonGradient
+            className="w-[60%] py-[14px] text-[22px] leading-9 font-semibold"
+            type="submit"
+            isLoading={isSubmitting}
+          >
             Sign In
           </ButtonGradient>
           <p className="mt-4 text-sm font-normal">
