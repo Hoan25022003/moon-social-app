@@ -16,6 +16,7 @@ const MenuPopper = ({ children }) => {
       placement="bottom-start"
       transition
       disablePortal
+      sx={{ zIndex: 50 }}
     >
       {({ TransitionProps, placement }) => (
         <Grow

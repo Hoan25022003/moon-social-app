@@ -10,12 +10,12 @@ import { NavLink } from "react-router-dom";
 const listNav = [
   {
     name: "Home",
-    url: "/",
+    url: "/home",
     icon: <HomeIcon></HomeIcon>,
   },
   {
-    name: "List friend",
-    url: "/list-friend",
+    name: "Friend",
+    url: "/friend",
     icon: <PeopleIcon></PeopleIcon>,
   },
   {
@@ -29,28 +29,32 @@ const listNav = [
     icon: <BookmarkIcon></BookmarkIcon>,
   },
   {
-    name: "Messages",
-    url: "/message",
+    name: "Moon Chat",
+    url: "/moon-chat",
     icon: <ChatIcon></ChatIcon>,
   },
   {
     name: "Watch",
-    url: "/",
+    url: "/watch",
     icon: <OndemandVideoIcon></OndemandVideoIcon>,
   },
 ];
 
 const HeaderNav = () => {
+  const navClass =
+    "flex items-center px-5 py-4 transition-colors rounded-full gap-x-3 text-text3 hover:bg-graySoft";
   return (
     <nav className="flex flex-col mt-10 gap-y-4">
       {listNav.map((nav) => (
         <NavLink
-          className="flex items-center px-5 py-4 transition-colors rounded-full gap-x-3 text-text3 hover:bg-graySoft"
+          className={({ isActive }) =>
+            isActive ? `${navClass} nav-active` : navClass
+          }
           to={nav.url}
           key={nav.name}
         >
           {nav.icon}
-          <span className="text-base leading-6 ">{nav.name}</span>
+          <span className="text-base leading-6 capitalize">{nav.name}</span>
         </NavLink>
       ))}
     </nav>

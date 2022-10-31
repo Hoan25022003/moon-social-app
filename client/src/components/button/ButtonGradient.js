@@ -16,6 +16,9 @@ const ButtonGradient = ({
       className += " from-thirdColor to-primary";
       break;
 
+    case 2:
+      className += " from-thirdColor to-secondary";
+      break;
     default:
       break;
   }

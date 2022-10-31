@@ -1,0 +1,22 @@
+// Customize Radio
+.MuiFormControlLabel-root {
+  .css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
+    @apply text-primary;
+  }
+}
+
+// Customize Switch
+.css-julti5-MuiSwitch-root {
+  .css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked {
+    @apply text-primary;
+  }
+  .css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked
+    + .MuiSwitch-track {
+    @apply bg-primary;
+  }
+}
+
+// Customize Menu
+.css-c58f4n-MuiButtonBase-root-MuiButton-root {
+  @apply p-1 min-w-0 text-graySoft h-10 w-10;
+}
