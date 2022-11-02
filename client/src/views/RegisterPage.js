@@ -141,7 +141,7 @@ const RegisterPage = () => {
         </FormGroup>
         <div className="text-center">
           <ButtonGradient
-            className="w-[60%] py-[14px] text-[22px] leading-9 font-semibold"
+            className="w-[60%] py-[14px] text-[22px] leading-9 font-semibold rounded-xl"
             type="submit"
             isLoading={isSubmitting}
           >

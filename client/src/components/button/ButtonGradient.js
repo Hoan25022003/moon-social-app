@@ -27,7 +27,7 @@ const ButtonGradient = ({
       variant="contained"
       type={type}
       onClick={onClick}
-      className={`bg-gradient-to-r rounded-xl duration-200 ${className} ${
+      className={`bg-gradient-to-r duration-200 ${className} select-none transition-all ${
         isLoading && "pointer-events-none opacity-40"
       }`}
     >

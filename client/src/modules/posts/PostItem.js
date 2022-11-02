@@ -13,7 +13,7 @@ import PostTheme from "./parts/PostTheme";
 const PostItem = ({ type = "theme" }) => {
   const [like, setLike] = useToggle(false);
   return (
-    <div className="flex flex-col px-4 rounded-lg bg-whiteSoft">
+    <div className="flex flex-col px-4 rounded-xl bg-whiteSoft">
       <div className="flex items-start justify-between mt-5 mb-3">
         <PostMeta
           avatar="https://images.unsplash.com/photo-1667114790847-7653bc249e82?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"

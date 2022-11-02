@@ -1,5 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
+import "swiper/scss";
+import "swiper/scss/navigation";
 
 const LoginPage = lazy(() => import("./views/LoginPage"));
 const RegisterPage = lazy(() => import("./views/RegisterPage"));

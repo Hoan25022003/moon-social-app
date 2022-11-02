@@ -7,7 +7,6 @@ import MenuNavItem from "components/menu/MenuNavItem";
 
 const HomeContact = () => {
   const { value: query, handleChange } = useChangeValue();
-  console.log(query);
   return (
     <div>
       <Search onChange={handleChange}></Search>

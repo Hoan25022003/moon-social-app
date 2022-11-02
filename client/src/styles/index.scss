@@ -8,8 +8,9 @@
   body {
     @apply font-body text-text1 bg-lite;
   }
-  input {
-    @apply outline-none placeholder:text-text4 placeholder:dark:text-text2;
+  input,
+  textarea {
+    @apply outline-none resize-none placeholder:font-normal placeholder:text-text4 placeholder:dark:text-text2;
   }
 }
 
@@ -17,7 +18,7 @@
   .scroll-custom {
     /* width */
     &::-webkit-scrollbar {
-      width: 10px;
+      width: 8px;
     }
 
     /* Track */
@@ -27,12 +28,13 @@
 
     /* Handle */
     &::-webkit-scrollbar-thumb {
-      @apply bg-iconColor rounded-lg;
+      @apply bg-iconColor bg-opacity-50 rounded-lg;
     }
 
     /* Handle on hover */
     &::-webkit-scrollbar-thumb:hover {
-      background: #888;
+      background-color: #888;
+      @apply bg-opacity-50;
     }
   }
 
@@ -68,6 +70,10 @@
     }
   }
 
+  .theme-active {
+    @apply opacity-60 border-[3px] border-primary pointer-events-none;
+  }
+
   .nav-active {
     @apply relative pointer-events-none;
     &::before {
@@ -84,6 +90,39 @@
         opacity: 1;
         width: 100%;
       }
+    }
+  }
+
+  .show-modal {
+    animation: showModal linear 0.25s;
+    @keyframes showModal {
+      from {
+        opacity: 0.3;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+}
+
+.swiper {
+  &-slide {
+    @apply select-none;
+  }
+  &-button-prev {
+    left: 2px;
+  }
+  &-button-next {
+    right: 2px;
+  }
+  &-button-prev,
+  &-button-next {
+    @apply text-text2 bg-white bg-opacity-60 h-[27px] translate-y-2 rounded-full;
+    &::after {
+      font-size: 14px;
     }
   }
 }

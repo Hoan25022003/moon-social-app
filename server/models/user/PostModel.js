@@ -4,7 +4,7 @@ const PostSchema = mongoose.Schema(
   {
     title: String,
     listImg: [{ type: String }],
-    theme: String,
+    theme: String || Object,
     content: String,
     listHeart: [
       {

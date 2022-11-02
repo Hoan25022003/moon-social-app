@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { theme } from "utils/constant";
+import { colorGradient } from "utils/constant";
 
 const Authentication = ({ children, heading }) => {
   return (
@@ -16,7 +16,7 @@ const Authentication = ({ children, heading }) => {
           <div
             className="mx-auto w-[600px] h-[600px] rounded-full"
             style={{
-              background: theme.linearPrimary,
+              background: colorGradient.linearPrimary,
             }}
           >
             <div className="relative flex items-center justify-center w-full h-full">

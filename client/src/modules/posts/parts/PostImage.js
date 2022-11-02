@@ -11,7 +11,7 @@ const PostImage = ({ src = "" }) => {
       />
       <div className="absolute inset-0 transition-all duration-300 bg-white bg-opacity-0 group-hover:bg-opacity-50"></div>
       <div className="absolute -bottom-full group-hover:bottom-10 duration-300 transition-all left-1/2 w-[40%] -translate-x-2/4">
-        <ButtonGradient className="w-full py-5 font-bold">
+        <ButtonGradient className="w-full py-5 font-bold rounded-xl">
           See More (+22)
         </ButtonGradient>
       </div>
