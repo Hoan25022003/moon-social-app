@@ -31,7 +31,7 @@ const ButtonGradient = ({
         isLoading && "pointer-events-none opacity-40"
       }`}
     >
-      {isLoading ? <LoadingSpin></LoadingSpin> : children}
+      {isLoading ? <LoadingSpin className="w-9 h-9"></LoadingSpin> : children}
     </Button>
   );
 };

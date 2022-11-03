@@ -37,21 +37,25 @@ const PostItem = ({ type = "theme" }) => {
       <div className="py-3 ">
         <div className="flex items-center gap-x-10">
           <PostStatus
-            hoverColor="group-hover:bg-heartColor"
+            hoverColor="group-hover:bg-heartColor group-hover:text-heartColor"
             quantity={3000}
-            className={like ? "text-heartColor " : "hover:text-heartColor"}
+            textColor={
+              like
+                ? "text-heartColor"
+                : "group-hover:text-heartColor transition-colors"
+            }
             onClick={setLike}
             title={like ? "Unlike" : "Like"}
           >
             {like ? (
-              <FavoriteIcon className="text-xl text-heartColor"></FavoriteIcon>
+              <FavoriteIcon className="text-xl text-heartColor heart-active"></FavoriteIcon>
             ) : (
-              <FavoriteBorderIcon className="text-xl"></FavoriteBorderIcon>
+              <FavoriteBorderIcon className="text-xl heart-active"></FavoriteBorderIcon>
             )}
           </PostStatus>
           <PostStatus
-            hoverColor="group-hover:bg-thirdColor"
-            className="hover:text-thirdColor"
+            hoverColor="group-hover:bg-thirdColor group-hover:text-thirdColor"
+            textColor="group-hover:text-thirdColor"
             quantity={400}
             title="Comment"
           >

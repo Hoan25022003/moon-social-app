@@ -1,8 +1,10 @@
 import React from "react";
 
-const LoadingSpin = () => {
+const LoadingSpin = ({ className }) => {
   return (
-    <div className="relative flex items-center justify-center lds-ring w-9 h-9">
+    <div
+      className={`relative flex items-center justify-center lds-ring ${className}`}
+    >
       <div></div>
       <div></div>
       <div></div>

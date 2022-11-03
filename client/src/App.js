@@ -21,7 +21,7 @@ function App() {
           <Route path="/home" element={<HomePage></HomePage>}></Route>
           <Route path="/group" element={<GroupPage></GroupPage>}></Route>
           <Route
-            path="/profile"
+            path="/profile/:id"
             element={<PersonalPage></PersonalPage>}
           ></Route>
         </Route>

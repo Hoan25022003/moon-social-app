@@ -8,9 +8,9 @@ import PostItem from "modules/posts/PostItem";
 
 const HomePage = () => {
   return (
-    <div>
+    <div className="py-5">
       <HomeFeature></HomeFeature>
-      <div className="flex flex-col mt-4 gap-y-5">
+      <div className="flex flex-col mt-4 gap-y-4">
         <PostItem></PostItem>
         {/* <LoadingSkeleton></LoadingSkeleton> */}
       </div>

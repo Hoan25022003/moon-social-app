@@ -3,7 +3,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import PeopleIcon from "@mui/icons-material/People";
 import GroupsIcon from "@mui/icons-material/Groups";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import OndemandVideoIcon from "@mui/icons-material/OndemandVideo";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import ChatIcon from "@mui/icons-material/Chat";
 import { NavLink } from "react-router-dom";
 
@@ -29,14 +29,14 @@ const listNav = [
     icon: <BookmarkIcon></BookmarkIcon>,
   },
   {
-    name: "Moon Chat",
-    url: "/moon-chat",
+    name: "Message",
+    url: "/message",
     icon: <ChatIcon></ChatIcon>,
   },
   {
-    name: "Watch",
-    url: "/watch",
-    icon: <OndemandVideoIcon></OndemandVideoIcon>,
+    name: "Notification",
+    url: "/notify",
+    icon: <NotificationsIcon></NotificationsIcon>,
   },
 ];
 

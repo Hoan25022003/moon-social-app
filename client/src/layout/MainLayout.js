@@ -8,9 +8,6 @@ import HomeContact from "modules/home/HomeContact";
 const MainLayout = () => {
   function rightElement(path) {
     switch (true) {
-      case path.includes("profile"):
-        return <div>Welcome to my account</div>;
-
       case path.includes("message"):
         return <div>This is chat message</div>;
 
@@ -21,7 +18,7 @@ const MainLayout = () => {
   const url = window.location.href;
   if (!url) return;
   return (
-    <div className="max-w-[1200px] mx-auto h-[300vh]">
+    <div className="max-w-[1200px] mx-auto">
       <div className="fixed top-0 flex items-start justify-between w-[1200px] gap-x-8">
         <div className="h-[100vh] flex-[1] flex flex-col justify-between z-50 py-8">
           <div>
@@ -47,7 +44,7 @@ const MainLayout = () => {
       </div>
       <div className="flex items-start gap-x-8">
         <div className="flex-1"></div>
-        <div className="flex-[2.5] z-50 pt-5">
+        <div className="flex-[2.5] z-50 ">
           <Outlet></Outlet>
         </div>
         <div className="flex-[1.5]"></div>

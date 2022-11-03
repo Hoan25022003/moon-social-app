@@ -13,7 +13,7 @@ const FiendSchema = mongoose.Schema({
       },
       status: {
         type: Number,
-        default: 2,
+        default: 3,
       },
       isSender: Boolean,
     },

@@ -7,11 +7,11 @@ const PostStatus = ({
   children,
   onClick = () => {},
   title,
-  className = "",
+  textColor = "",
 }) => {
   return (
     <div
-      className={`flex items-center cursor-pointer group gap-x-2 select-none text-text3 ${className}`}
+      className={`flex items-center cursor-pointer group gap-x-2 select-none text-text3`}
       title={title}
       onClick={onClick}
     >
@@ -20,7 +20,7 @@ const PostStatus = ({
       >
         {children}
       </div>
-      <span className="text-sm">{quantity}</span>
+      <span className={`text-sm ${textColor}`}>{quantity}</span>
     </div>
   );
 };
