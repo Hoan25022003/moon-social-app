@@ -1,10 +1,10 @@
 import { debounce } from "lodash";
 import { useState } from "react";
 
-export default function useChangeValue(init = "") {
+export default function useChangeValue(init = "", timer = 500) {
   const [value, setValue] = useState(init);
   const handleChange = debounce((e) => {
     setValue(e.target.value);
-  }, 500);
+  }, timer);
   return { value, handleChange };
 }

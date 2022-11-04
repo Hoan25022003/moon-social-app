@@ -59,7 +59,7 @@ const HeaderDarkMode = () => {
 
   return (
     <div className="flex items-center mb-4 gap-x-3">
-      <span>Dark/Light :</span>
+      <span>Dark Mode</span>
       <FormControlLabel
         control={<MaterialUISwitch sx={{ m: 1 }} checked={checked} />}
         onChange={handleChange}

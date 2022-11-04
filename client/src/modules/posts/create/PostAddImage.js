@@ -2,7 +2,7 @@ import ButtonGradient from "components/button/ButtonGradient";
 import ImageUpload from "components/upload/ImageUpload";
 import React from "react";
 import { useForm } from "react-hook-form";
-import TextareaAutosize from "react-textarea-autosize";
+import TextareaAutosize from "@mui/material/TextareaAutosize";
 
 const PostAddImage = () => {
   const {
@@ -23,8 +23,10 @@ const PostAddImage = () => {
   return (
     <form onSubmit={handleSubmit(handlePostImage)} className="mt-3 select-none">
       <TextareaAutosize
-        className="w-full overflow-auto scroll-custom text-base font-normal max-h-[300px] mb-8"
+        aria-label="empty textarea"
+        maxRows={8}
         placeholder="Hi Hoan, what are you thinking?"
+        className="w-full mb-8 overflow-auto text-base font-normal scroll-custom"
         {...register("content")}
       />
       <ImageUpload

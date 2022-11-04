@@ -1,27 +1,42 @@
-import { Avatar } from "@mui/material";
 import React from "react";
+import { useSearchParams } from "react-router-dom";
+import { Avatar } from "@mui/material";
 import BackPage from "components/common/BackPage";
 import ProfileFeature from "modules/profile/ProfileFeature";
 import ProfileGeneral from "modules/profile/ProfileGeneral";
 import TextHeading from "components/text/TextHeading";
 import TextLight from "components/text/TextLight";
+import ProfileTabList from "modules/profile/ProfileTabList";
+import PictureCover from "components/picture/PictureCover";
+import ProfileAbout from "modules/profile/tabs/ProfileAbout";
+import ProfilePost from "modules/profile/tabs/ProfilePost";
+import ProfileFriend from "modules/profile/tabs/ProfileFriend";
+import ProfileLike from "modules/profile/tabs/ProfileLike";
 
 const PersonalPage = () => {
-  // const { id } = useParams();
+  const listTab = ["about", "posts", "friends", "likes"];
+  const [switchTab, setSwitchTab] = React.useState(0);
+  const [searchParams, setSearchParams] = useSearchParams("");
+  const tabName = searchParams.get("tab");
+  React.useEffect(() => {
+    if (tabName === "about") {
+      searchParams.delete("tab");
+      setSearchParams(searchParams);
+    }
+    setSwitchTab((turn) => turn - 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabName]);
+
   return (
     <div className="border-x border-graySoft">
-      <BackPage>
+      <BackPage turnSwitchTab={switchTab}>
         <div className="flex flex-col">
-          <h3 className="text-lg font-bold">Hoan Do</h3>
+          <h4 className="text-lg font-bold">Hoan Do</h4>
           <p className="text-[13px] font-normal text-text4">12 posts</p>
         </div>
       </BackPage>
       <div className="relative">
-        <img
-          src="https://pbs.twimg.com/profile_banners/998963083816022017/1527006522/1080x360"
-          className="w-full h-[250px] object-cover cursor-pointer"
-          alt=""
-        />
+        <PictureCover src="https://pbs.twimg.com/profile_banners/998963083816022017/1527006522/1080x360" />
         <div className="absolute bottom-0 p-1 bg-white rounded-full cursor-pointer left-5 translate-y-2/4">
           <Avatar
             alt="Remy Sharp"
@@ -38,8 +53,27 @@ const PersonalPage = () => {
           <ProfileGeneral></ProfileGeneral>
         </div>
       </div>
+      <ProfileTabList listTab={listTab} setSearchParams={setSearchParams}>
+        <ProfileTabItem tabName={tabName}></ProfileTabItem>
+      </ProfileTabList>
     </div>
   );
+};
+
+const ProfileTabItem = ({ tabName }) => {
+  switch (tabName) {
+    case "posts":
+      return <ProfilePost></ProfilePost>;
+
+    case "friends":
+      return <ProfileFriend></ProfileFriend>;
+
+    case "likes":
+      return <ProfileLike></ProfileLike>;
+
+    default:
+      return <ProfileAbout></ProfileAbout>;
+  }
 };
 
 export default PersonalPage;

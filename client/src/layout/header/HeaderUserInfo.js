@@ -26,12 +26,8 @@ const HeaderUserInfo = ({
         </div>
       </Link>
       <div>
-        <MenuNav>
-          <MenuNavItem
-            handleExtra={() => {
-              navigate({ url });
-            }}
-          >
+        <MenuNav styleCoordinate="translate3d(110px, -74.4px, 0px)">
+          <MenuNavItem handleExtra={() => navigate(url)}>
             My Account
           </MenuNavItem>
           <MenuNavItem handleExtra={handleSignOut}>Log Out</MenuNavItem>

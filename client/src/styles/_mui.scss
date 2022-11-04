@@ -24,3 +24,16 @@
 .css-c58f4n-MuiButtonBase-root-MuiButton-root {
   @apply p-1 min-w-0 text-graySoft h-10 w-10;
 }
+
+// Customize Tabs
+.css-1ujnqem-MuiTabs-root {
+  .css-11yukd5-MuiTabs-indicator {
+    @apply bg-primary h-[3px] rounded-xl;
+  }
+  .css-1a4cg4j-MuiButtonBase-root-MuiTab-root {
+    @apply text-text3 capitalize flex-1 hover:bg-graySoft transition-all font-body;
+    &.Mui-selected {
+      @apply text-primary pointer-events-none;
+    }
+  }
+}

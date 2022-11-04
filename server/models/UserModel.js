@@ -10,7 +10,7 @@ const UserSchema = mongoose.Schema(
       type: String,
       enum: ["male", "female"],
     },
-    address: String,
+    detailInfo: Object,
     listSaved: [
       {
         type: String,

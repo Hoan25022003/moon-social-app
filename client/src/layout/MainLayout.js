@@ -44,7 +44,7 @@ const MainLayout = () => {
       </div>
       <div className="flex items-start gap-x-8">
         <div className="flex-1"></div>
-        <div className="flex-[2.5] z-50 ">
+        <div className="flex-[2.5] z-10">
           <Outlet></Outlet>
         </div>
         <div className="flex-[1.5]"></div>

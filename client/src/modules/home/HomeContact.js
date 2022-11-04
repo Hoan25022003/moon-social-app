@@ -6,9 +6,11 @@ import MenuNav from "components/menu/MenuNav";
 import MenuNavItem from "components/menu/MenuNavItem";
 import TextHeading from "components/text/TextHeading";
 import TextUsername from "components/text/TextUsername";
+import { useNavigate } from "react-router-dom";
 
 const HomeContact = () => {
   const { value: query, handleChange } = useChangeValue();
+  const navigate = useNavigate();
   return (
     <div>
       <Search onChange={handleChange}></Search>
@@ -39,7 +41,9 @@ const HomeContact = () => {
               <TextUsername>Huy Do</TextUsername>
             </div>
             <MenuNav>
-              <MenuNavItem>View info</MenuNavItem>
+              <MenuNavItem handleExtra={() => navigate("/profile/123456")}>
+                View info
+              </MenuNavItem>
               <MenuNavItem>Send message</MenuNavItem>
             </MenuNav>
           </div>

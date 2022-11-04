@@ -6,7 +6,7 @@ import Popper from "@mui/material/Popper";
 import MenuList from "@mui/material/MenuList";
 import { useMenuNav } from "./menuContext";
 
-const MenuPopper = ({ children }) => {
+const MenuPopper = ({ children, styleCoordinate = "" }) => {
   const { open, anchorRef, handleClose, handleListKeyDown } = useMenuNav();
   return (
     <Popper
@@ -16,7 +16,7 @@ const MenuPopper = ({ children }) => {
       placement="bottom-start"
       transition
       disablePortal
-      sx={{ zIndex: 50 }}
+      sx={{ transform: styleCoordinate + "!important", zIndex: 50 }}
     >
       {({ TransitionProps, placement }) => (
         <Grow

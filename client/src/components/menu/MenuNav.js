@@ -7,7 +7,7 @@ const MenuNav = ({ children, ...props }) => {
   return (
     <MenuProvider>
       <ButtonMenu></ButtonMenu>
-      <MenuPopper>{children}</MenuPopper>
+      <MenuPopper {...props}>{children}</MenuPopper>
     </MenuProvider>
   );
 };
