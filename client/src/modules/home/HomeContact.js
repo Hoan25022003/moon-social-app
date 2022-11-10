@@ -2,8 +2,6 @@ import { Avatar } from "@mui/material";
 import Search from "components/search/Search";
 import useChangeValue from "hooks/useChangeValue";
 import React from "react";
-import MenuNav from "components/menu/MenuNav";
-import MenuNavItem from "components/menu/MenuNavItem";
 import TextHeading from "components/text/TextHeading";
 import TextUsername from "components/text/TextUsername";
 import { useNavigate } from "react-router-dom";
@@ -26,10 +24,6 @@ const HomeContact = () => {
               />
               <span className="text-[15px] font-semibold">Hoan Do</span>
             </div>
-            <MenuNav>
-              <MenuNavItem>View info</MenuNavItem>
-              <MenuNavItem>Send message</MenuNavItem>
-            </MenuNav>
           </div>
           <div className="flex items-center justify-between px-4 py-3 transition-all cursor-pointer hover:bg-graySoft">
             <div className="flex items-center gap-x-3">
@@ -40,12 +34,6 @@ const HomeContact = () => {
               />
               <TextUsername>Huy Do</TextUsername>
             </div>
-            <MenuNav>
-              <MenuNavItem handleExtra={() => navigate("/profile/123456")}>
-                View info
-              </MenuNavItem>
-              <MenuNavItem>Send message</MenuNavItem>
-            </MenuNav>
           </div>
         </div>
       </div>

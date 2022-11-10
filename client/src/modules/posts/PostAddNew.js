@@ -21,7 +21,7 @@ const SelectPostType = ({ type }) => {
 const PostAddNew = ({ handleHideModal, type }) => {
   return (
     <Overlay handleHideModal={handleHideModal}>
-      <div className=" w-[550px] mx-auto bg-white z-50 rounded-xl show-modal">
+      <div className="w-[550px] mx-auto bg-white z-50 rounded-xl show-modal">
         <ModalHeading handleHideModal={handleHideModal}>
           Create new post
         </ModalHeading>

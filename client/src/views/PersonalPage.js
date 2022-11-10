@@ -1,6 +1,5 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
-import { Avatar } from "@mui/material";
 import BackPage from "components/common/BackPage";
 import ProfileFeature from "modules/profile/ProfileFeature";
 import ProfileGeneral from "modules/profile/ProfileGeneral";
@@ -12,6 +11,7 @@ import ProfileAbout from "modules/profile/tabs/ProfileAbout";
 import ProfilePost from "modules/profile/tabs/ProfilePost";
 import ProfileFriend from "modules/profile/tabs/ProfileFriend";
 import ProfileLike from "modules/profile/tabs/ProfileLike";
+import PictureAvatarBig from "components/picture/PictureAvatarBig";
 
 const PersonalPage = () => {
   const listTab = ["about", "posts", "friends", "likes"];
@@ -37,13 +37,10 @@ const PersonalPage = () => {
       </BackPage>
       <div className="relative">
         <PictureCover src="https://pbs.twimg.com/profile_banners/998963083816022017/1527006522/1080x360" />
-        <div className="absolute bottom-0 p-1 bg-white rounded-full cursor-pointer left-5 translate-y-2/4">
-          <Avatar
-            alt="Remy Sharp"
-            src="https://images.unsplash.com/photo-1667114790847-7653bc249e82?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
-            sx={{ width: 130, height: 130 }}
-          />
-        </div>
+        <PictureAvatarBig
+          avatar="https://images.unsplash.com/photo-1667114790847-7653bc249e82?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
+          alt="Hoan Do"
+        />
       </div>
       <div className="px-5">
         <ProfileFeature></ProfileFeature>

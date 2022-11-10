@@ -8,8 +8,9 @@ const RegisterPage = lazy(() => import("./views/RegisterPage"));
 const HomePage = lazy(() => import("./views/HomePage"));
 const MainLayout = lazy(() => import("./layout/MainLayout"));
 const PersonalPage = lazy(() => import("./views/PersonalPage"));
-const NotFoundPage = lazy(() => import("./views/NotFoundPage"));
 const GroupPage = lazy(() => import("./views/GroupPage"));
+const FriendPage = lazy(() => import("./views/FriendPage"));
+const NotFoundPage = lazy(() => import("./views/NotFoundPage"));
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
         <Route path="/register" element={<RegisterPage></RegisterPage>}></Route>
         <Route element={<MainLayout></MainLayout>}>
           <Route path="/home" element={<HomePage></HomePage>}></Route>
-          <Route path="/group" element={<GroupPage></GroupPage>}></Route>
+          <Route path="/friends" element={<FriendPage></FriendPage>}></Route>
+          <Route path="/groups" element={<GroupPage></GroupPage>}></Route>
           <Route
             path="/profile/:id"
             element={<PersonalPage></PersonalPage>}

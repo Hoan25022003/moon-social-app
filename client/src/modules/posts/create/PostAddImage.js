@@ -1,5 +1,5 @@
 import ButtonGradient from "components/button/ButtonGradient";
-import ImageUpload from "components/upload/ImageUpload";
+import PictureUpload from "components/picture/PictureUpload";
 import React from "react";
 import { useForm } from "react-hook-form";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
@@ -29,14 +29,14 @@ const PostAddImage = () => {
         className="w-full mb-8 overflow-auto text-base font-normal scroll-custom"
         {...register("content")}
       />
-      <ImageUpload
+      <PictureUpload
         className="h-[200px] flex flex-col justify-center bg-whiteSoft items-center rounded-lg hover:bg-graySoft"
         name="image"
         control={control}
       >
         <img src="/img/picture.png" className="mb-3 w-14 h-14" alt="" />
         <h3 className="text-text3">Click to select image</h3>
-      </ImageUpload>
+      </PictureUpload>
       <ButtonGradient
         type="submit"
         isLoading={isSubmitting}

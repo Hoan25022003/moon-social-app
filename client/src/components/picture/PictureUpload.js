@@ -1,7 +1,7 @@
 import React from "react";
 import { useController } from "react-hook-form";
 
-const ImageUpload = ({ children, className, control, name, ...props }) => {
+const PictureUpload = ({ children, className, control, name, ...props }) => {
   const { field } = useController({
     control,
     name,
@@ -14,4 +14,4 @@ const ImageUpload = ({ children, className, control, name, ...props }) => {
   );
 };
 
-export default ImageUpload;
+export default PictureUpload;

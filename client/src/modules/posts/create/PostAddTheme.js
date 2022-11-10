@@ -4,6 +4,7 @@ import { Navigation } from "swiper";
 import { listTheme } from "utils/constant";
 import ButtonGradient from "components/button/ButtonGradient";
 import { useForm } from "react-hook-form";
+import axios from "api/axios";
 
 const PostAddTheme = () => {
   const [selectTheme, setSelectTheme] = React.useState("default");
@@ -17,8 +18,12 @@ const PostAddTheme = () => {
       content: "",
     },
   });
-  const handleAddPost = (value) => {
-    console.log({ ...value, theme: selectTheme });
+  const handleAddPost = async (value) => {
+    await axios.post("/post/create-public", {
+      ...value,
+      theme: selectTheme,
+      type: "theme",
+    });
   };
   return (
     <form onSubmit={handleSubmit(handleAddPost)} className="mt-3">

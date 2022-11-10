@@ -4,6 +4,10 @@ const bcrypt = require("bcrypt");
 const path = require("path");
 const multer = require("multer");
 const UserModel = require("../models/UserModel");
+const {
+  handleRegister,
+  handleLogin,
+} = require("../controllers/userController");
 
 router.get("/", async (req, res) => {
   try {
@@ -14,18 +18,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/register", async (req, res) => {
-  try {
-    await UserModel.create({
-      firstName: req.body.first,
-      lastName: req.body.last,
-      email: req.body.email,
-      password: req.body.password,
-    });
-    res.status(200).json({ mess: "Successful" });
-  } catch (error) {
-    res.status(500).json({ mess: "Server error" });
-  }
-});
+router.post("/register", handleRegister);
+
+router.post("/login", handleLogin);
 
 module.exports = router;

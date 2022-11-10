@@ -9,6 +9,7 @@ import Input from "components/form/Input";
 import ErrorMessage from "components/form/ErrorMessage";
 import ButtonGradient from "components/button/ButtonGradient";
 import { Link } from "react-router-dom";
+import axios from "api/axios";
 
 const schema = yup.object({
   email: yup
@@ -24,13 +25,21 @@ const LoginPage = () => {
     control,
     formState: { isSubmitting, errors, isDirty },
     reset,
+    setError,
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
   });
-  const handleLogin = (values) => {
-    console.log(values);
-    reset({ email: "", password: "" });
+  const handleLogin = async (values) => {
+    try {
+      await axios.post("/auth/login", values);
+      reset({ email: "", password: "" });
+    } catch (error) {
+      if (error.response.status === 401) {
+        setError("password", { message: "Email or password is not correct" });
+        setError("email", { message: "" });
+      }
+    }
   };
   return (
     <Authentication heading="Log in">

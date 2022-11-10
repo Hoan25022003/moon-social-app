@@ -1,9 +1,9 @@
 import React from "react";
-import Authentication from "layout/Authentication";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import Authentication from "layout/Authentication";
 import FormGroup from "components/form/FormGroup";
 import Label from "components/form/Label";
 import Input from "components/form/Input";
@@ -12,6 +12,8 @@ import ErrorMessage from "components/form/ErrorMessage";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import AlertInfo from "components/common/AlertInfo";
+import axios from "api/axios";
 
 const schema = yup.object({
   firstName: yup
@@ -36,24 +38,38 @@ const schema = yup.object({
     ),
 });
 
+const initialValue = {
+  email: "",
+  firstName: "",
+  lastName: "",
+  password: "",
+  gender: "male",
+};
+
 const RegisterPage = () => {
+  // const [status, setStatus] = React.useState(null);
   const {
     handleSubmit,
     control,
-    watch,
     formState: { isSubmitting, errors, isDirty },
     reset,
     setValue,
+    setError,
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
-    defaultValues: {
-      gender: "male",
-    },
+    defaultValues: initialValue,
   });
-  const handleRegister = (values) => {
-    console.log(values);
-    reset({});
+  const [showAlert, setShowAlert] = React.useState(false);
+  const handleRegister = async (values) => {
+    try {
+      await axios.post("/auth/register", values);
+      setShowAlert(true);
+      reset(initialValue);
+    } catch (error) {
+      error.response.status === 401 &&
+        setError("email", { message: "This email already existed" });
+    }
   };
   return (
     <Authentication heading="Register">
@@ -155,6 +171,9 @@ const RegisterPage = () => {
           </p>
         </div>
       </form>
+      <AlertInfo open={showAlert} setOpen={setShowAlert}>
+        Register successful
+      </AlertInfo>
     </Authentication>
   );
 };

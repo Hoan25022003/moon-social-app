@@ -39,6 +39,10 @@
     }
   }
 
+  .scroll-hidden {
+    overflow-y: hidden;
+  }
+
   // Loading Spinner Btn
   .lds-ring {
     & div {

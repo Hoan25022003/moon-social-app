@@ -1,13 +1,16 @@
 import React from "react";
 
-const PictureCover = ({ src, onClick }) => {
+const PictureCover = ({ src, onClick, children }) => {
   return (
-    <img
-      src={src}
-      onClick={onClick}
-      className="w-full h-[250px] object-cover cursor-pointer"
-      alt=""
-    />
+    <>
+      {children}
+      <img
+        src={src}
+        onClick={onClick}
+        className="w-full h-[250px] object-cover cursor-pointer"
+        alt=""
+      />
+    </>
   );
 };
 

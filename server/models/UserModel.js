@@ -1,4 +1,4 @@
-const mongoose = require("./connectDB");
+const mongoose = require("../connectDB");
 
 const UserSchema = mongoose.Schema(
   {
@@ -10,6 +10,8 @@ const UserSchema = mongoose.Schema(
       type: String,
       enum: ["male", "female"],
     },
+    avatar: String,
+    coverImg: String,
     detailInfo: Object,
     listSaved: [
       {

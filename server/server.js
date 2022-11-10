@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/auth", require("./routes/userRoute"));
-// app.use("/api/posts", require("./routes/postRoute"));
+app.use("/api/post", require("./routes/postRoute"));
 
 const PORT = process.env.PORT || 8080;
 

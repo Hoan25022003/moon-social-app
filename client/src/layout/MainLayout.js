@@ -11,6 +11,9 @@ const MainLayout = () => {
       case path.includes("message"):
         return <div>This is chat message</div>;
 
+      case path.includes("friends"):
+        return <div>This is friends page</div>;
+
       default:
         return <HomeContact></HomeContact>;
     }

@@ -2,9 +2,8 @@ const mongoose = require("../connectDB");
 
 const PostSchema = mongoose.Schema(
   {
-    title: String,
+    theme: Object,
     listImg: [{ type: String }],
-    theme: String || Object,
     content: String,
     listHeart: [
       {
@@ -15,6 +14,7 @@ const PostSchema = mongoose.Schema(
     type: {
       type: String,
       enum: ["theme", "image", "video"],
+      required: true,
     },
     modeComment: { type: Boolean, default: true },
     linkVideo: String,
@@ -22,10 +22,14 @@ const PostSchema = mongoose.Schema(
       type: String,
       ref: "users",
     },
+    groupID: {
+      type: String,
+      ref: "groups",
+    },
   },
   { timestamps: true }
 );
 
-const PostUser = mongoose.model("user_posts", PostSchema);
+const PostModel = mongoose.model("posts", PostSchema);
 
-module.exports = PostUser;
+module.exports = PostModel;

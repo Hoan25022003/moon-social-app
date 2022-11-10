@@ -8,6 +8,7 @@ const Search = ({
   onChange = () => {},
   placeholder = "Search in here",
   isSuggested = true,
+  className = "text-[15px]",
 }) => {
   const [focus, setFocus] = React.useState(false);
   const { nodeRef } = useClickOut(focus, setFocus);
@@ -25,7 +26,7 @@ const Search = ({
           type="text"
           onChange={onChange}
           placeholder={placeholder}
-          className="flex-1 px-3 py-4 text-[15px] bg-transparent"
+          className={`flex-1 px-3 py-4 bg-transparent ${className}`}
           onFocus={() => setFocus(true)}
         />
       </label>

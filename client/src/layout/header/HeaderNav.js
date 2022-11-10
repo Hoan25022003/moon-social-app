@@ -15,7 +15,7 @@ const listNav = [
   },
   {
     name: "Friend",
-    url: "/friend",
+    url: "/friends",
     icon: <PeopleIcon></PeopleIcon>,
   },
   {

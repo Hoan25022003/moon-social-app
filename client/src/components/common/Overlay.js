@@ -1,10 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import useToggle from "hooks/useToggle";
 
-const Overlay = ({ children, handleHideModal }) => {
+const Overlay = ({ children, handleHideModal, alignCenter = false }) => {
   return (
-    <div className="fixed inset-0 z-50 h-[100vh] p-10">
+    <div
+      className={`fixed inset-0 z-[9999] max-h-[100vh] p-10 scroll-hidden ${
+        alignCenter && "flex items-center"
+      }`}
+    >
       <div
         className="absolute inset-0 bg-black bg-opacity-25 -z-10"
         onClick={handleHideModal}

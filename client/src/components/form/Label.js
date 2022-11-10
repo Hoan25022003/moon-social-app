@@ -15,7 +15,7 @@ const Label = ({ className = "", name = "", children }) => {
 Label.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string,
-  children: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default Label;

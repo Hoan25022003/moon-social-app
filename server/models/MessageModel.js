@@ -6,9 +6,9 @@ const MessageSchema = mongoose.Schema(
       type: String,
       ref: "users",
     },
-    chatId: {
+    chatID: {
       type: String,
-      ref: "user_chat",
+      ref: "chats",
     },
     content: {
       type: String,
@@ -19,6 +19,6 @@ const MessageSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const MessageUser = mongoose.model("user_message", MessageSchema);
+const MessageUser = mongoose.model("messages", MessageSchema);
 
 module.exports = MessageUser;

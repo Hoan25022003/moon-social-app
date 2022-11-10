@@ -2,18 +2,26 @@ const mongoose = require("../connectDB");
 
 const ChatSchema = mongoose.Schema(
   {
-    users: [
+    participant: [
       {
         type: String,
         ref: "users",
       },
     ],
+    friendID: {
+      type: String,
+      ref: "friends",
+    },
+    groupID: {
+      type: String,
+      ref: "groups",
+    },
     latestMessage: {
       type: String,
-      ref: "user_message",
+      ref: "messages",
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("user_chat", ChatSchema);
+module.exports = mongoose.model("chats", ChatSchema);

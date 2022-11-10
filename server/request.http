@@ -2,13 +2,25 @@ POST http://localhost:8080/api/auth/register
 Content-Type: application/json
 
 {
-    "first" : "Hoang",
-    "last": "Do",
-    "email" : "hoan@gmail.com",
-    "password": "2003"
+    "first" : "Do",
+    "last": "Hoan",
+    "email" : "hoan2003@gmail.com",
+    "password": "hoan"
 }
 
 ###
-GET http://localhost:8080/api/auth
+POST http://localhost:8080/api/post/create-public
 Content-Type: application/json
+
+{
+    "title": "I am M.Luffy",
+    "theme": {
+        "linkImg": "/img/theme-donut.png",
+        "textColor" : "black"
+    },
+    "content": "Who will become the king of pirates",
+    "authorID": "63663512aaf9e3ff171b94a5",
+    "listHeart": ["63663512aaf9e3ff171b94a5", "63667268cebfaa004252c670"],
+    "type" : "theme"
+}
 

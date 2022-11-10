@@ -10,12 +10,12 @@ const CommentSchema = mongoose.Schema(
     },
     postID: {
       type: String,
-      ref: "user_posts",
+      ref: "posts",
     },
   },
   { timestamps: true }
 );
 
-const CommentUser = mongoose.model("user_comments", CommentSchema);
+const CommentUser = mongoose.model("comments", CommentSchema);
 
 module.exports = CommentUser;
