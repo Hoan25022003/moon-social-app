@@ -10,6 +10,7 @@ const MainLayout = lazy(() => import("./layout/MainLayout"));
 const PersonalPage = lazy(() => import("./views/PersonalPage"));
 const GroupPage = lazy(() => import("./views/GroupPage"));
 const FriendPage = lazy(() => import("./views/FriendPage"));
+const FilterPage = lazy(() => import("./views/FilterPage"));
 const NotFoundPage = lazy(() => import("./views/NotFoundPage"));
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
             path="/profile/:id"
             element={<PersonalPage></PersonalPage>}
           ></Route>
+          <Route path="/search" element={<FilterPage></FilterPage>}></Route>
         </Route>
         <Route path="*" element={<NotFoundPage></NotFoundPage>}></Route>
       </Routes>

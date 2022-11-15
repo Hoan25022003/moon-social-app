@@ -9,9 +9,12 @@ import { useNavigate } from "react-router-dom";
 const HomeContact = () => {
   const { value: query, handleChange } = useChangeValue();
   const navigate = useNavigate();
+  const handleEnterKey = (e) => {
+    if (e.which === 13 && query) navigate("/search?q=" + query);
+  };
   return (
     <div>
-      <Search onChange={handleChange}></Search>
+      <Search onChange={handleChange} onKeyDown={handleEnterKey}></Search>
       <div className="mt-5 overflow-hidden rounded-xl bg-whiteSoft">
         <TextHeading className="p-4">User contact</TextHeading>
         <div className="flex flex-col">

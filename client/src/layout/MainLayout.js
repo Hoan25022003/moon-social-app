@@ -1,25 +1,12 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import HeaderNav from "./header/HeaderNav";
 import HeaderDarkMode from "./header/HeaderDarkMode";
 import HeaderUserInfo from "./header/HeaderUserInfo";
 import HomeContact from "modules/home/HomeContact";
 
 const MainLayout = () => {
-  function rightElement(path) {
-    switch (true) {
-      case path.includes("message"):
-        return <div>This is chat message</div>;
-
-      case path.includes("friends"):
-        return <div>This is friends page</div>;
-
-      default:
-        return <HomeContact></HomeContact>;
-    }
-  }
-  const url = window.location.href;
-  if (!url) return;
+  const location = useLocation();
   return (
     <div className="max-w-[1200px] mx-auto">
       <div className="fixed top-0 flex items-start justify-between w-[1200px] gap-x-8">
@@ -41,8 +28,8 @@ const MainLayout = () => {
           </div>
         </div>
         <div className="flex-[2.5]"></div>
-        <div className="flex-[1.5] z-50 overflow-auto h-[100vh] py-5 scroll-custom">
-          {rightElement(url)}
+        <div className="flex-[1.5] z-50 overflow-auto h-[100vh] py-4 scroll-custom">
+          <RightContainer path={location.pathname} />
         </div>
       </div>
       <div className="flex items-start gap-x-8">
@@ -54,6 +41,22 @@ const MainLayout = () => {
       </div>
     </div>
   );
+};
+
+const RightContainer = ({ path }) => {
+  switch (path) {
+    case "/message":
+      return <div>This is chat message</div>;
+
+    case "/friends":
+      return <div>This is friends page</div>;
+
+    case "/search":
+      return <div>This is search page</div>;
+
+    default:
+      return <HomeContact></HomeContact>;
+  }
 };
 
 export default MainLayout;

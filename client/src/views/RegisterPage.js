@@ -12,7 +12,7 @@ import ErrorMessage from "components/form/ErrorMessage";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import AlertInfo from "components/common/AlertInfo";
+import AlertInfo from "components/alert/AlertInfo";
 import axios from "api/axios";
 
 const schema = yup.object({

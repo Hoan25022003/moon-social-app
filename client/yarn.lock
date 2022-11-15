@@ -8896,6 +8896,11 @@
     "regenerator-runtime" "^0.13.9"
     "whatwg-fetch" "^3.6.2"
 
+"react-confirm@^0.2.3":
+  "integrity" "sha512-KYeBgEr88cuwrEozpOibwTWjX32tOVYQ4hKPSqlsDY+66EYeZjAhjhFRZB+TkfU9JcY23zfkLsZyShDqdtipjA=="
+  "resolved" "https://registry.npmjs.org/react-confirm/-/react-confirm-0.2.3.tgz"
+  "version" "0.2.3"
+
 "react-dev-utils@^12.0.1":
   "integrity" "sha512-84Ivxmr17KjUupyqzFode6xKhjwuEJDROWKJy/BthkL7Wn6NJ8h4WE6k/exAv6ImS+0oZLRRW5j/aINMHyeGeQ=="
   "resolved" "https://registry.npmjs.org/react-dev-utils/-/react-dev-utils-12.0.1.tgz"
@@ -10218,11 +10223,6 @@
     "csso" "^4.2.0"
     "picocolors" "^1.0.0"
     "stable" "^0.1.8"
-
-"sweetalert2@^11.4.17":
-  "integrity" "sha512-z0iQW5fDdvtoDNle3iHTKunsuNWgPaMifVu0GPtdguR0uVPrvg9gg9bnSQeJ4tx3C7FwJOEnRshxrs6fFItRvw=="
-  "resolved" "https://registry.npmjs.org/sweetalert2/-/sweetalert2-11.4.17.tgz"
-  "version" "11.4.17"
 
 "swiper@^8.4.4":
   "integrity" "sha512-jA/8BfOZwT8PqPSnMX0TENZYitXEhNa7ZSNj1Diqh5LZyUJoBQaZcqAiPQ/PIg1+IPaRn/V8ZYVb0nxHMh51yw=="

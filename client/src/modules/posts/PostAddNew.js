@@ -4,6 +4,7 @@ import PostMeta from "./parts/PostMeta";
 import ModalHeading from "components/modal/ModalHeading";
 import PostAddTheme from "./create/PostAddTheme";
 import PostAddImage from "./create/PostAddImage";
+import ModalLine from "components/modal/ModalLine";
 
 const SelectPostType = ({ type }) => {
   switch (type) {
@@ -25,7 +26,7 @@ const PostAddNew = ({ handleHideModal, type }) => {
         <ModalHeading handleHideModal={handleHideModal}>
           Create new post
         </ModalHeading>
-        <div className="h-[1px] w-full bg-whiteSoft2"></div>
+        <ModalLine />
         <div className="flex flex-col px-5 py-4">
           <PostMeta
             avatar="https://images.unsplash.com/photo-1667114790847-7653bc249e82?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"

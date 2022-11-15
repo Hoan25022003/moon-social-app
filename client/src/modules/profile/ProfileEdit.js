@@ -14,6 +14,7 @@ import Label from "components/form/Label";
 import Input from "components/form/Input";
 import { TextareaAutosize, MenuItem } from "@mui/material";
 import Dropdown from "components/dropdown/Dropdown";
+import ModalLine from "components/modal/ModalLine";
 
 const schema = yup.object({
   firstName: yup
@@ -50,7 +51,7 @@ const ProfileEdit = ({ handleHideModal }) => {
         <ModalHeading handleHideModal={handleHideModal}>
           Edit profile
         </ModalHeading>
-        <div className="h-[1px] w-full bg-whiteSoft2"></div>
+        <ModalLine />
         <form onSubmit={handleSubmit(handleEditProfile)}>
           <div className="max-h-[500px] overflow-auto">
             <div className="relative">

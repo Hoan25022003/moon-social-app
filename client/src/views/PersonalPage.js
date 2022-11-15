@@ -1,5 +1,4 @@
 import React from "react";
-import { useSearchParams } from "react-router-dom";
 import BackPage from "components/common/BackPage";
 import ProfileFeature from "modules/profile/ProfileFeature";
 import ProfileGeneral from "modules/profile/ProfileGeneral";
@@ -12,21 +11,11 @@ import ProfilePost from "modules/profile/tabs/ProfilePost";
 import ProfileFriend from "modules/profile/tabs/ProfileFriend";
 import ProfileLike from "modules/profile/tabs/ProfileLike";
 import PictureAvatarBig from "components/picture/PictureAvatarBig";
+import useTurnSwitch from "hooks/useTurnSwitch";
 
 const PersonalPage = () => {
   const listTab = ["about", "posts", "friends", "likes"];
-  const [switchTab, setSwitchTab] = React.useState(0);
-  const [searchParams, setSearchParams] = useSearchParams("");
-  const tabName = searchParams.get("tab");
-  React.useEffect(() => {
-    if (tabName === "about") {
-      searchParams.delete("tab");
-      setSearchParams(searchParams);
-    }
-    setSwitchTab((turn) => turn - 1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabName]);
-
+  const { keyName: tabName, switchTab, setSearchParams } = useTurnSwitch("tab");
   return (
     <div className="border-x border-graySoft">
       <BackPage turnSwitchTab={switchTab}>

@@ -15,7 +15,7 @@ const ProfileFeature = ({ status = 1 }) => {
       <div className="flex items-center justify-end py-3 gap-x-3">
         <Tooltip title="Copy link to profile">
           <IconButton
-            className="hover:bg-graySoft border-strock"
+            className="hover:bg-graySoft border-graySoft"
             aria-label="copy link"
             onClick={() => {
               navigator.clipboard.writeText(window.location.href);
