@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import useToggle from "hooks/useToggle";
 import PostAddNew from "modules/posts/PostAddNew";
 
-const HomeFeature = ({
+const PostFeature = ({
   avatar = "https://images.unsplash.com/photo-1666679639559-fdb2162b3cbd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80",
   username = "Hoan",
   linkInfo,
@@ -59,10 +59,10 @@ const HomeFeature = ({
   );
 };
 
-HomeFeature.propTypes = {
+PostFeature.propTypes = {
   avatar: PropTypes.string,
   username: PropTypes.string,
   linkInfo: PropTypes.string,
 };
 
-export default HomeFeature;
+export default PostFeature;

@@ -50,7 +50,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const HeaderDarkMode = () => {
+const SideDarkMode = () => {
   const [checked, setChecked] = React.useState(false);
 
   const handleChange = (event) => {
@@ -73,4 +73,4 @@ const HeaderDarkMode = () => {
   );
 };
 
-export default HeaderDarkMode;
+export default SideDarkMode;

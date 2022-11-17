@@ -1,11 +1,11 @@
 import React from "react";
-import HomeFeature from "modules/home/HomeFeature";
+import PostFeature from "modules/posts/PostFeature";
 import PostItem from "modules/posts/PostItem";
 
 const HomePage = () => {
   return (
     <div className="py-4">
-      <HomeFeature></HomeFeature>
+      <PostFeature></PostFeature>
       <div className="flex flex-col mt-4 gap-y-4">
         <PostItem></PostItem>
       </div>

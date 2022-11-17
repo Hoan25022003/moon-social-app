@@ -9,6 +9,21 @@
   }
 }
 
+.css-vqmohf-MuiButtonBase-root-MuiRadio-root {
+  &.Mui-checked {
+    color: #0072ff !important;
+  }
+  // .css-hyxlzm {
+  //   @apply items-center justify-center;
+  // }
+  .css-1hbvpl3-MuiSvgIcon-root {
+    @apply w-5 h-5;
+  }
+  .css-11zohuh-MuiSvgIcon-root {
+    @apply w-5 h-5;
+  }
+}
+
 // Customize Switch
 .css-julti5-MuiSwitch-root {
   .css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked {
@@ -57,5 +72,12 @@
   .css-1t1j96h-MuiPaper-root-MuiDialog-paper {
     width: 400px;
     max-width: 450px;
+  }
+}
+
+// Custom Table
+.css-gh8rj1-MuiTable-root {
+  .css-1ex1afd-MuiTableCell-root {
+    @apply py-3;
   }
 }

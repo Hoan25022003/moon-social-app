@@ -1,35 +1,34 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import BackPage from "components/common/BackPage";
-import Search from "components/search/Search";
 import TextHeading from "components/text/TextHeading";
-import useChangeValue from "hooks/useChangeValue";
 import useTurnSwitch from "hooks/useTurnSwitch";
 import FriendItem from "modules/friends/FriendItem";
 import FriendList from "modules/friends/FriendList";
 import PostItem from "modules/posts/PostItem";
+import EmptyLayout from "layout/EmptyLayout";
 
 const FilterPage = () => {
-  const { value: query, handleChange } = useChangeValue("");
   const { switchTab, keyName } = useTurnSwitch("q");
-  const navigate = useNavigate();
-  const handleEnterKey = (e) => {
-    if (e.which === 13 && query) navigate("/search?q=" + query);
-  };
+  const [searchParams, setSearchParams] = useSearchParams("");
+  console.log(searchParams.get("list") || "all");
   return (
     <div className="border-b border-x border-graySoft">
       <BackPage turnSwitchTab={switchTab}>
-        <div className="flex-1 py-1">
-          <Search
-            placeholder="Search in here"
-            className="py-[14px] text-sm"
-            onChange={handleChange}
-            // value={keyName || ""}
-            onKeyDown={handleEnterKey}
-          ></Search>
+        <div className="flex flex-col">
+          <h4 className="text-lg font-bold">Search</h4>
+          <p className="text-[13px] font-normal text-text4">
+            Have 4 result for "{keyName}"
+          </p>
         </div>
       </BackPage>
-      <div className="flex flex-col px-5 py-4 gap-y-6">
+      <EmptyLayout
+        className="py-10"
+        linkImg="/img/searching.png"
+        info="No results found for this keyword"
+        support="Please try again later !"
+      ></EmptyLayout>
+      {/* <div className="flex flex-col px-5 py-4 gap-y-6">
         <div>
           <TextHeading className="mb-3">People</TextHeading>
           <FriendList>
@@ -55,7 +54,7 @@ const FilterPage = () => {
             <PostItem type="image"></PostItem>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

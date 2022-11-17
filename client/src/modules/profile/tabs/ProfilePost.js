@@ -1,12 +1,12 @@
 import React from "react";
-import HomeFeature from "modules/home/HomeFeature";
+import PostFeature from "modules/posts/PostFeature";
 import PostItem from "modules/posts/PostItem";
 import PostSkeleton from "components/skeleton/PostSkeleton";
 
 const ProfilePost = () => {
   return (
     <div className="flex flex-col px-3 my-3 gap-y-3">
-      <HomeFeature linkInfo="/profile/123456"></HomeFeature>
+      <PostFeature linkInfo="/profile/123456"></PostFeature>
       <PostItem type="image"></PostItem>
       <PostSkeleton></PostSkeleton>
     </div>

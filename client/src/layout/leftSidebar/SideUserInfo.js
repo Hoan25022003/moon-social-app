@@ -6,7 +6,7 @@ import MenuNav from "components/menu/MenuNav";
 import MenuNavItem from "components/menu/MenuNavItem";
 import TextLight from "components/text/TextLight";
 
-const HeaderUserInfo = ({
+const SideUserInfo = ({
   url = "/profile/123456",
   avatar,
   username,
@@ -37,11 +37,11 @@ const HeaderUserInfo = ({
   );
 };
 
-HeaderUserInfo.propTypes = {
+SideUserInfo.propTypes = {
   url: PropTypes.string,
   avatar: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
   email: PropTypes.string,
 };
 
-export default HeaderUserInfo;
+export default SideUserInfo;

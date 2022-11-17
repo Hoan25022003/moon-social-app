@@ -40,7 +40,7 @@ const listNav = [
   },
 ];
 
-const HeaderNav = () => {
+const SideNav = () => {
   const navClass =
     "flex items-center px-5 py-4 transition-colors rounded-full gap-x-3 text-text3 hover:bg-graySoft";
   return (
@@ -61,4 +61,4 @@ const HeaderNav = () => {
   );
 };
 
-export default HeaderNav;
+export default SideNav;
