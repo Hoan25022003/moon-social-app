@@ -90,21 +90,42 @@
   }
 }
 
-.swiper {
-  &-slide {
+// Custom swiper
+.swiper-theme {
+  .swiper-slide {
     @apply select-none;
   }
-  &-button-prev {
+  .swiper-button-prev {
     left: 2px;
   }
-  &-button-next {
+  .swiper-button-next {
     right: 2px;
   }
-  &-button-prev,
-  &-button-next {
+  .swiper-button-prev,
+  .swiper-button-next {
     @apply text-text2 bg-white bg-opacity-60 h-[27px] translate-y-2 rounded-full;
     &::after {
       font-size: 14px;
+    }
+  }
+}
+
+.swiper-backdrop {
+  @apply select-none;
+  .swiper-button-disabled {
+    visibility: hidden;
+  }
+  .swiper-button-prev {
+    left: 20px;
+  }
+  .swiper-button-next {
+    right: 20px;
+  }
+  .swiper-button-next,
+  .swiper-button-prev {
+    @apply bg-white bg-opacity-30 h-[84px] w-10 text-text2 -translate-y-1/2 transition-all;
+    &:hover {
+      @apply bg-opacity-50;
     }
   }
 }

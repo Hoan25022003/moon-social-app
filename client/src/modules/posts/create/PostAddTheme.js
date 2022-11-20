@@ -50,6 +50,7 @@ const PostAddTheme = () => {
             modules={[Navigation]}
             spaceBetween={20}
             slidesPerView={5}
+            className="swiper-theme"
           >
             <SwiperSlide>
               <div

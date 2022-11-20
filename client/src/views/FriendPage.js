@@ -8,7 +8,6 @@ import FriendList from "modules/friends/FriendList";
 
 const FriendPage = () => {
   const { value: query, handleChange } = useChangeValue("");
-  console.log(query);
   return (
     <div className="border-b border-x border-graySoft">
       <BackPage>
@@ -22,7 +21,7 @@ const FriendPage = () => {
           onChange={handleChange}
           placeholder="Search username"
           isSuggested={false}
-          className="py-4 text-[15px]"
+          className="py-[14px]"
           icon="user"
         ></Search>
         <FriendList>

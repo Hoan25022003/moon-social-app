@@ -35,7 +35,7 @@ const LoginPage = () => {
       await axios.post("/auth/login", values);
       reset({ email: "", password: "" });
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.response.status === 400) {
         setError("password", { message: "Email or password is not correct" });
         setError("email", { message: "" });
       }

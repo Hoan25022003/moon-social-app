@@ -1,8 +1,9 @@
 import React from "react";
+import axios from "api/axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Authentication from "layout/Authentication";
 import FormGroup from "components/form/FormGroup";
 import Label from "components/form/Label";
@@ -13,7 +14,6 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import AlertInfo from "components/alert/AlertInfo";
-import axios from "api/axios";
 
 const schema = yup.object({
   firstName: yup
@@ -47,11 +47,11 @@ const initialValue = {
 };
 
 const RegisterPage = () => {
-  // const [status, setStatus] = React.useState(null);
+  const navigate = useNavigate();
   const {
     handleSubmit,
     control,
-    formState: { isSubmitting, errors, isDirty },
+    formState: { isSubmitting, errors },
     reset,
     setValue,
     setError,
@@ -66,8 +66,9 @@ const RegisterPage = () => {
       await axios.post("/auth/register", values);
       setShowAlert(true);
       reset(initialValue);
+      navigate("/login");
     } catch (error) {
-      error.response.status === 401 &&
+      error.response.status === 400 &&
         setError("email", { message: "This email already existed" });
     }
   };
@@ -87,21 +88,21 @@ const RegisterPage = () => {
               control={control}
               name="firstName"
               placeholder={"First Name"}
-              error={isDirty && errors?.firstName}
+              error={errors?.firstName}
             ></Input>
             {errors?.firstName && (
               <ErrorMessage>{errors.firstName?.message}</ErrorMessage>
             )}
           </FormGroup>
           <FormGroup>
-            <Label name="lasName" className="mb-2">
+            <Label name="lastName" className="mb-2">
               Last Name *
             </Label>
             <Input
               control={control}
               name="lastName"
               placeholder={"Last Name"}
-              error={isDirty && errors?.lastName}
+              error={errors?.lastName}
             ></Input>
             {errors?.lastName && (
               <ErrorMessage>{errors.lastName?.message}</ErrorMessage>
@@ -117,7 +118,7 @@ const RegisterPage = () => {
             name="email"
             control={control}
             type="email"
-            error={isDirty && errors?.email}
+            error={errors?.email}
           ></Input>
           {errors?.email && (
             <ErrorMessage>{errors.email?.message}</ErrorMessage>
@@ -132,7 +133,7 @@ const RegisterPage = () => {
             name="password"
             control={control}
             type="password"
-            error={isDirty && errors?.password}
+            error={errors?.password}
           ></Input>
           {errors?.password && (
             <ErrorMessage>{errors.password?.message}</ErrorMessage>

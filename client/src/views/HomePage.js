@@ -8,6 +8,7 @@ const HomePage = () => {
       <PostFeature></PostFeature>
       <div className="flex flex-col mt-4 gap-y-4">
         <PostItem></PostItem>
+        <PostItem type="image"></PostItem>
       </div>
     </div>
   );

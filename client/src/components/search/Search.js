@@ -9,7 +9,7 @@ const Search = ({
   onChange = () => {},
   placeholder = "Search in here",
   isSuggested = true,
-  className = "text-sm py-[14px]",
+  className = "py-4",
   icon = "search",
   ...props
 }) => {
@@ -44,7 +44,7 @@ const Search = ({
             type="text"
             onChange={onChange}
             placeholder={placeholder}
-            className={`flex-1 px-3  bg-transparent ${className}`}
+            className={`flex-1 px-3  bg-transparent  text-sm ${className}`}
             onFocus={() => setFocus(!focus)}
             {...props}
           />
