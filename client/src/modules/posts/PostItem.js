@@ -35,7 +35,14 @@ const PostItem = ({ type = "theme" }) => {
               laboriosam consequuntur blanditiis dolorem ducimus doloribus, illo
               laudantium suscipit error. Mollitia, quisquam!
             </PostContent>
-            <PostImage src="https://images.unsplash.com/photo-1666787031139-61a0e22e0c2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"></PostImage>
+            <PostImage
+              src="https://images.unsplash.com/photo-1666787031139-61a0e22e0c2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
+              listImg={[
+                "https://images.unsplash.com/photo-1668613964763-90d0bd6559f7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80",
+                "https://images.unsplash.com/photo-1668595472892-57a348e65858?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80",
+                "https://images.unsplash.com/photo-1668414250091-9785b10191cb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1237&q=80",
+              ]}
+            ></PostImage>
           </>
         )}
         <div className="py-3 ">

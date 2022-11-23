@@ -1,21 +1,24 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+import store from "./redux/store";
+import { createRoot } from "react-dom/client";
 import "swiper/css/bundle";
 import "styles/index.scss";
 import { Provider } from "react-redux";
-import { store } from "./redux/configureStore";
+import { CookiesProvider } from "react-cookie";
 import { BrowserRouter } from "react-router-dom";
+import reportWebVitals from "./reportWebVitals";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
   <BrowserRouter>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <CookiesProvider>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </CookiesProvider>
   </BrowserRouter>
 );
 

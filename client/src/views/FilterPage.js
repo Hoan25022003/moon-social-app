@@ -22,13 +22,13 @@ const FilterPage = () => {
           </p>
         </div>
       </BackPage>
-      <EmptyLayout
+      {/* <EmptyLayout
         className="py-10"
         linkImg="/img/searching.png"
         info="No results found for this keyword"
         support="Please try again later !"
-      ></EmptyLayout>
-      {/* <div className="flex flex-col px-5 py-4 gap-y-6">
+      ></EmptyLayout> */}
+      <div className="flex flex-col px-5 py-4 gap-y-6">
         <div>
           <TextHeading className="mb-3">People</TextHeading>
           <FriendList>
@@ -54,7 +54,7 @@ const FilterPage = () => {
             <PostItem type="image"></PostItem>
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };

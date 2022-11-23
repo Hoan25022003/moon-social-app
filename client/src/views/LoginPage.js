@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Authentication from "layout/Authentication";
 import FormGroup from "components/form/FormGroup";
 import Label from "components/form/Label";
 import Input from "components/form/Input";
 import ErrorMessage from "components/form/ErrorMessage";
 import ButtonGradient from "components/button/ButtonGradient";
-import { Link } from "react-router-dom";
-import axios from "api/axios";
+import { loginUser } from "redux/auth/authRequest";
 
 const schema = yup.object({
   email: yup
@@ -23,23 +24,25 @@ const LoginPage = () => {
   const {
     handleSubmit,
     control,
-    formState: { isSubmitting, errors, isDirty },
+    formState: { errors, isDirty },
     reset,
     setError,
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
   });
-  const handleLogin = async (values) => {
-    try {
-      await axios.post("/auth/login", values);
-      reset({ email: "", password: "" });
-    } catch (error) {
-      if (error.response.status === 400) {
-        setError("password", { message: "Email or password is not correct" });
-        setError("email", { message: "" });
-      }
-    }
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { currentAccount, isLoading } = useSelector(
+    (state) => state.auth.login
+  );
+  useEffect(() => {
+    if (currentAccount) navigate("/home");
+    else document.title = "Login | Moon Star";
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentAccount]);
+  const handleLogin = (values) => {
+    dispatch(loginUser({ userData: values, reset, setError }));
   };
   return (
     <Authentication heading="Log in">
@@ -60,7 +63,9 @@ const LoginPage = () => {
             error={isDirty && errors?.email}
           ></Input>
           {errors?.email && (
-            <ErrorMessage>{errors?.email?.message}</ErrorMessage>
+            <ErrorMessage className="-bottom-1">
+              {errors?.email?.message}
+            </ErrorMessage>
           )}
         </FormGroup>
         <FormGroup>
@@ -75,14 +80,16 @@ const LoginPage = () => {
             error={errors?.password}
           ></Input>
           {errors?.password && (
-            <ErrorMessage>{errors?.password?.message}</ErrorMessage>
+            <ErrorMessage className="-bottom-1">
+              {errors?.password?.message}
+            </ErrorMessage>
           )}
         </FormGroup>
         <div className="mt-8 text-center">
           <ButtonGradient
             className="w-[60%] py-[14px] text-[22px] leading-9 font-semibold rounded-xl"
             type="submit"
-            isLoading={isSubmitting}
+            isLoading={isLoading}
           >
             Sign In
           </ButtonGradient>

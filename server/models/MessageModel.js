@@ -1,4 +1,4 @@
-const mongoose = require("../connectDB");
+const mongoose = require("../config/connectDB");
 
 const MessageSchema = mongoose.Schema(
   {

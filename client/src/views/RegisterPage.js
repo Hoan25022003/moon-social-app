@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "api/axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -14,6 +14,8 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import AlertInfo from "components/alert/AlertInfo";
+import { registerUser } from "redux/auth/authRequest";
+import { useDispatch, useSelector } from "react-redux";
 
 const schema = yup.object({
   firstName: yup
@@ -48,10 +50,11 @@ const initialValue = {
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     handleSubmit,
     control,
-    formState: { isSubmitting, errors },
+    formState: { errors },
     reset,
     setValue,
     setError,
@@ -60,17 +63,38 @@ const RegisterPage = () => {
     resolver: yupResolver(schema),
     defaultValues: initialValue,
   });
-  const [showAlert, setShowAlert] = React.useState(false);
-  const handleRegister = async (values) => {
-    try {
-      await axios.post("/auth/register", values);
-      setShowAlert(true);
-      reset(initialValue);
-      navigate("/login");
-    } catch (error) {
-      error.response.status === 400 &&
-        setError("email", { message: "This email already existed" });
-    }
+  const { isLoading } = useSelector((state) => state.auth.register);
+  useEffect(() => {
+    document.title = "Register | Moon Star";
+  }, []);
+  // const { errorMessage } = useSelector((state) => state.auth.register);
+  // useEffect(() => {
+  //   if (errorMessage) {
+  //     for (const name in errorMessage) {
+  //       setError(name, { message: errorMessage[name] });
+  //     }
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [errorMessage]);
+  const handleRegister = (values) => {
+    dispatch(
+      registerUser({
+        userData: values,
+        initialValue,
+        reset,
+        setError,
+        navigate,
+      })
+    );
+    // try {
+    //   await axios.post("/auth/register", values);
+    //   setShowAlert(true);
+    //   reset(initialValue);
+    //   navigate("/login");
+    // } catch (error) {
+    //   error.response.status === 400 &&
+    //     setError("email", { message: "This email already existed" });
+    // }
   };
   return (
     <Authentication heading="Register">
@@ -160,7 +184,7 @@ const RegisterPage = () => {
           <ButtonGradient
             className="w-[60%] py-[14px] text-[22px] leading-9 font-semibold rounded-xl"
             type="submit"
-            isLoading={isSubmitting}
+            isLoading={isLoading}
           >
             Sign up
           </ButtonGradient>
@@ -172,9 +196,6 @@ const RegisterPage = () => {
           </p>
         </div>
       </form>
-      <AlertInfo open={showAlert} setOpen={setShowAlert}>
-        Register successful
-      </AlertInfo>
     </Authentication>
   );
 };

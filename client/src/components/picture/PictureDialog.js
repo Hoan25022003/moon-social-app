@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Backdrop, CircularProgress } from "@mui/material";
-import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Backdrop, CircularProgress } from "@mui/material";
 
-const ModalPicture = ({ openState, listImg = [] }) => {
+const PictureDialog = ({ openState, listImg = [] }) => {
   const [openBackdrop, setOpenBackdrop] = openState;
   const handleClickBackdrop = (e) => {
     const classNameElement = e.target.className;
@@ -47,9 +47,9 @@ const ModalPicture = ({ openState, listImg = [] }) => {
   );
 };
 
-ModalPicture.propTypes = {
+PictureDialog.propTypes = {
   openState: PropTypes.any,
   picture: PropTypes.array,
 };
 
-export default ModalPicture;
+export default PictureDialog;

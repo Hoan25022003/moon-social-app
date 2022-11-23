@@ -1,6 +1,9 @@
-import { apiUrl } from "config/config";
+import axios from "axios";
 
-const { default: axios } = require("axios");
+const apiUrl =
+  process.env.NODE_ENV !== "production"
+    ? "http://localhost:8080/api"
+    : "some-url";
 
 export default axios.create({
   baseURL: apiUrl,
