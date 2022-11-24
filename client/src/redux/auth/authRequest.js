@@ -56,14 +56,3 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
-
-export const refreshToken = async (accessToken) => {
-  try {
-    const res = await axios.post("/auth/refresh", {
-      withCredentials: false,
-    });
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
-};

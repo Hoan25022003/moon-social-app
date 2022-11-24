@@ -33,14 +33,12 @@ const LoginPage = () => {
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { currentAccount, isLoading } = useSelector(
-    (state) => state.auth.login
-  );
+  const { isLoading, currentUser } = useSelector((state) => state.auth.login);
   useEffect(() => {
-    if (currentAccount) navigate("/home");
+    if (currentUser) navigate("/home");
     else document.title = "Login | Moon Star";
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentAccount]);
+  }, [currentUser]);
   const handleLogin = (values) => {
     dispatch(loginUser({ userData: values, reset, setError }));
   };

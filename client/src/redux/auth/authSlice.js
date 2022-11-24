@@ -5,17 +5,24 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     login: {
-      currentAccount: null,
+      currentUser: null,
       isLoading: false,
     },
     register: { isLoading: false, success: false },
   },
-  reducers: {},
+  reducers: {
+    refreshLogin: (state, { payload }) => {
+      return {
+        ...state,
+        currentUser: payload,
+      };
+    },
+  },
   extraReducers: (builder) => {
     /* Login */
     builder
       .addCase(loginUser.fulfilled, (state, { payload }) => {
-        state.login.currentAccount = payload;
+        state.login.currentUser = payload;
         state.login.isLoading = false;
       })
       .addCase(loginUser.pending, (state) => {
@@ -38,5 +45,7 @@ const authSlice = createSlice({
       });
   },
 });
+
+export const { refreshLogin } = authSlice.actions;
 
 export default authSlice.reducer;

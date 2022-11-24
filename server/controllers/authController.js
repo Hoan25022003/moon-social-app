@@ -30,7 +30,7 @@ const handleRegister = asyncHandler(async (req, res) => {
 
 function generateToken(payload) {
   const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "60s",
+    expiresIn: "1h",
   });
   const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: "7d",

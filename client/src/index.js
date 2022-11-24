@@ -1,12 +1,12 @@
 import React from "react";
 import App from "./App";
-import store from "./redux/store";
 import { createRoot } from "react-dom/client";
 import "swiper/css/bundle";
 import "styles/index.scss";
 import { Provider } from "react-redux";
-import { CookiesProvider } from "react-cookie";
 import { BrowserRouter } from "react-router-dom";
+import { persistor, store } from "redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 import reportWebVitals from "./reportWebVitals";
 
 const container = document.getElementById("root");
@@ -14,11 +14,11 @@ const root = createRoot(container);
 
 root.render(
   <BrowserRouter>
-    <CookiesProvider>
-      <Provider store={store}>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
         <App />
-      </Provider>
-    </CookiesProvider>
+      </PersistGate>
+    </Provider>
   </BrowserRouter>
 );
 

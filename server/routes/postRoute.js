@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/create-public", async (req, res) => {
+router.post("/public", async (req, res) => {
   try {
     await PostModel.create({
       ...req.body,

@@ -1,10 +1,13 @@
-import axios from "api/axios";
 import { getUserStart, getUserSuccess } from "./userSlice";
 
-export const getAllUser = async (accessToken, dispatch) => {
+export const getAllUser = async (accessToken, axiosJWT, dispatch) => {
   dispatch(getUserStart());
   try {
-    const res = await axios.get("/users");
+    const res = await axiosJWT.get("/users", {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
     dispatch(getUserSuccess(res.data));
   } catch (error) {
     console.log(error);

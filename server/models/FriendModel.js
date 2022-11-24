@@ -11,9 +11,9 @@ const FriendSchema = mongoose.Schema({
     ref: "users",
     required: true,
   },
-  status: {
-    type: Number,
-    default: 3,
+  isConfirmed: {
+    type: Boolean,
+    default: false,
   },
 });
 

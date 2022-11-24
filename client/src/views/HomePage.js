@@ -1,35 +1,29 @@
 import React, { useEffect } from "react";
+import axios from "api/axios";
+import jwtDecode from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import PostFeature from "modules/posts/PostFeature";
 import PostItem from "modules/posts/PostItem";
 import { getAllUser } from "redux/users/userRequest";
-import jwtDecode from "jwt-decode";
+import { refreshLogin } from "redux/auth/authSlice";
+import { createAxios } from "api/createInstance";
 
 const HomePage = () => {
-  const { currentAccount } = useSelector((state) => state.auth.login);
+  const { currentUser } = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [cookies, setCookie] = useCookies(["access_token", "refresh_token"]);
-  // const {listUsers, isFetching} = useSelector(state => state.users)
+  let axiosJWT = createAxios(currentUser, dispatch, refreshLogin);
+
   useEffect(() => {
-    if (currentAccount?.accessToken) {
-      getAllUser(currentAccount?.accessToken, dispatch);
-      // let expires = new Date();
-      // const decodeToken = jwtDecode(currentAccount?.accessToken);
-      // const timer = decodeToken.exp - decodeToken.iat;
-      // expires.setTime(expires.getTime() + timer * 1000);
-      // setCookie("access_token", currentAccount.accessToken, {
-      //   path: "/",
-      //   expires,
-      // });
-    }
-    // else navigate("/login");
-    document.title = "Home page";
+    if (currentUser) {
+      getAllUser(currentUser?.accessToken, axiosJWT, dispatch);
+      document.title = "Home page";
+    } else navigate("/login");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  !cookies?.access_token && navigate("/login");
+  const { listUsers } = useSelector((state) => state.users);
+  console.log(listUsers);
   return (
     <div className="py-4">
       <PostFeature></PostFeature>
