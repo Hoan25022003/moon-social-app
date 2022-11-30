@@ -5,8 +5,11 @@ import Search from "components/search/Search";
 import EmptyLayout from "layout/EmptyLayout";
 import FriendItem from "modules/friends/FriendItem";
 import FriendList from "modules/friends/FriendList";
+import useCheckLogin from "hooks/useCheckLogin";
 
 const FriendPage = () => {
+  const { currentUser } = useCheckLogin("Add friend");
+  console.log(currentUser);
   const { value: query, handleChange } = useChangeValue("");
   return (
     <div className="border-b border-x border-graySoft">

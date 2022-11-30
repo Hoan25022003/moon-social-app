@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -11,6 +11,7 @@ import Input from "components/form/Input";
 import ErrorMessage from "components/form/ErrorMessage";
 import ButtonGradient from "components/button/ButtonGradient";
 import { loginUser } from "redux/auth/authRequest";
+import { useCheckUser } from "hooks/useCheckLogin";
 
 const schema = yup.object({
   email: yup
@@ -21,6 +22,8 @@ const schema = yup.object({
 });
 
 const LoginPage = () => {
+  useCheckUser("Login | Moon Stars");
+  const navigate = useNavigate();
   const {
     handleSubmit,
     control,
@@ -31,16 +34,16 @@ const LoginPage = () => {
     mode: "onChange",
     resolver: yupResolver(schema),
   });
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isLoading, currentUser } = useSelector((state) => state.auth.login);
-  useEffect(() => {
-    if (currentUser) navigate("/home");
-    else document.title = "Login | Moon Star";
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+  const { isLoading } = useSelector((state) => state.auth.login);
+  // const navigate = useNavigate();
+  // useEffect(() => {
+  //   if (currentUser) navigate("/home");
+  //   else document.title = "Login | Moon Star";
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [currentUser]);
   const handleLogin = (values) => {
-    dispatch(loginUser({ userData: values, reset, setError }));
+    dispatch(loginUser({ userData: values, reset, setError, navigate }));
   };
   return (
     <Authentication heading="Log in">

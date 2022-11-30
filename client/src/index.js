@@ -15,9 +15,9 @@ const root = createRoot(container);
 root.render(
   <BrowserRouter>
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <App />
-      </PersistGate>
+      <App />
+      {/* <PersistGate loading={null} persistor={persistor}>
+      </PersistGate> */}
     </Provider>
   </BrowserRouter>
 );

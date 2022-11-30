@@ -3,7 +3,6 @@ const UserModel = require("../models/UserModel");
 const {
   handleRegister,
   handleLogin,
-  handleRefreshToken,
   handleLogout,
 } = require("../controllers/authController");
 const verifyToken = require("../middleWare/verifyToken");
@@ -21,8 +20,8 @@ router.post("/register", handleRegister);
 
 router.post("/login", handleLogin);
 
-router.post("/refresh", handleRefreshToken);
+// router.post("/refresh", handleRefreshToken);
 
-router.post("/logout", verifyToken, handleLogout);
+router.post("/logout", handleLogout);
 
 module.exports = router;

@@ -7,7 +7,7 @@ const LoginPage = lazy(() => import("./views/LoginPage"));
 const RegisterPage = lazy(() => import("./views/RegisterPage"));
 const HomePage = lazy(() => import("./views/HomePage"));
 const MainLayout = lazy(() => import("./layout/MainLayout"));
-const PersonalPage = lazy(() => import("./views/PersonalPage"));
+const ProfilePage = lazy(() => import("./views/ProfilePage"));
 const GroupPage = lazy(() => import("./views/GroupPage"));
 const FriendPage = lazy(() => import("./views/FriendPage"));
 const FilterPage = lazy(() => import("./views/FilterPage"));
@@ -26,7 +26,7 @@ function App() {
           <Route path="/groups" element={<GroupPage></GroupPage>}></Route>
           <Route
             path="/profile/:id"
-            element={<PersonalPage></PersonalPage>}
+            element={<ProfilePage></ProfilePage>}
           ></Route>
           <Route path="/search" element={<FilterPage></FilterPage>}></Route>
           <Route path="/post-saved" element={<SavedPage></SavedPage>}></Route>

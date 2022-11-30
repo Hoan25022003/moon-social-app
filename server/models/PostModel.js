@@ -2,9 +2,9 @@ const mongoose = require("../config/connectDB");
 
 const PostSchema = mongoose.Schema(
   {
+    content: String,
     theme: Object,
     listImg: [{ type: String }],
-    content: String,
     listHeart: [
       {
         type: String,

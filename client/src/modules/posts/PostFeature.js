@@ -9,7 +9,7 @@ import PostAddNew from "modules/posts/PostAddNew";
 
 const PostFeature = ({
   avatar = "https://images.unsplash.com/photo-1666679639559-fdb2162b3cbd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80",
-  username = "Hoan",
+  username = " ",
   linkInfo,
 }) => {
   const [showModal, setShowModal] = useToggle(false);

@@ -7,10 +7,12 @@ import SideContact from "./rightSidebar/SideContact";
 import SideFilter from "./rightSidebar/SideFilter";
 import useChangeValue from "hooks/useChangeValue";
 import Search from "components/search/Search";
+import { useSelector } from "react-redux";
 
 const MainLayout = () => {
   const location = useLocation();
   const { value: query, handleChange } = useChangeValue("", 0);
+  const { currentUser } = useSelector((state) => state.auth.login);
   const navigate = useNavigate();
   const handleEnterKey = (e) => {
     if (e.which === 13 && query) navigate("/search?q=" + query);
@@ -30,8 +32,9 @@ const MainLayout = () => {
             <SideDarkMode></SideDarkMode>
             <SideUserInfo
               avatar="https://images.unsplash.com/photo-1667114790847-7653bc249e82?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
-              username="Hoan Do"
-              email="hoan@gmail.com"
+              username={currentUser?.firstName + " " + currentUser?.lastName}
+              email={currentUser?.email}
+              url={"/profile/" + currentUser?._id}
             ></SideUserInfo>
           </div>
         </div>

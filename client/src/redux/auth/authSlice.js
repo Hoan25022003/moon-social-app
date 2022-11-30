@@ -11,11 +11,11 @@ const authSlice = createSlice({
     register: { isLoading: false, success: false },
   },
   reducers: {
-    refreshLogin: (state, { payload }) => {
-      return {
-        ...state,
-        currentUser: payload,
-      };
+    logoutAccount: (state) => {
+      state.login.currentUser = null;
+    },
+    loginRefresh: (state, { payload }) => {
+      state.login.currentUser = payload;
     },
   },
   extraReducers: (builder) => {
@@ -46,6 +46,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { refreshLogin } = authSlice.actions;
+export const { loginRefresh, logoutAccount } = authSlice.actions;
 
 export default authSlice.reducer;

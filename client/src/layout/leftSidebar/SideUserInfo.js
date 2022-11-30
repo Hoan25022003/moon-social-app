@@ -1,4 +1,6 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "redux/auth/authRequest";
 import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
@@ -8,8 +10,9 @@ import TextLight from "components/text/TextLight";
 
 const SideUserInfo = ({ url = "/profile/123456", avatar, username, email }) => {
   const navigate = useNavigate();
-  const handleSignOut = () => {
-    console.log(123);
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    logoutUser(dispatch);
   };
   return (
     <div className="flex items-center justify-between">
@@ -21,11 +24,11 @@ const SideUserInfo = ({ url = "/profile/123456", avatar, username, email }) => {
         </div>
       </Link>
       <div>
-        <MenuNav styleCoordinate="translate3d(110px, -74.4px, 0px)">
+        <MenuNav styleCoordinate="translate3d(80px, -74.4px, 0px)">
           <MenuNavItem handleExtra={() => navigate(url)}>
             Change password
           </MenuNavItem>
-          <MenuNavItem handleExtra={handleSignOut}>Log out</MenuNavItem>
+          <MenuNavItem handleExtra={handleLogout}>Log out</MenuNavItem>
         </MenuNav>
       </div>
     </div>

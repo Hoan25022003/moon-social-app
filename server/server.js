@@ -13,7 +13,9 @@ app.use(cookieParser());
 
 app.use("/api/auth", require("./routes/authRoute"));
 app.use("/api/users", require("./routes/userRoute"));
+app.use("/api/friends", require("./routes/friendRoute"));
 app.use("/api/posts", require("./routes/postRoute"));
+app.use("/api/comments", require("./routes/commentRoute"));
 
 const PORT = process.env.PORT || 8080;
 

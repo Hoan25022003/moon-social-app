@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import axios from "api/axios";
+import React from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -13,9 +12,9 @@ import ErrorMessage from "components/form/ErrorMessage";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import AlertInfo from "components/alert/AlertInfo";
 import { registerUser } from "redux/auth/authRequest";
 import { useDispatch, useSelector } from "react-redux";
+import { useCheckUser } from "hooks/useCheckLogin";
 
 const schema = yup.object({
   firstName: yup
@@ -49,6 +48,7 @@ const initialValue = {
 };
 
 const RegisterPage = () => {
+  useCheckUser("Register | Moon Stars");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
@@ -64,18 +64,6 @@ const RegisterPage = () => {
     defaultValues: initialValue,
   });
   const { isLoading } = useSelector((state) => state.auth.register);
-  useEffect(() => {
-    document.title = "Register | Moon Star";
-  }, []);
-  // const { errorMessage } = useSelector((state) => state.auth.register);
-  // useEffect(() => {
-  //   if (errorMessage) {
-  //     for (const name in errorMessage) {
-  //       setError(name, { message: errorMessage[name] });
-  //     }
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [errorMessage]);
   const handleRegister = (values) => {
     dispatch(
       registerUser({
@@ -86,16 +74,8 @@ const RegisterPage = () => {
         navigate,
       })
     );
-    // try {
-    //   await axios.post("/auth/register", values);
-    //   setShowAlert(true);
-    //   reset(initialValue);
-    //   navigate("/login");
-    // } catch (error) {
-    //   error.response.status === 400 &&
-    //     setError("email", { message: "This email already existed" });
-    // }
   };
+
   return (
     <Authentication heading="Register">
       <form

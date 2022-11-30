@@ -1,11 +1,15 @@
 const jwt = require("jsonwebtoken");
+const UserModel = require("../models/UserModel");
 
 module.exports = function verifyToken(req, res, next) {
-  const headerAuth = req.headers["authorization"];
-  const token = headerAuth.split(" ")[1];
+  const headerAuth = req.headers.authorization;
+  const token = headerAuth.split("Bearer ")[1];
   if (!token) res.sendStatus(401);
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
-    if (err) res.sendStatus(403);
-    else next();
+  jwt.verify(token, process.env.TOKEN_SECRET, async (err, data) => {
+    if (err) res.status(403).json("Token is not valid");
+    else {
+      req.username = await UserModel.findOne({ email: data.email });
+      next();
+    }
   });
 };

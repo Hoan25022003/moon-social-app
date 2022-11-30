@@ -5,7 +5,7 @@ import LinkIcon from "@mui/icons-material/Link";
 import SendIcon from "@mui/icons-material/Send";
 import ProfileEdit from "./ProfileEdit";
 
-const ProfileFeature = ({ status = 1 }) => {
+const ProfileFeature = ({ yourSelf, status = 1 }) => {
   const classGeneral = "px-4 py-1 font-semibold capitalize rounded-full";
   const [toggleInvite, setToggleInvite] = useToggle(status === 2);
   const [showEdit, setShowEdit] = useToggle(false);
@@ -25,31 +25,30 @@ const ProfileFeature = ({ status = 1 }) => {
           </IconButton>
         </Tooltip>
 
-        <Button
-          variant="outlined"
-          className={`${classGeneral} hover:bg-graySoft text-text1 border-strock`}
-          onClick={setShowEdit}
-        >
-          Edit profile
-        </Button>
-
-        {/* Feature for my friend */}
-        {status === 1 ? (
-          <>
-            {/* <Tooltip title="Send Message">
-            <IconButton
-              className="hover:bg-graySoft border-strock"
-              aria-label="send message"
-            >
-              <SendIcon className="text-lg text-iconColor" />
-            </IconButton>
-          </Tooltip>
+        {yourSelf ? (
           <Button
             variant="outlined"
-            className={`${classGeneral} hover:bg-graySoft text-primary border-primary`}
+            className={`${classGeneral} hover:bg-graySoft text-text1 border-strock`}
+            onClick={setShowEdit}
           >
-            Unfriend
-          </Button> */}
+            Edit profile
+          </Button>
+        ) : status === 1 ? (
+          <>
+            <Tooltip title="Send Message">
+              <IconButton
+                className="hover:bg-graySoft border-strock"
+                aria-label="send message"
+              >
+                <SendIcon className="text-lg text-iconColor" />
+              </IconButton>
+            </Tooltip>
+            <Button
+              variant="outlined"
+              className={`${classGeneral} hover:bg-graySoft text-primary border-primary`}
+            >
+              Unfriend
+            </Button>
           </>
         ) : (
           <Button

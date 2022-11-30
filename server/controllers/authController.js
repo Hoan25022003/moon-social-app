@@ -3,8 +3,6 @@ const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-let refreshTokens = [];
-
 const handleRegister = asyncHandler(async (req, res) => {
   try {
     const username = await UserModel.findOne({
@@ -29,13 +27,9 @@ const handleRegister = asyncHandler(async (req, res) => {
 });
 
 function generateToken(payload) {
-  const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+  return jwt.sign(payload, process.env.TOKEN_SECRET, {
     expiresIn: "1h",
   });
-  const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
-    expiresIn: "7d",
-  });
-  return { accessToken, refreshToken };
 }
 
 const handleLogin = asyncHandler(async (req, res) => {
@@ -46,17 +40,22 @@ const handleLogin = asyncHandler(async (req, res) => {
     if (username) {
       const result = await bcrypt.compare(req.body.password, username.password);
       if (result) {
-        const tokens = generateToken(req.body);
-        res.cookie("refreshToken", tokens.refreshToken, {
+        const { _id, firstName, lastName, email, avatar } = username._doc;
+        const token = generateToken({
+          _id,
+          firstName,
+          lastName,
+          email,
+          avatar,
+        });
+        res.cookie("tokens", token, {
           httpOnly: true,
           secure: false,
           path: "/",
           sameSite: "strict",
         });
-        refreshTokens.push(tokens.refreshToken);
-        const { password, ...others } = username._doc;
 
-        res.json({ ...others, accessToken: tokens.accessToken });
+        res.json({ _id, firstName, lastName, email, avatar, token });
       } else res.sendStatus(400);
     } else res.sendStatus(400);
   } catch (error) {
@@ -65,43 +64,43 @@ const handleLogin = asyncHandler(async (req, res) => {
   }
 });
 
-const handleRefreshToken = async (req, res) => {
-  try {
-    const refreshToken = req.cookies.refreshToken;
-    !refreshToken && res.status(401);
-    if (!refreshTokens.includes(refreshToken))
-      res.status(403).json({ mess: "Token is not available" });
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-      if (err) res.status(403);
-      refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
-      const { email, password } = user;
-      const newTokens = generateToken({ email, password });
-      refreshTokens.push(newTokens.refreshToken);
-      res.cookie("refreshToken", newTokens.refreshToken, {
-        httpOnly: true,
-        secure: false,
-        path: "/",
-        sameSite: "strict",
-      });
-      res.json({ accessToken: newTokens.accessToken });
-    });
-  } catch (error) {
-    res.status(500);
-    throw new Error(error);
-  }
-};
+// const handleRefreshToken = async (req, res) => {
+//   try {
+//     const refreshToken = req.cookies.refreshToken;
+//     console.log(71, refreshToken);
+// !refreshToken && res.status(401);
+//     // if (!refreshTokens.includes(refreshToken))
+//     //   res.status(403).json({ mess: "Token is not available" });
+//     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+//       if (err) res.status(403);
+//       refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+//       const newTokens = generateToken(user);
+//       refreshTokens.push(newTokens.refreshToken);
+//       res.cookie("refreshToken", newTokens.refreshToken, {
+//         httpOnly: true,
+//         secure: false,
+//         path: "/",
+//         sameSite: "strict",
+//       });
+//       res.json({ accessToken: newTokens.accessToken });
+//     });
+//   } catch (error) {
+//     res.status(500);
+//     throw new Error(error);
+//   }
+// };
 
-const handleLogout = (req, res) => {
-  refreshTokens = refreshTokens.filter(
-    (token) => token !== req.cookies.refreshToken
-  );
-  res.clearCookie("refreshToken");
-  res.json({ mess: "Logout Successful" });
-};
+const handleLogout = asyncHandler((req, res) => {
+  try {
+    res.clearCookie("tokens");
+    res.json({ mess: "Logout Successful" });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 
 module.exports = {
   handleRegister,
   handleLogin,
-  handleRefreshToken,
   handleLogout,
 };

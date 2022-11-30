@@ -1,17 +1,20 @@
 import axios from "api/axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { logoutAccount } from "./authSlice";
+import Cookies from "js-cookie";
 
 export const loginUser = createAsyncThunk(
   "auth/login",
   async ({ userData, ...others }) => {
-    const { reset, setError } = { ...others };
+    const { reset, setError, navigate } = { ...others };
     try {
-      const res = await axios.post("/auth/login", userData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await axios.post("/auth/login", userData);
       reset({ email: "", password: "" });
+      Cookies.set("tokens", res.data?.token, {
+        expires: 1 / 24,
+        path: "/",
+      });
+      navigate("/home");
       return res.data;
     } catch (error) {
       if (error.response.status === 400) {
@@ -21,19 +24,6 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
-
-// export const registerUser = async (user, dispatch, { ...others }) => {
-//   const { reset, navigate, initialValue, setShowAlert } = { ...others };
-//   try {
-//     await axios.post("/auth/register", user);
-//     setShowAlert(true);
-//     reset(initialValue);
-//     navigate("/login");
-//   } catch (error) {
-//     error.response.status === 400 &&
-//       dispatch(registerFailed({ email: "This email already existed" }));
-//   }
-// };
 
 export const registerUser = createAsyncThunk(
   "auth/register",
@@ -56,3 +46,14 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
+
+export const logoutUser = async (dispatch) => {
+  try {
+    await axios.post("/auth/logout");
+    Cookies.remove("tokens");
+    dispatch(logoutAccount());
+    window.location.href = "/login";
+  } catch (error) {
+    console.log(error);
+  }
+};
