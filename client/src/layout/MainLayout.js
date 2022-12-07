@@ -31,7 +31,7 @@ const MainLayout = () => {
           <div>
             <SideDarkMode></SideDarkMode>
             <SideUserInfo
-              avatar="https://images.unsplash.com/photo-1667114790847-7653bc249e82?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
+              avatar={currentUser?.avatar}
               username={currentUser?.firstName + " " + currentUser?.lastName}
               email={currentUser?.email}
               url={"/profile/" + currentUser?._id}

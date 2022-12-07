@@ -46,6 +46,18 @@ const getPostFilter = asyncHandler(async (req, res) => {
   }
 });
 
+const getSavedList = asyncHandler(async (req, res) => {
+  try {
+    const username = req.username;
+    const userInfo = await UserModel.findById(username._id).populate(
+      "listSaved"
+    );
+    res.json({ listSaved: userInfo.listSaved });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+});
+
 const handleCreatePost = asyncHandler(async (req, res) => {
   try {
     const username = req.username;
@@ -119,4 +131,5 @@ module.exports = {
   handleShowHeart,
   getPostFilter,
   handleSavePost,
+  getSavedList,
 };

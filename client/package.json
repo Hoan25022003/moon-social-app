@@ -33,6 +33,7 @@
     "redux-persist": "^6.0.0",
     "sass": "^1.52.2",
     "slugify": "^1.6.5",
+    "socket.io-client": "^4.5.4",
     "swiper": "^8.4.4",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.4",

@@ -15,6 +15,10 @@ const handleRegister = asyncHandler(async (req, res) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
+        avatar:
+          req.body.gender === "male"
+            ? "/uploads/avatar-man.png"
+            : "/uploads/avatar-woman.png",
         password: hash,
         gender: req.body.gender,
       });
