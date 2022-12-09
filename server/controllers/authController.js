@@ -8,9 +8,12 @@ const handleRegister = asyncHandler(async (req, res) => {
     const username = await UserModel.findOne({
       email: req.body.email,
     });
+
+    console.log("handle Register username: ", username);
     if (username) res.sendStatus(400);
     else {
       const hash = await bcrypt.hash(req.body.password, 10);
+      console.log("hash password: ", hash);
       await UserModel.create({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
@@ -37,6 +40,7 @@ const handleLogin = asyncHandler(async (req, res) => {
     const username = await UserModel.findOne({
       email: req.body.email,
     });
+
     if (username) {
       const result = await bcrypt.compare(req.body.password, username.password);
       if (result) {
@@ -46,8 +50,8 @@ const handleLogin = asyncHandler(async (req, res) => {
           firstName,
           lastName,
           email,
-          avatar,
         });
+        console.log("login bcrypt result: ", token);
         res.cookie("tokens", token, {
           httpOnly: true,
           secure: false,

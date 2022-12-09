@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const UserModel = require("../models/UserModel");
 const PostModel = require("../models/PostModel");
+const fs = require("fs");
+const ImageModel = require("../models/imageModel");
 
 let monthNames = [
   "January",
@@ -71,9 +73,10 @@ const getUserDetail = asyncHandler(async (req, res) => {
 const getSavedList = asyncHandler(async (req, res) => {
   try {
     const username = req.username;
-    const userInfo = await UserModel.findById(username._id).populate(
-      "listSaved"
-    );
+    const userInfo = await UserModel.findById(username._id)
+      .populate("listSaved")
+      .populate("avatar")
+      .populate("coverImg");
     res.json({ listSaved: userInfo.listSaved });
   } catch (error) {
     res.status(500).json({ error });
@@ -83,15 +86,45 @@ const getSavedList = asyncHandler(async (req, res) => {
 const handleUpdateInfo = asyncHandler(async (req, res) => {
   try {
     const username = req.username;
+    const files = req.files;
+    console.log(files);
+    let newAvatar;
+    let newCoverImg;
+    if (files) {
+      const [avatar, cover] = files;
+      const avatarImg = fs.readFileSync(avatar.path);
+      newAvatar = new ImageModel({
+        name: avatar.filename,
+        image: Buffer.from(avatarImg).toString("base64"),
+      });
+      await newAvatar.save();
+      // fs.unlink(
+      //   __dirname + `/public/uploads/${username.avatar.name}`,
+      //   function (err) {
+      //     console.log("file deleted unsuccessfully", err);
+      //   }
+      // );
+
+      const coverImg = fs.readFileSync(cover.path);
+      newCoverImg = new ImageModel({
+        name: cover.filename,
+        image: Buffer.from(coverImg).toString("base64"),
+      });
+      await newCoverImg.save();
+    }
+
     await UserModel.findByIdAndUpdate(username._id, {
-      avatar: req.body.avatar || username.avatar || "",
-      coverImg: req.body.coverImg || username.coverImg || "",
+      avatar: newAvatar || username.avatar || "",
+      coverImg: newCoverImg || username.coverImg || "",
+      firstName: req.body.firstName || username.firstName,
+      lastName: req.body.lastName || username.lastName,
       detailInfo: {
+        birthday: req.body.birthday || "",
         workAt: req.body.workAt || "",
         desc: req.body.desc || "",
       },
     });
-    res.json("Update info successful");
+    res.json(`Update info successful`);
   } catch (error) {
     res.status(500).json("Server error");
   }

@@ -21,6 +21,6 @@ const UserSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const UserModel = mongoose.model("groups", UserSchema);
+const GroupModel = mongoose.model("groups", UserSchema);
 
-module.exports = UserModel;
+module.exports = GroupModel;

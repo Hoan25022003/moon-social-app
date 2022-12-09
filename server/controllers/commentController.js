@@ -18,6 +18,9 @@ const handleAddComments = asyncHandler(async (req, res) => {
   const username = req.username;
   try {
     if (!req.body) res.status(400).json("Please type full info");
+    if (!req.body.content || req.body.content.trim().length == 0) {
+      return res.status(400).json("Comment must have 1 character at least");
+    }
     const { modeComment } = await PostModel.findById(req.params.id);
     if (!modeComment) res.status(400).json("Mode comment is turned off");
     else {

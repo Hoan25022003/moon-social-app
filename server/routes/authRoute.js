@@ -4,6 +4,7 @@ const {
   handleRegister,
   handleLogin,
   handleLogout,
+  handleTest,
 } = require("../controllers/authController");
 const verifyToken = require("../middleWare/verifyToken");
 
