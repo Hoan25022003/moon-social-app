@@ -30,25 +30,26 @@ io.on("connection", (socket) => {
   socket.on("sendComment", async (comment) => {
     const currentUser = getCurrentUser(socket.id);
     try {
-      if (!comment) res.status(400).json("Please type full info");
+      if (!comment) {
+        return socket.emit("error");
+      }
       const { modeComment } = await PostModel.findById(currentUser.post.id);
-      if (!modeComment) res.status(400).json("Mode comment is turned off");
-      else {
+      if (!modeComment) {
+        return socket.emit("error");
+      } else {
         await CommentModel.create({
-          ...req.body,
+          ...comment,
           userID: currentUser._id,
           postID: currentUser.post.id,
         });
-        res.json("Create successful!");
+        io.to(currentUser.post).emit(
+          "comment",
+          formatComment(currentUser, comment)
+        );
       }
     } catch (error) {
-      res.status(500).json(error);
+      socket.emit("error");
     }
-
-    io.to(currentUser.post).emit(
-      "comment",
-      formatComment(currentUser, comment)
-    );
   });
 
   socket.on("deleteComment", async (commentId) => {
@@ -56,12 +57,12 @@ io.on("connection", (socket) => {
     try {
       const deleteComment = await CommentModel.findById(commentId);
       if (currentUser._id !== deleteComment.userID) {
-        return res.status(403).json("Unauthorized");
+        return socket.emit("error");
       }
       await CommentModel.deleteOne(commentId);
       io.to(currentUser.post).emit("deletedComment", commentId);
     } catch (err) {
-      res.status(500).json("Server error");
+      socket.emit("error");
     }
   });
 
