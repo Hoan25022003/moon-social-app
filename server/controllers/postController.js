@@ -46,28 +46,25 @@ const getPostFilter = asyncHandler(async (req, res) => {
   }
 });
 
-const getSavedList = asyncHandler(async (req, res) => {
-  try {
-    const username = req.username;
-    const userInfo = await UserModel.findById(username._id).populate(
-      "listSaved"
-    );
-    res.json({ listSaved: userInfo.listSaved });
-  } catch (error) {
-    res.status(500).json({ error });
-  }
-});
-
 const handleCreatePost = asyncHandler(async (req, res) => {
+  const username = req.username;
   try {
-    const username = req.username;
-    await PostModel.create({
-      ...req.body,
-      authorID: username._id,
-      theme:
-        req.body.type === "theme" && (req.body.theme || { type: "default" }),
-    });
-    res.json({ mess: "Successful" });
+    const { type } = req.body;
+    if (type === "theme") {
+      await PostModel.create({
+        ...req.body,
+        authorID: username._id,
+        theme: req.body.theme || { type: "default" },
+      });
+      res.json({ mess: "Create success post theme" });
+    } else if (type === "image") {
+      const file = req.files;
+      console.log(file);
+      // await PostModel.create({
+      //   ...req.body,
+      //   authorID: username._id
+      // })
+    } else res.status(400).json("Invalid post type");
   } catch (error) {
     res.status(500).json({ error, mess: "Error server" });
   }
@@ -131,5 +128,4 @@ module.exports = {
   handleShowHeart,
   getPostFilter,
   handleSavePost,
-  getSavedList,
 };

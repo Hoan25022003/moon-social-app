@@ -1,10 +1,12 @@
 import axios from "api/axios";
 import Cookies from "js-cookie";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { userFriend } from "redux/users/userRequest";
 
-export default function useAddFriend(userID, status) {
+export default function useAddFriend(userID) {
   const [loadingBtn, setLoadingBtn] = useState(false);
-  const [statusNumber, setStatusNumber] = useState(status);
+  const dispatch = useDispatch();
 
   // Send invitation
   const handleInvite = async () => {
@@ -17,7 +19,7 @@ export default function useAddFriend(userID, status) {
           authorization: "Bearer " + Cookies.get("tokens"),
         },
       });
-      setStatusNumber(2);
+      dispatch(userFriend());
       setLoadingBtn(false);
     } catch (error) {
       console.log(error);
@@ -35,7 +37,7 @@ export default function useAddFriend(userID, status) {
           authorization: "Bearer " + Cookies.get("tokens"),
         },
       });
-      setStatusNumber(1);
+      dispatch(userFriend());
       setLoadingBtn(false);
     } catch (error) {
       console.log(error);
@@ -52,11 +54,16 @@ export default function useAddFriend(userID, status) {
           authorization: "Bearer " + Cookies.get("tokens"),
         },
       });
-      setStatusNumber(3);
+      dispatch(userFriend());
     } catch (error) {
       console.log(error);
     }
   };
 
-  return { statusNumber, loadingBtn, handleInvite, handleAccept, handleCancel };
+  return {
+    loadingBtn,
+    handleInvite,
+    handleAccept,
+    handleCancel,
+  };
 }

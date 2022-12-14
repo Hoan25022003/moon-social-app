@@ -8,10 +8,10 @@ import FriendList from "modules/friends/FriendList";
 import useCheckLogin from "hooks/useCheckLogin";
 import { useDispatch, useSelector } from "react-redux";
 import { userFriend } from "redux/users/userRequest";
+import FriendSkeleton from "components/skeleton/FriendSkeleton";
 
 const FriendPage = () => {
   const { currentUser } = useCheckLogin("Add friend | Moon Stars");
-  // console.log(currentUser);
   const dispatch = useDispatch();
   const { value: query, handleChange } = useChangeValue("");
   useEffect(() => {
@@ -36,6 +36,12 @@ const FriendPage = () => {
           className="py-[14px]"
           icon="user"
         ></Search>
+        {loading && (
+          <FriendList>
+            <FriendSkeleton />
+            <FriendSkeleton />
+          </FriendList>
+        )}
         {listUsers &&
           (listUsers.length > 0 ? (
             <FriendList>

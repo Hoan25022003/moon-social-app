@@ -11,12 +11,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 //   error: "#E64B59",
 // };
 
-const AlertInfo = ({
-  open = false,
-  setOpen,
-  severity = "success",
-  children,
-}) => {
+const AlertInfo = ({ open = false, setOpen, severity, children, message }) => {
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -25,14 +20,21 @@ const AlertInfo = ({
     setOpen(false);
   };
   return (
-    <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
-      <Alert
-        onClose={handleClose}
-        severity={severity}
-        sx={{ width: "100%", backgroundColor: "#4AC860" }}
-      >
-        {children}
-      </Alert>
+    <Snackbar
+      open={open}
+      autoHideDuration={3000}
+      onClose={handleClose}
+      message={!severity && message}
+    >
+      {severity === "success" && (
+        <Alert
+          onClose={handleClose}
+          severity={severity}
+          sx={{ width: "100%", backgroundColor: "#4AC860" }}
+        >
+          {children}
+        </Alert>
+      )}
     </Snackbar>
   );
 };

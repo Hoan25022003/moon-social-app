@@ -8,6 +8,7 @@ const handleRegister = asyncHandler(async (req, res) => {
     const username = await UserModel.findOne({
       email: req.body.email,
     });
+
     if (username) res.sendStatus(400);
     else {
       const hash = await bcrypt.hash(req.body.password, 10);
@@ -41,6 +42,7 @@ const handleLogin = asyncHandler(async (req, res) => {
     const username = await UserModel.findOne({
       email: req.body.email,
     });
+
     if (username) {
       const result = await bcrypt.compare(req.body.password, username.password);
       if (result) {
@@ -67,32 +69,6 @@ const handleLogin = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
-
-// const handleRefreshToken = async (req, res) => {
-//   try {
-//     const refreshToken = req.cookies.refreshToken;
-//     console.log(71, refreshToken);
-// !refreshToken && res.status(401);
-//     // if (!refreshTokens.includes(refreshToken))
-//     //   res.status(403).json({ mess: "Token is not available" });
-//     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-//       if (err) res.status(403);
-//       refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
-//       const newTokens = generateToken(user);
-//       refreshTokens.push(newTokens.refreshToken);
-//       res.cookie("refreshToken", newTokens.refreshToken, {
-//         httpOnly: true,
-//         secure: false,
-//         path: "/",
-//         sameSite: "strict",
-//       });
-//       res.json({ accessToken: newTokens.accessToken });
-//     });
-//   } catch (error) {
-//     res.status(500);
-//     throw new Error(error);
-//   }
-// };
 
 const handleLogout = asyncHandler((req, res) => {
   try {

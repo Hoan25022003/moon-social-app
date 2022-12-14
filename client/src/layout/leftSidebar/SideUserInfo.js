@@ -11,6 +11,7 @@ import TextLight from "components/text/TextLight";
 const SideUserInfo = ({ url = "/profile/123456", avatar, username, email }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  // console.log(avatar);
   const handleLogout = () => {
     logoutUser(dispatch);
   };

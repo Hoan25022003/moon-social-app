@@ -57,10 +57,7 @@ const PersonalPage = () => {
         <>
           <div className="relative">
             <PictureCover src="https://pbs.twimg.com/profile_banners/998963083816022017/1527006522/1080x360" />
-            <PictureAvatarBig
-              avatar="https://images.unsplash.com/photo-1667114790847-7653bc249e82?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
-              alt="Hoan Do"
-            />
+            <PictureAvatarBig avatar={userInfo?.avatar} alt={fullName} />
           </div>
           <div className="px-5">
             <ProfileFeature yourSelf={yourSelf}></ProfileFeature>

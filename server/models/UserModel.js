@@ -10,10 +10,13 @@ const UserSchema = mongoose.Schema(
       type: String,
       enum: ["male", "female"],
     },
-    avatar: String,
+    avatar: {
+      type: Object,
+      ref: "images",
+    },
     coverImg: {
-      type: String,
-      default: "/uploads/cover-image-default.jpg",
+      type: Object,
+      ref: "images",
     },
     detailInfo: Object,
     listSaved: [
