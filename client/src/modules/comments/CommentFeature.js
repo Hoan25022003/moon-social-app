@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Avatar } from "@mui/material";
 import Overlay from "components/common/Overlay";
 import ModalHeading from "components/modal/ModalHeading";
@@ -7,8 +8,18 @@ import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
 import ModalLine from "components/modal/ModalLine";
 import CommentItem from "./CommentItem";
+import { socket } from "../../api/axios";
 
-const CommentFeature = ({ handleHideModal }) => {
+const CommentFeature = ({ handleHideModal, post }) => {
+  const { id } = post;
+  const { currentUser } = useSelector((state) => state.auth.login);
+
+  useEffect(() => {
+    socket.emit("join", { user: currentUser._id, post: id });
+    socket.on("deletedComment", (commentId) => {
+      console.log("DELETED COMMENT: ", commentId);
+    });
+  }, [id]);
   return (
     <Overlay handleHideModal={handleHideModal}>
       <div className="w-[600px] mx-auto bg-white z-50 rounded-xl show-modal ">

@@ -77,7 +77,10 @@ const PostItem = ({ type = "theme" }) => {
         </div>
       </div>
       {modalComment && (
-        <CommentFeature handleHideModal={setModalComment}></CommentFeature>
+        <CommentFeature
+          handleHideModal={setModalComment}
+          post={{ id: "63a1d08c8e4aa3fc74ced7f2" }}
+        ></CommentFeature>
       )}
     </>
   );

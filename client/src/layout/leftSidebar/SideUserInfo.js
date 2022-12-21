@@ -11,6 +11,7 @@ import TextLight from "components/text/TextLight";
 const SideUserInfo = ({ url = "/profile/123456", avatar, username, email }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  // console.log(avatar);
   const handleLogout = () => {
     logoutUser(dispatch);
   };
@@ -37,7 +38,7 @@ const SideUserInfo = ({ url = "/profile/123456", avatar, username, email }) => {
 
 SideUserInfo.propTypes = {
   url: PropTypes.string,
-  avatar: PropTypes.string.isRequired,
+  avatar: PropTypes.string,
   username: PropTypes.string.isRequired,
   email: PropTypes.string,
 };

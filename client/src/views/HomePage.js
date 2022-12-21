@@ -8,7 +8,7 @@ const HomePage = () => {
   // const { listUsers } = useSelector((state) => state.users);
   // console.log(listUsers);
   return (
-    <div className="py-4">
+    <div className="py-4 bg-red-500 dark:bg-black">
       <PostFeature username={currentUser?.firstName}></PostFeature>
       <div className="flex flex-col mt-4 gap-y-4">
         <PostItem></PostItem>

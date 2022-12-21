@@ -9,15 +9,17 @@ const handleRegister = asyncHandler(async (req, res) => {
       email: req.body.email,
     });
 
-    console.log("handle Register username: ", username);
     if (username) res.sendStatus(400);
     else {
       const hash = await bcrypt.hash(req.body.password, 10);
-      console.log("hash password: ", hash);
       await UserModel.create({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
+        avatar:
+          req.body.gender === "male"
+            ? "/uploads/avatar-man.png"
+            : "/uploads/avatar-woman.png",
         password: hash,
         gender: req.body.gender,
       });
@@ -50,8 +52,8 @@ const handleLogin = asyncHandler(async (req, res) => {
           firstName,
           lastName,
           email,
+          avatar,
         });
-        console.log("login bcrypt result: ", token);
         res.cookie("tokens", token, {
           httpOnly: true,
           secure: false,
@@ -67,32 +69,6 @@ const handleLogin = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
-
-// const handleRefreshToken = async (req, res) => {
-//   try {
-//     const refreshToken = req.cookies.refreshToken;
-//     console.log(71, refreshToken);
-// !refreshToken && res.status(401);
-//     // if (!refreshTokens.includes(refreshToken))
-//     //   res.status(403).json({ mess: "Token is not available" });
-//     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-//       if (err) res.status(403);
-//       refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
-//       const newTokens = generateToken(user);
-//       refreshTokens.push(newTokens.refreshToken);
-//       res.cookie("refreshToken", newTokens.refreshToken, {
-//         httpOnly: true,
-//         secure: false,
-//         path: "/",
-//         sameSite: "strict",
-//       });
-//       res.json({ accessToken: newTokens.accessToken });
-//     });
-//   } catch (error) {
-//     res.status(500);
-//     throw new Error(error);
-//   }
-// };
 
 const handleLogout = asyncHandler((req, res) => {
   try {

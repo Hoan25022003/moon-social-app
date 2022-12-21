@@ -1,8 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const UserModel = require("../models/UserModel");
 const PostModel = require("../models/PostModel");
-const fs = require("fs");
-const ImageModel = require("../models/imageModel");
+const FriendModel = require("../models/FriendModel");
 
 let monthNames = [
   "January",
@@ -19,6 +18,31 @@ let monthNames = [
   "December",
 ];
 
+async function getAllFriend(username) {
+  const listFriend = await FriendModel.find({
+    $or: [
+      {
+        from: username._id,
+      },
+      { to: username._id },
+    ],
+  }).populate(["from", "to"]);
+  var listUser = [];
+  listFriend.map((item) => {
+    if (item.from.email === username.email)
+      listUser = [
+        ...listUser,
+        { ...item.to._doc, isConfirmed: item.isConfirmed, isSender: true },
+      ];
+    else
+      listUser = [
+        ...listUser,
+        { ...item.from._doc, isConfirmed: item.isConfirmed, isSender: false },
+      ];
+  });
+  return listUser;
+}
+
 function searchListByName(name) {
   return {
     $regex: name,
@@ -27,12 +51,13 @@ function searchListByName(name) {
 }
 
 const getUserList = asyncHandler(async (req, res) => {
+  const username = req.username;
   try {
-    const username = req.username;
     const { gender, name } = req.query;
     const filterQuery = (query) => query && { query };
     const listUser = await UserModel.find(
       {
+        email: { $ne: username.email },
         $or: [
           {
             firstName: searchListByName(name || ""),
@@ -45,7 +70,8 @@ const getUserList = asyncHandler(async (req, res) => {
       },
       { password: 0 }
     );
-    res.json(listUser);
+    const listFriend = await getAllFriend(username);
+    res.json({ listUser, listFriend });
   } catch (error) {
     res.status(500).json(error);
   }
@@ -73,10 +99,9 @@ const getUserDetail = asyncHandler(async (req, res) => {
 const getSavedList = asyncHandler(async (req, res) => {
   try {
     const username = req.username;
-    const userInfo = await UserModel.findById(username._id)
-      .populate("listSaved")
-      .populate("avatar")
-      .populate("coverImg");
+    const userInfo = await UserModel.findById(username._id).populate(
+      "listSaved"
+    );
     res.json({ listSaved: userInfo.listSaved });
   } catch (error) {
     res.status(500).json({ error });

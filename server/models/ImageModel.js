@@ -1,13 +1,19 @@
-const mongoose = require("mongoose");
+const mongoose = require("../config/connectDB");
 
 const ImageSchema = mongoose.Schema({
   name: {
     type: String,
     require: true,
   },
-  image: {
+  images: [
+    {
+      type: String,
+      require: true,
+    },
+  ],
+  userID: {
     type: String,
-    require: true,
+    ref: "users",
   },
 });
 

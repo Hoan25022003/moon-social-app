@@ -1,10 +1,14 @@
 import React from "react";
 import { Button, TextareaAutosize } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { socket } from "../../api/axios";
 
 const CommentForm = ({
   placeholder = "Comment your reply about this post",
 }) => {
+  const { currentUser } = useSelector((state) => state.auth.login);
+
   const {
     register,
     formState: { isDirty, errors },
@@ -12,6 +16,7 @@ const CommentForm = ({
   } = useForm({ mode: "onChange" });
   const handleComment = (values) => {
     console.log(values);
+    socket.emit("sendComment", values);
   };
   return (
     <form

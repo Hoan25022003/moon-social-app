@@ -5,11 +5,20 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import AlertDialog from "components/alert/AlertDialog";
+import { useSelector } from "react-redux";
+import { socket } from "api/axios";
 
-const CommentItem = ({ linkInfo = "" }) => {
+const CommentItem = ({
+  linkInfo = "",
+  comment = {
+    _id: "63a1d5acce0398d5bdbfd857",
+    userId: "63a1c19941e74649fd04c779",
+  },
+}) => {
+  const { currentUser } = useSelector((state) => state.auth.login);
   const [openDialog, setOpenDialog] = React.useState(false);
   const handleDeleteComment = () => {
-    console.log(123);
+    socket.emit("deleteComment", comment._id);
   };
   return (
     <>
@@ -35,13 +44,15 @@ const CommentItem = ({ linkInfo = "" }) => {
             possimus dolore officiis praesentium!
           </h5>
         </div>
-        <Tooltip
-          title="Delete comment"
-          className="pointer-events-none opacity-30"
-          onClick={setOpenDialog}
-        >
-          <DeleteIcon className="text-xl text-iconColor" />
-        </Tooltip>
+        {comment?.userId === currentUser._id ? (
+          <Tooltip
+            title="Delete comment"
+            className="pointer-events-auto opacity-30"
+            onClick={setOpenDialog}
+          >
+            <DeleteIcon className="text-xl text-iconColor" />
+          </Tooltip>
+        ) : null}
       </div>
       <AlertDialog
         open={openDialog}
