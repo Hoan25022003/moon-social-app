@@ -43,7 +43,7 @@ const ProfileEdit = ({ handleHideModal }) => {
   });
   const watchDesc = watch("desc");
   const handleEditProfile = (values) => {
-    console.log(values);
+    const formData = new FormData();
   };
   return (
     <Overlay handleHideModal={handleHideModal} alignCenter={true}>
