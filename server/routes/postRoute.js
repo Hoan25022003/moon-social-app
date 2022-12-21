@@ -6,11 +6,17 @@ const {
   getPostFilter,
   handleSavePost,
   handleShowHeart,
+  getPostPersonal,
+  getPostFeature,
 } = require("../controllers/postController");
 const verifyToken = require("../middleWare/verifyToken");
 const upload = require("../utils/uploadStorage");
 
 router.get("/", verifyToken, getPostList);
+
+router.get("/:id", verifyToken, getPostPersonal);
+
+router.get("/:id/:by", verifyToken, getPostFeature);
 
 router.get("/filter", verifyToken, getPostFilter);
 

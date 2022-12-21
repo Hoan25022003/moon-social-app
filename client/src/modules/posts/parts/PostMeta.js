@@ -4,15 +4,11 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import TextUsername from "components/text/TextUsername";
 
-const PostMeta = ({
-  avatar,
-  fullName,
-  showDate = true,
-  sizeAvatar = 42,
-  timer,
-}) => {
+const PostMeta = ({ showDate = true, sizeAvatar = 42, timer = "", author }) => {
+  const { _id, avatar, firstName, lastName } = author;
+  const fullName = firstName + " " + lastName;
   return (
-    <Link to={"/home"} className="flex items-center gap-x-3 w-fit">
+    <Link to={"/profile/" + _id} className="flex items-center gap-x-3 w-fit">
       <Avatar
         alt="Hoan"
         src={avatar}
@@ -30,7 +26,7 @@ const PostMeta = ({
 
 PostMeta.propTypes = {
   avatar: PropTypes.string,
-  fullName: PropTypes.string,
+  author: PropTypes.object,
   showDate: PropTypes.bool,
   timer: PropTypes.any,
 };

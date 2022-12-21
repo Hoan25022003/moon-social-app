@@ -1,34 +1,41 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { addNewPost } from "redux/posts/postRequest";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
 import { listTheme } from "utils/constant";
 import ButtonGradient from "components/button/ButtonGradient";
-import { useForm } from "react-hook-form";
-import axios from "api/axios";
+import { useNavigate } from "react-router-dom";
 
 const PostAddTheme = () => {
-  const [selectTheme, setSelectTheme] = React.useState("default");
   const {
     register,
     handleSubmit,
-    formState: { isDirty, isSubmitting },
+    formState: { isDirty },
+    reset,
+    setValue,
+    watch,
   } = useForm({
     mode: "onChange",
     defaultValues: {
       content: "",
+      theme: "",
     },
   });
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const watchTheme = watch("theme");
+  const { loading, error } = useSelector((state) => state.posts.createPost);
   const handleAddPost = async (value) => {
-    await axios.post("/post/create-public", {
-      ...value,
-      theme: selectTheme,
-      type: "theme",
-    });
+    console.log(value);
+    const data = { ...value, type: "theme" };
+    dispatch(addNewPost({ data, navigate, reset }));
   };
   return (
     <form onSubmit={handleSubmit(handleAddPost)} className="mt-3">
       <div className="relative min-h-[200px]">
-        {selectTheme === "default" ? (
+        {!watchTheme ? (
           <textarea
             className="w-full min-h-[140px] text-xl font-medium scroll-custom bg-transparent"
             placeholder="Hi Hoan, what are you thinking?"
@@ -36,9 +43,9 @@ const PostAddTheme = () => {
           ></textarea>
         ) : (
           <div className="relative w-full max-h-[300px] overflow-hidden rounded-xl scroll-custom">
-            <img src={selectTheme?.linkImg} alt="" />
+            <img src={watchTheme?.linkImg} alt="" />
             <textarea
-              className={`absolute w-full min-h-[220px] scroll-custom p-4 text-xl font-medium text-center bg-transparent top-5 ${selectTheme?.textColor}`}
+              className={`absolute w-full min-h-[220px] scroll-custom p-4 text-xl font-medium text-center bg-transparent top-5 ${watchTheme?.textColor}`}
               placeholder="Hi Hoan, what are you thinking?"
               {...register("content")}
             ></textarea>
@@ -55,9 +62,9 @@ const PostAddTheme = () => {
             <SwiperSlide>
               <div
                 className={`h-10 rounded-md cursor-pointer bg-graySoft ${
-                  selectTheme === "default" && "theme-active"
+                  !watchTheme && "theme-active"
                 }`}
-                onClick={(e) => setSelectTheme("default")}
+                onClick={(e) => setValue("theme", "")}
               ></div>
             </SwiperSlide>
             {listTheme.map((theme, i) => (
@@ -65,10 +72,10 @@ const PostAddTheme = () => {
                 <img
                   src={theme.linkImg}
                   className={`object-cover w-full h-10 rounded-md cursor-pointer ${
-                    selectTheme.linkImg === theme.linkImg && "theme-active"
+                    watchTheme.linkImg === theme.linkImg && "theme-active"
                   }`}
                   alt=""
-                  onClick={(e) => setSelectTheme(theme)}
+                  onClick={(e) => setValue("theme", theme)}
                 />
               </SwiperSlide>
             ))}
@@ -77,7 +84,7 @@ const PostAddTheme = () => {
       </div>
       <ButtonGradient
         type="submit"
-        isLoading={isSubmitting}
+        isLoading={loading}
         className={`w-full py-3 mt-4 text-base font-bold rounded-md ${
           !isDirty && "pointer-events-none opacity-40"
         }`}

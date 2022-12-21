@@ -5,8 +5,8 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
+const { userJoin } = require("./utils/usersActive");
 const commentHandler = require("./socket_io/commentHandler");
-const { getCurrentUser, userJoin } = require("./utils/usersActive");
 
 const app = express();
 const server = http.createServer(app);

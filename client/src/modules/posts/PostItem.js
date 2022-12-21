@@ -10,52 +10,65 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import PostTheme from "./parts/PostTheme";
 import CommentFeature from "modules/comments/CommentFeature";
+import axios from "api/axios";
+import Cookies from "js-cookie";
 
-const PostItem = ({ type = "theme" }) => {
-  const [like, setLike] = useToggle(false);
+const PostItem = ({ postInfo }) => {
+  const {
+    _id,
+    isLiked,
+    saved,
+    content,
+    theme,
+    authorID,
+    type,
+    listImg,
+    listHeart,
+  } = postInfo;
+  const [like, setLike] = useToggle(isLiked);
   const [modalComment, setModalComment] = useToggle(false);
+  const [countLike, setCountLike] = React.useState(listHeart.length);
+  const handleLiked = async () => {
+    try {
+      setLike();
+      await axios({
+        method: "POST",
+        url: "/posts/heart/" + _id,
+        headers: {
+          authorization: "Bearer " + Cookies.get("tokens"),
+        },
+      });
+      like ? setCountLike((c) => c - 1) : setCountLike((c) => c + 1);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <div className="flex flex-col px-4 rounded-xl bg-whiteSoft">
         <div className="flex items-start justify-between mt-5 mb-3">
-          <PostMeta
-            avatar="https://images.unsplash.com/photo-1667114790847-7653bc249e82?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
-            fullName="Hoan Do"
-            timer="22 minutes previous"
-          ></PostMeta>
-          <PostSaved></PostSaved>
+          <PostMeta timer="22 minutes previous" author={authorID}></PostMeta>
+          <PostSaved isSaved={saved} postID={_id}></PostSaved>
         </div>
         {type === "theme" ? (
-          <PostTheme></PostTheme>
+          <PostTheme theme={theme}>{content}</PostTheme>
         ) : (
           <>
-            <PostContent>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis
-              dolor eligendi esse enim quod molestiae commodi, porro consequatur
-              laboriosam consequuntur blanditiis dolorem ducimus doloribus, illo
-              laudantium suscipit error. Mollitia, quisquam!
-            </PostContent>
-            <PostImage
-              src="https://images.unsplash.com/photo-1666787031139-61a0e22e0c2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
-              listImg={[
-                "https://images.unsplash.com/photo-1668613964763-90d0bd6559f7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80",
-                "https://images.unsplash.com/photo-1668595472892-57a348e65858?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80",
-                "https://images.unsplash.com/photo-1668414250091-9785b10191cb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1237&q=80",
-              ]}
-            ></PostImage>
+            <PostContent>{content}</PostContent>
+            <PostImage src={listImg[0]} listImg={listImg}></PostImage>
           </>
         )}
         <div className="py-3 ">
           <div className="flex items-center gap-x-10">
             <PostStatus
               hoverColor="group-hover:bg-heartColor group-hover:text-heartColor"
-              quantity={3000}
+              quantity={countLike}
               textColor={
                 like
                   ? "text-heartColor"
                   : "group-hover:text-heartColor transition-colors"
               }
-              onClick={setLike}
+              onClick={handleLiked}
               title={like ? "Unlike" : "Like"}
             >
               {like ? (

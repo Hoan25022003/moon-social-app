@@ -6,7 +6,7 @@ export default function useTurnSwitch(key) {
   const keyName = searchParams.get(key);
   const [switchTab, setSwitchTab] = useState(0);
   useEffect(() => {
-    if (keyName === "about") {
+    if (keyName === "picture") {
       searchParams.delete(key);
       setSearchParams(searchParams);
     }

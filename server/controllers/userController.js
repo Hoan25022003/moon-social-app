@@ -86,25 +86,17 @@ const getUserDetail = asyncHandler(async (req, res) => {
         monthNames[userDetail?.createdAt.getMonth()] +
         " " +
         userDetail?.createdAt.getFullYear();
+      const postCount = await PostModel.find({
+        authorID: req.params.id,
+      }).count();
       res.json({
         userInfo: { ...userDetail._doc, createdAt: dateJoin },
         yourSelf: username.email == userDetail.email,
+        postCount,
       });
     } else res.status(400).json("User ID is not valid");
   } catch (error) {
     res.status(500).json(error);
-  }
-});
-
-const getSavedList = asyncHandler(async (req, res) => {
-  try {
-    const username = req.username;
-    const userInfo = await UserModel.findById(username._id).populate(
-      "listSaved"
-    );
-    res.json({ listSaved: userInfo.listSaved });
-  } catch (error) {
-    res.status(500).json({ error });
   }
 });
 
@@ -155,4 +147,4 @@ const handleUpdateInfo = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { getUserList, handleUpdateInfo, getUserDetail, getSavedList };
+module.exports = { getUserList, handleUpdateInfo, getUserDetail };

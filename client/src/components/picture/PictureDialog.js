@@ -32,8 +32,8 @@ const PictureDialog = ({ openState, listImg = [] }) => {
           slidesPerView={1}
           allowTouchMove={false}
         >
-          {listImg.map((img) => (
-            <SwiperSlide>
+          {listImg.map((img, i) => (
+            <SwiperSlide key={i}>
               <img
                 src={img}
                 alt=""

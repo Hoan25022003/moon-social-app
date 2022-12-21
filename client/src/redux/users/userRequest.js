@@ -13,7 +13,7 @@ export const userProfile = createAsyncThunk(
         },
       });
       return fulfillWithValue({
-        userInfo: res.data?.userInfo,
+        userInfo: { ...res.data?.userInfo, postCount: res.data?.postCount },
         yourSelf: res.data?.yourSelf,
       });
     } catch (error) {
@@ -34,7 +34,6 @@ export const userFriend = createAsyncThunk("users/friend", async () => {
     listUser = listUser.map((user) => {
       return verifyFriend(listFriend, user);
     });
-    console.log(listUser);
     return listUser;
   } catch (error) {
     console.log(error);

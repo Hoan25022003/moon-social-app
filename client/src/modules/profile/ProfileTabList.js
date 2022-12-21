@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";
+import { useSearchParams } from "react-router-dom";
 
-const ProfileTabList = ({ children, listTab = [], setSearchParams }) => {
-  const [value, setValue] = React.useState(listTab[0]);
+const ProfileTabList = ({
+  children,
+  listTab = [],
+  // setSearchParams,
+  // searchParams,
+}) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [value, setValue] = React.useState(
+    searchParams.get("tab") || "picture"
+  );
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

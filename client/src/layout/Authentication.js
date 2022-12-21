@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 
 const Authentication = ({ children, heading }) => {
   const { success } = useSelector((state) => state.auth.register);
-  const [open, setOpen] = useState(success);
   return (
     <div className="w-full h-[100vh] flex items-start">
       <div className="w-[1200px] mx-auto grid gap-x-8 grid-cols-[1fr,1.5fr] mt-10">
@@ -38,9 +37,7 @@ const Authentication = ({ children, heading }) => {
           </div>
         </div>
       </div>
-      <AlertInfo open={open} setOpen={setOpen}>
-        Register successful
-      </AlertInfo>
+      <AlertInfo open={success}>Register successful</AlertInfo>
     </div>
   );
 };

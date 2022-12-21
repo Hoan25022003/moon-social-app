@@ -2,18 +2,16 @@ import { Avatar } from "@mui/material";
 import React from "react";
 import CollectionsIcon from "@mui/icons-material/Collections";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import useToggle from "hooks/useToggle";
 import PostAddNew from "modules/posts/PostAddNew";
 
-const PostFeature = ({
-  avatar = "https://images.unsplash.com/photo-1666679639559-fdb2162b3cbd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80",
-  username = " ",
-  linkInfo,
-}) => {
+const PostFeature = ({ linkInfo, username, avatar }) => {
   const [showModal, setShowModal] = useToggle(false);
   const [postType, setPostType] = React.useState("");
+  // const { avatar, firstName, lastName } = currentUser;
+  // console.log(avatar);
   return (
     <div className="px-4 py-3 bg-whiteSoft rounded-xl">
       {showModal && (

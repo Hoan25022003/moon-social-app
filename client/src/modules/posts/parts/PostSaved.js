@@ -7,10 +7,12 @@ import Checkbox from "@mui/material/Checkbox";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import axios from "api/axios";
+import Cookies from "js-cookie";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-const PostSaved = ({ isSaved = false }) => {
+const PostSaved = ({ isSaved = false, postID = "" }) => {
   const [saved, setSaved] = useToggle(isSaved);
   const [open, setOpen] = React.useState(false);
 
@@ -21,9 +23,20 @@ const PostSaved = ({ isSaved = false }) => {
 
     setOpen(false);
   };
-  const handleClick = () => {
-    setOpen(true);
-    setSaved();
+  const handleSaved = async () => {
+    try {
+      setSaved();
+      await axios({
+        method: "POST",
+        url: "/posts/saved/" + postID,
+        headers: {
+          authorization: "Bearer " + Cookies.get("tokens"),
+        },
+      });
+      setOpen(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const action = (
     <React.Fragment>
@@ -44,7 +57,7 @@ const PostSaved = ({ isSaved = false }) => {
         icon={<BookmarkBorderIcon className="text-iconColor" />}
         checkedIcon={<BookmarkIcon className="text-primary" />}
         checked={saved}
-        onChange={handleClick}
+        onChange={handleSaved}
       />
       <Snackbar
         open={open}

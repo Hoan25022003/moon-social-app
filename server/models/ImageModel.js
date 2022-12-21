@@ -5,15 +5,17 @@ const ImageSchema = mongoose.Schema({
     type: String,
     require: true,
   },
-  images: [
-    {
-      type: String,
-      require: true,
-    },
-  ],
+  link: {
+    type: String,
+    require: true,
+  },
   userID: {
     type: String,
     ref: "users",
+  },
+  private: {
+    type: Boolean,
+    default: false,
   },
 });
 

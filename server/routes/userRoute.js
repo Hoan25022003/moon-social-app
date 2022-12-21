@@ -13,8 +13,6 @@ router.get("/", verifyToken, getUserList);
 
 router.get("/:id", verifyToken, getUserDetail);
 
-router.post("/saved-post", verifyToken, getSavedList);
-
 router.put(
   "/update-info",
   verifyToken,

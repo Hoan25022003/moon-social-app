@@ -19,21 +19,22 @@ import PictureAvatarBig from "components/picture/PictureAvatarBig";
 import Skeleton from "@mui/material/Skeleton";
 import ProfileLoading from "modules/profile/ProfileLoading";
 
-const listTab = ["about", "posts", "friends", "likes"];
+const listTab = ["picture", "posts", "friends", "likes"];
 
 const PersonalPage = () => {
   const { currentUser } = useCheckLogin();
-  const { keyName: tabName, switchTab, setSearchParams } = useTurnSwitch("tab");
-  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
+  const { keyName: tabName, switchTab } = useTurnSwitch("tab");
   useEffect(() => {
-    dispatch(userProfile(id));
+    currentUser && dispatch(userProfile(id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+  }, [currentUser, id]);
   const { loading, error, userInfo, yourSelf } = useSelector(
     (state) => state.users.profile
   );
+  // console.log(userInfo);
   const [fullName, setFullName] = useState("");
   fullName && (document.title = fullName + " | Moon Stars");
   useEffect(() => {
@@ -46,12 +47,26 @@ const PersonalPage = () => {
       <BackPage turnSwitchTab={switchTab}>
         <div className="flex flex-col">
           <h4 className="text-lg font-bold">
-            {fullName || <Skeleton variant="text" sx={{ fontSize: "18px" }} />}
+            {fullName || (
+              <Skeleton
+                variant="text"
+                sx={{ fontSize: "18px", width: "100px" }}
+              />
+            )}
           </h4>
-          <p className="text-[13px] font-normal text-text4">12 posts</p>
+          <p className="text-[13px] font-normal text-text4">
+            {userInfo ? (
+              userInfo?.postCount + " posts"
+            ) : (
+              <Skeleton
+                variant="text"
+                sx={{ fontSize: "13px", width: "60px" }}
+              ></Skeleton>
+            )}
+          </p>
         </div>
       </BackPage>
-      {loading || !fullName ? (
+      {!currentUser || loading || !fullName ? (
         <ProfileLoading />
       ) : (
         <>
@@ -67,7 +82,7 @@ const PersonalPage = () => {
               <ProfileGeneral dateJoin={userInfo?.createdAt}></ProfileGeneral>
             </div>
           </div>
-          <ProfileTabList listTab={listTab} setSearchParams={setSearchParams}>
+          <ProfileTabList listTab={listTab}>
             <ProfileTabItem
               tabName={tabName}
               yourSelf={yourSelf}
