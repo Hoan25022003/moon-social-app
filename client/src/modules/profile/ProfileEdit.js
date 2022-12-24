@@ -15,6 +15,8 @@ import Input from "components/form/Input";
 import { TextareaAutosize, MenuItem } from "@mui/material";
 import Dropdown from "components/dropdown/Dropdown";
 import ModalLine from "components/modal/ModalLine";
+import { updateUserProfile } from "../../redux/users/userRequest";
+import { useDispatch, useSelector } from "react-redux";
 
 const schema = yup.object({
   firstName: yup
@@ -31,6 +33,9 @@ const schema = yup.object({
 
 const ProfileEdit = ({ handleHideModal }) => {
   const {
+    userInfo: { avatar, coverImg, firstName, lastName, detailInfo },
+  } = useSelector((state) => state.users.profile);
+  const {
     control,
     handleSubmit,
     register,
@@ -41,9 +46,11 @@ const ProfileEdit = ({ handleHideModal }) => {
     mode: "onChange",
     resolver: yupResolver(schema),
   });
+  const dispatch = useDispatch();
   const watchDesc = watch("desc");
   const handleEditProfile = (values) => {
-    const formData = new FormData();
+    console.log(values);
+    // dispatch(updateUserProfile(values));
   };
   return (
     <Overlay handleHideModal={handleHideModal} alignCenter={true}>
@@ -55,7 +62,7 @@ const ProfileEdit = ({ handleHideModal }) => {
         <form onSubmit={handleSubmit(handleEditProfile)}>
           <div className="max-h-[500px] overflow-auto">
             <div className="relative">
-              <PictureCover src="https://pbs.twimg.com/profile_banners/998963083816022017/1527006522/1080x360">
+              <PictureCover src={coverImg}>
                 <div className="absolute inset-0 flex items-center bg-black bg-opacity-25">
                   <PictureUpload
                     className="flex items-center justify-center w-12 h-12 mx-auto transition-all bg-black bg-opacity-50 rounded-full hover:bg-opacity-40"
@@ -66,11 +73,7 @@ const ProfileEdit = ({ handleHideModal }) => {
                   </PictureUpload>
                 </div>
               </PictureCover>
-              <PictureAvatarBig
-                avatar="https://images.unsplash.com/photo-1667114790847-7653bc249e82?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
-                alt="Hoan Do"
-                size={110}
-              >
+              <PictureAvatarBig avatar={avatar} alt="avatar" size={110}>
                 <div className="absolute inset-0 flex items-center bg-black bg-opacity-25 rounded-full cursor-default">
                   <PictureUpload
                     className="flex items-center justify-center w-10 h-10 mx-auto transition-all bg-black bg-opacity-50 rounded-full hover:bg-opacity-40"
@@ -91,7 +94,7 @@ const ProfileEdit = ({ handleHideModal }) => {
                   <Input
                     control={control}
                     name="firstName"
-                    placeholder="First Name"
+                    placeholder={firstName}
                   ></Input>
                 </FormGroup>
                 <FormGroup>
@@ -101,7 +104,7 @@ const ProfileEdit = ({ handleHideModal }) => {
                   <Input
                     control={control}
                     name="lastName"
-                    placeholder="First Name"
+                    placeholder={lastName}
                   ></Input>
                 </FormGroup>
               </div>
@@ -118,7 +121,11 @@ const ProfileEdit = ({ handleHideModal }) => {
                 </div>
                 <TextareaAutosize
                   aria-label="empty textarea"
-                  placeholder="Let's describe to yourself"
+                  placeholder={
+                    detailInfo?.desc
+                      ? detailInfo?.desc
+                      : "Let's describe to yourself!"
+                  }
                   className="w-full px-5 py-4 text-base transition-all border border-strock rounded-xl focus:border-primary"
                   name="desc"
                   minRows={3}

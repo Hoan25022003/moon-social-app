@@ -11,9 +11,16 @@ const getCurrentUser = (sId) => {
   return users.filter((user) => user.sId === sId);
 };
 
-const removeUser = (sId) => {};
+const removeUser = (sId) => {
+  const userIdx = users.findIndex((user) => user.sId == sId);
+
+  if (userIdx !== -1) {
+    return users.splice(userIdx, 1);
+  }
+};
 
 module.exports = {
   userJoin,
   getCurrentUser,
+  removeUser,
 };

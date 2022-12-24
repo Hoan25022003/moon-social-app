@@ -10,14 +10,8 @@ const UserSchema = mongoose.Schema(
       type: String,
       enum: ["male", "female"],
     },
-    avatar: {
-      type: Object,
-      ref: "images",
-    },
-    coverImg: {
-      type: Object,
-      ref: "images",
-    },
+    avatar: String,
+    coverImg: String,
     detailInfo: Object,
     listSaved: [
       {

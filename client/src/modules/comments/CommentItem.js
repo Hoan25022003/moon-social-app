@@ -8,43 +8,35 @@ import AlertDialog from "components/alert/AlertDialog";
 import { useSelector } from "react-redux";
 import { socket } from "api/axios";
 
-const CommentItem = ({
-  linkInfo = "",
-  comment = {
-    _id: "63a1d5acce0398d5bdbfd857",
-    userId: "63a1c19941e74649fd04c779",
-  },
-}) => {
+const CommentItem = ({ linkInfo = "", comment }) => {
   const { currentUser } = useSelector((state) => state.auth.login);
+  const { content, userID } = comment;
   const [openDialog, setOpenDialog] = React.useState(false);
+  const fullName = userID.firstName + " " + userID.lastName;
   const handleDeleteComment = () => {
     socket.emit("deleteComment", comment._id);
   };
+  console.log({ comment });
   return (
     <>
       <div className="flex items-start gap-x-3 ">
         <Link to={linkInfo}>
           <Avatar
             src="https://images.unsplash.com/photo-1667114790847-7653bc249e82?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
-            alt="Hoan Do"
+            alt={userID.firstName}
             sx={{ width: 52, height: 52 }}
           />
         </Link>
         <div>
           <div className="flex items-center gap-x-2">
-            <TextUsername>Huy Do</TextUsername>
+            <TextUsername>{fullName}</TextUsername>
             <Tooltip title="Author">
               <VerifiedIcon className="text-xl text-primary" />
             </Tooltip>
           </div>
-          <h5 className="text-[15px] font-normal text-text2">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui
-            praesentium reiciendis labore consequatur iste sit mollitia. Harum
-            asperiores quam at totam natus, labore voluptas tenetur accusantium,
-            possimus dolore officiis praesentium!
-          </h5>
+          <h5 className="text-[15px] font-normal text-text2">{content}</h5>
         </div>
-        {comment?.userId === currentUser._id ? (
+        {userID?._id === currentUser?._id ? (
           <Tooltip
             title="Delete comment"
             className="pointer-events-auto opacity-30"

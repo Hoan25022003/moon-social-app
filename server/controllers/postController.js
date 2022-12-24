@@ -1,16 +1,20 @@
 const asyncHandler = require("express-async-handler");
+const cloudinary = require("../config/cloudinary");
+const ImageModel = require("../models/ImageModel");
 const PostModel = require("../models/PostModel");
 const UserModel = require("../models/UserModel");
 
-function checkSavedPost(listPost, listSaved) {
+function checkSavedAndLiked(listPost, username) {
+  const { listSaved, _id } = username;
   return listPost.map((post) => ({
     ...post._doc,
     saved: listSaved.includes(post._id),
+    isLiked: post.listHeart.includes(_id),
   }));
 }
 
 const getPostList = asyncHandler(async (req, res) => {
-  const { listSaved } = req.username;
+  const username = req.username;
   try {
     const listPost = await PostModel.find().populate("authorID", [
       "_id",
@@ -19,7 +23,63 @@ const getPostList = asyncHandler(async (req, res) => {
       "lastName",
       "avatar",
     ]);
-    res.json({ listPost: checkSavedPost(listPost, listSaved) });
+    res.json({ listPost: checkSavedAndLiked(listPost, username) });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+const getPostPersonal = asyncHandler(async (req, res) => {
+  const username = req.username;
+  try {
+    const { id } = req.params;
+    const { by } = req.query;
+    const userInfo = await UserModel.findById(id);
+    if (userInfo) {
+      const condition = !by ? { authorID: id } : {};
+      let listPost = await PostModel.find(condition).populate("authorID", [
+        "_id",
+        "email",
+        "firstName",
+        "lastName",
+        "avatar",
+      ]);
+      let listNewPost;
+      if (by) {
+        listNewPost = checkSavedAndLiked(listPost, userInfo).filter((post) => {
+          if (by === "liked") return post.isLiked;
+          return post.saved;
+        });
+      } else listNewPost = checkSavedAndLiked(listPost, username);
+      res.json({
+        listPost: listNewPost,
+      });
+    } else res.status(400).json("User invalid");
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+const getPostFeature = asyncHandler(async (req, res) => {
+  const username = req.username;
+  try {
+    const { id, by } = req.params;
+    const userInfo = await UserModel.findById(id);
+    if (userInfo) {
+      const listPost = await PostModel.find().populate("authorID", [
+        "_id",
+        "email",
+        "firstName",
+        "lastName",
+        "avatar",
+      ]);
+      const listNewPost = checkSavedAndLiked(listPost, userInfo).filter(
+        (post) => {
+          if (by === "liked") return post.isLiked;
+          return post.saved;
+        }
+      );
+    } else res.status(400).json("Invalid user");
   } catch (error) {
     res.status(500).json(error);
   }
@@ -54,16 +114,29 @@ const handleCreatePost = asyncHandler(async (req, res) => {
       await PostModel.create({
         ...req.body,
         authorID: username._id,
-        theme: req.body.theme || { type: "default" },
+        theme: req.body.theme || { linkImg: null },
       });
       res.json({ mess: "Create success post theme" });
     } else if (type === "image") {
-      const file = req.files;
-      console.log(file);
-      // await PostModel.create({
-      //   ...req.body,
-      //   authorID: username._id
-      // })
+      const files = req.files;
+      var listImg = [];
+      for (const file of files) {
+        const data = await cloudinary.upload(file.path, {
+          folder: "moon-stars",
+        });
+        await ImageModel.create({
+          name: data.original_filename,
+          link: data.url,
+          userID: username._id,
+        });
+        listImg.push(data.url);
+      }
+      await PostModel.create({
+        ...req.body,
+        authorID: username._id,
+        listImg,
+      });
+      res.json("Add success post");
     } else res.status(400).json("Invalid post type");
   } catch (error) {
     res.status(500).json({ error, mess: "Error server" });
@@ -105,7 +178,7 @@ const handleSavePost = asyncHandler(async (req, res) => {
       await UserModel.findByIdAndUpdate(username._id, {
         listSaved,
       });
-      res.json(username);
+      res.json("Saved success");
     }
   } catch (error) {
     res.status(500).json(error);
@@ -122,10 +195,12 @@ const handleDeletePost = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  handleCreatePost,
   getPostList,
+  getPostFilter,
+  getPostPersonal,
+  getPostFeature,
+  handleCreatePost,
   handleDeletePost,
   handleShowHeart,
-  getPostFilter,
   handleSavePost,
 };

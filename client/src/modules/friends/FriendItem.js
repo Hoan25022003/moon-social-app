@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { Avatar, Button, IconButton, Snackbar } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import TextLight from "components/text/TextLight";
 import FriendStatus from "./FriendStatus";
 

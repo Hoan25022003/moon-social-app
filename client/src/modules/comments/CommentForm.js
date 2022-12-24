@@ -11,11 +11,12 @@ const CommentForm = ({
 
   const {
     register,
+    reset,
     formState: { isDirty, errors },
     handleSubmit,
   } = useForm({ mode: "onChange" });
   const handleComment = (values) => {
-    console.log(values);
+    reset();
     socket.emit("sendComment", values);
   };
   return (

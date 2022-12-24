@@ -20,7 +20,9 @@ module.exports = function commentHandler(socket, io) {
           userID: currentUser.user,
           postID: currentUser.post,
         });
+        let returnComment;
         newComment.save(function (err, comment) {
+          console.log(comment);
           newComment._id = comment._id;
         });
         const user = await UserModel.findById(currentUser.user);

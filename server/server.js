@@ -5,12 +5,16 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
+const { userJoin, removeUser } = require("./utils/usersActive");
 const commentHandler = require("./socket_io/commentHandler");
-const { getCurrentUser, userJoin } = require("./utils/usersActive");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
 
 /* Configuration */
 app.use(cors({ origin: ["http://localhost:3000"] }));
@@ -42,6 +46,7 @@ io.on("connection", (socket) => {
   commentHandler(socket, io);
 
   socket.on("disconnect", () => {
+    removeUser(socket.id);
     console.log("User had left!!");
   });
 });

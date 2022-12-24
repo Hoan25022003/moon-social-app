@@ -1,14 +1,28 @@
 import React from "react";
 import { useController } from "react-hook-form";
 
-const PictureUpload = ({ children, className, control, name, ...props }) => {
-  const { field } = useController({
-    control,
-    name,
-  });
+const PictureUpload = ({
+  children,
+  className,
+  control,
+  name,
+  onChange,
+  ...props
+}) => {
+  // const { field } = useController({
+  //   control,
+  //   name,
+  // });
   return (
     <label className={className + " cursor-pointer"}>
-      <input type="file" name="" className="hidden" {...field} />
+      <input
+        type="file"
+        name={name}
+        className="hidden"
+        onChange={onChange}
+        {...props}
+        // {...field}
+      />
       {children}
     </label>
   );

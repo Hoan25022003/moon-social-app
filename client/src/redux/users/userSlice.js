@@ -1,16 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getUserList, userFriend, userProfile } from "./userRequest";
 
+const initProfile = {
+  error: false,
+  loading: false,
+  userInfo: null,
+  yourSelf: false,
+};
+
 const userSlice = createSlice({
   name: "users",
   initialState: {
     listUsers: null,
-    profile: {
-      error: false,
-      loading: false,
-      userInfo: null,
-      yourSelf: false,
-    },
+    profile: initProfile,
     friend: {
       loading: false,
       error: false,
@@ -21,6 +23,9 @@ const userSlice = createSlice({
     // getUserProfile: (state, { payload }) => {
     //   state.userProfile.userInfo = payload;
     // },
+    resetProfile: (state) => {
+      state.profile = initProfile;
+    },
   },
   extraReducers: (builder) => {
     // Personal profile
@@ -57,6 +62,6 @@ const userSlice = createSlice({
   },
 });
 
-// export const { getUserProfile } = userSlice.actions;
+export const { resetProfile } = userSlice.actions;
 
 export default userSlice.reducer;

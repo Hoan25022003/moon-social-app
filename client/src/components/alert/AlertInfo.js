@@ -1,42 +1,47 @@
 import React from "react";
+import { useState } from "react";
+import PropTypes from "prop-types";
 import { Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 
-const Alert = React.forwardRef(function Alert(props, ref) {
+const Alert = React.forwardRef((props, ref) => {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-// const alertBg = {
-//   success: ,
-//   error: "#E64B59",
-// };
-
-const AlertInfo = ({ open = false, setOpen, severity, children, message }) => {
+const AlertInfo = ({ open = true, severity = "success", children }) => {
+  const [openAlert, setOpenAlert] = useState(open);
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
 
-    setOpen(false);
+    setOpenAlert(false);
   };
   return (
     <Snackbar
-      open={open}
+      open={openAlert}
       autoHideDuration={3000}
       onClose={handleClose}
-      message={!severity && message}
+      // message={!severity && children}
     >
-      {severity === "success" && (
-        <Alert
-          onClose={handleClose}
-          severity={severity}
-          sx={{ width: "100%", backgroundColor: "#4AC860" }}
-        >
-          {children}
-        </Alert>
-      )}
+      <Alert
+        onClose={handleClose}
+        severity={severity}
+        sx={{
+          width: "100%",
+          backgroundColor: severity === "success" ? "#4AC860" : "#E64B59",
+        }}
+      >
+        {children}
+      </Alert>
     </Snackbar>
   );
+};
+
+AlertInfo.propTypes = {
+  open: PropTypes.bool,
+  severity: PropTypes.oneOf(["success", "error"]),
+  children: PropTypes.string,
 };
 
 export default AlertInfo;

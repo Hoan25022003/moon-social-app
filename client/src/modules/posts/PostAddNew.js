@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Overlay from "components/common/Overlay";
 import PostMeta from "./parts/PostMeta";
 import ModalHeading from "components/modal/ModalHeading";
 import PostAddTheme from "./create/PostAddTheme";
 import PostAddImage from "./create/PostAddImage";
 import ModalLine from "components/modal/ModalLine";
+import AlertInfo from "components/alert/AlertInfo";
+import { useSelector } from "react-redux";
 
 const SelectPostType = ({ type }) => {
   switch (type) {
@@ -19,20 +21,19 @@ const SelectPostType = ({ type }) => {
   }
 };
 
-const PostAddNew = ({ handleHideModal, type }) => {
+const PostAddNew = ({ handleHideModal, type, author }) => {
+  const { success } = useSelector((state) => state.posts.createPost);
+  const { currentUser } = useSelector((state) => state.auth.login);
   return (
     <Overlay handleHideModal={handleHideModal}>
+      {success && <AlertInfo>Create success post</AlertInfo>}
       <div className="w-[550px] mx-auto bg-white z-50 rounded-xl show-modal">
         <ModalHeading handleHideModal={handleHideModal}>
           Create new post
         </ModalHeading>
         <ModalLine />
         <div className="flex flex-col px-5 py-4">
-          <PostMeta
-            avatar="https://images.unsplash.com/photo-1667114790847-7653bc249e82?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
-            fullName="Hoan Do"
-            showDate={false}
-          ></PostMeta>
+          <PostMeta author={currentUser} showDate={false}></PostMeta>
           <SelectPostType type={type}></SelectPostType>
         </div>
       </div>

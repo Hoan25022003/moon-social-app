@@ -91,6 +91,7 @@ const LoginPage = () => {
             className="w-[60%] py-[14px] text-[22px] leading-9 font-semibold rounded-xl"
             type="submit"
             isLoading={isLoading}
+            sizeLoading="36px"
           >
             Sign In
           </ButtonGradient>

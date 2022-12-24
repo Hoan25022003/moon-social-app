@@ -19,8 +19,8 @@ const MainLayout = () => {
   };
   return (
     <div className="max-w-[1200px] mx-auto">
-      <div className="fixed top-0 flex items-start justify-between w-[1200px] gap-x-8">
-        <div className="h-[100vh] flex-[1] flex flex-col justify-between z-50 py-8">
+      <div className="relative flex items-start justify-between w-[1200px] gap-x-8">
+        <div className="sticky top-0 h-[100vh] flex-[1] flex flex-col justify-between z-50 py-8">
           <div>
             <Link to={"/"} className="flex items-center gap-x-4">
               <img src="/moon.png" alt="" className="w-10 h-10" />
@@ -38,19 +38,21 @@ const MainLayout = () => {
             ></SideUserInfo>
           </div>
         </div>
-        <div className="flex-[2.5]"></div>
-        <div className="flex-[1.5] z-50 overflow-auto h-[100vh] py-4 scroll-custom">
+        <div className="flex-[2.5]">
+          <Outlet></Outlet>
+        </div>
+        <div className="sticky top-0 flex-[1.5] z-50 overflow-auto h-[100vh] py-4 scroll-custom">
           <Search onChange={handleChange} onKeyDown={handleEnterKey}></Search>
           <RightContainer path={location.pathname} />
         </div>
       </div>
-      <div className="flex items-start gap-x-8">
-        <div className="flex-1"></div>
+      {/* <div className="flex items-start gap-x-8">
+        <div className="flex-[1]"></div>
         <div className="flex-[2.5] z-10">
           <Outlet></Outlet>
         </div>
         <div className="flex-[1.5]"></div>
-      </div>
+      </div> */}
     </div>
   );
 };

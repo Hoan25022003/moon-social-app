@@ -2,6 +2,8 @@ const asyncHandler = require("express-async-handler");
 const UserModel = require("../models/UserModel");
 const PostModel = require("../models/PostModel");
 const FriendModel = require("../models/FriendModel");
+const ImageModel = require("../models/ImageModel");
+const cloudinary = require("../config/cloudinary");
 
 let monthNames = [
   "January",
@@ -86,9 +88,13 @@ const getUserDetail = asyncHandler(async (req, res) => {
         monthNames[userDetail?.createdAt.getMonth()] +
         " " +
         userDetail?.createdAt.getFullYear();
+      const postCount = await PostModel.find({
+        authorID: req.params.id,
+      }).count();
       res.json({
         userInfo: { ...userDetail._doc, createdAt: dateJoin },
         yourSelf: username.email == userDetail.email,
+        postCount,
       });
     } else res.status(400).json("User ID is not valid");
   } catch (error) {
@@ -96,51 +102,49 @@ const getUserDetail = asyncHandler(async (req, res) => {
   }
 });
 
-const getSavedList = asyncHandler(async (req, res) => {
-  try {
-    const username = req.username;
-    const userInfo = await UserModel.findById(username._id).populate(
-      "listSaved"
-    );
-    res.json({ listSaved: userInfo.listSaved });
-  } catch (error) {
-    res.status(500).json({ error });
-  }
-});
-
 const handleUpdateInfo = asyncHandler(async (req, res) => {
   try {
     const username = req.username;
     const files = req.files;
-    console.log(files);
+    // console.log(files);
     let newAvatar;
     let newCoverImg;
     if (files) {
-      const [avatar, cover] = files;
-      const avatarImg = fs.readFileSync(avatar.path);
-      newAvatar = new ImageModel({
-        name: avatar.filename,
-        image: Buffer.from(avatarImg).toString("base64"),
-      });
-      await newAvatar.save();
-      // fs.unlink(
-      //   __dirname + `/public/uploads/${username.avatar.name}`,
-      //   function (err) {
-      //     console.log("file deleted unsuccessfully", err);
-      //   }
-      // );
+      const { avatar, cover } = files;
 
-      const coverImg = fs.readFileSync(cover.path);
-      newCoverImg = new ImageModel({
-        name: cover.filename,
-        image: Buffer.from(coverImg).toString("base64"),
-      });
-      await newCoverImg.save();
+      if (avatar) {
+        const data = await cloudinary.upload(avatar[0].path, {
+          folder: "moon-stars",
+        });
+        newAvatar = new ImageModel({
+          name: data.original_filename,
+          link: data.url,
+          public_id: data.public_id,
+          userID: username._id,
+        });
+        await newAvatar.save();
+      }
+
+      if (cover) {
+        const data = await cloudinary.upload(cover[0].path, {
+          folder: "moon-stars",
+        });
+        console.log("COVER IMAGE: ", data);
+        newCoverImg = new ImageModel({
+          name: data.original_filename,
+          link: data.url,
+          public_id: data.public_id,
+          userID: username._id,
+        });
+        await newCoverImg.save();
+      }
     }
 
+    console.log("NEW COVER IMAGE: ", newCoverImg);
+
     await UserModel.findByIdAndUpdate(username._id, {
-      avatar: newAvatar || username.avatar || "",
-      coverImg: newCoverImg || username.coverImg || "",
+      avatar: newAvatar.link || username.avatar || "",
+      coverImg: newCoverImg.link || username.coverImg || "",
       firstName: req.body.firstName || username.firstName,
       lastName: req.body.lastName || username.lastName,
       detailInfo: {
@@ -155,4 +159,4 @@ const handleUpdateInfo = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { getUserList, handleUpdateInfo, getUserDetail, getSavedList };
+module.exports = { getUserList, handleUpdateInfo, getUserDetail };

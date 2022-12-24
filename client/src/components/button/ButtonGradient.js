@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import LoadingSpin from "components/loading/LoadingSpin";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 
 const ButtonGradient = ({
   className,
@@ -10,6 +10,7 @@ const ButtonGradient = ({
   type = "button",
   theme = 1,
   isLoading = false,
+  sizeLoading = "24px",
 }) => {
   switch (theme) {
     case 1:
@@ -31,7 +32,13 @@ const ButtonGradient = ({
         isLoading && "pointer-events-none opacity-40"
       }`}
     >
-      {isLoading ? <LoadingSpin className="w-9 h-9"></LoadingSpin> : children}
+      {isLoading ? (
+        <CircularProgress
+          style={{ width: sizeLoading, height: sizeLoading, color: "white" }}
+        />
+      ) : (
+        children
+      )}
     </Button>
   );
 };

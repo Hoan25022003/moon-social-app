@@ -13,12 +13,38 @@ export const userProfile = createAsyncThunk(
         },
       });
       return fulfillWithValue({
-        userInfo: res.data?.userInfo,
+        userInfo: { ...res.data?.userInfo, postCount: res.data?.postCount },
         yourSelf: res.data?.yourSelf,
       });
     } catch (error) {
       return rejectWithValue(true);
       // console.log(error);
+    }
+  }
+);
+
+export const updateUserProfile = createAsyncThunk(
+  "users/update",
+  async (data, { dispatch }) => {
+    try {
+      const formData = new FormData();
+      for (const [key, value] of Object.entries(data)) {
+        formData.append(key, value);
+      }
+
+      const res = await axios({
+        method: "POST",
+        url: "/users/update-info",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: "Bearer " + Cookies.get("tokens"),
+        },
+      });
+      console.log("UPDATE USER SUCCESS: ", res.data);
+      // dispatch(userProfile)
+    } catch (err) {
+      console.log("UPDATE USER ERROR: ", err);
     }
   }
 );
@@ -34,7 +60,6 @@ export const userFriend = createAsyncThunk("users/friend", async () => {
     listUser = listUser.map((user) => {
       return verifyFriend(listFriend, user);
     });
-    console.log(listUser);
     return listUser;
   } catch (error) {
     console.log(error);
