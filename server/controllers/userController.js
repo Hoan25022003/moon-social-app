@@ -1,7 +1,9 @@
 const asyncHandler = require("express-async-handler");
+const removeTones = require("../utils/removeTones");
 const UserModel = require("../models/UserModel");
 const PostModel = require("../models/PostModel");
 const FriendModel = require("../models/FriendModel");
+const ImageModel = require("../models/ImageModel");
 
 let monthNames = [
   "January",
@@ -43,33 +45,43 @@ async function getAllFriend(username) {
   return listUser;
 }
 
-function searchListByName(name) {
-  return {
-    $regex: name,
-    $options: "i",
-  };
+function searchListByName(str, name) {
+  // return {
+  //   $regex: removeTones(name),
+  //   $options: "i",
+  // };
+  return removeTones(str.toLowerCase()).includes(
+    removeTones(name.toLowerCase())
+  );
 }
 
 const getUserList = asyncHandler(async (req, res) => {
   const username = req.username;
   try {
-    const { gender, name } = req.query;
-    const filterQuery = (query) => query && { query };
-    const listUser = await UserModel.find(
+    const { gender, name, status } = req.query;
+    const filterQuery = (key, query) => query && { [key]: query };
+    // console.log(filterQuery(gender));
+    let listUser = await UserModel.find(
       {
         email: { $ne: username.email },
-        $or: [
-          {
-            firstName: searchListByName(name || ""),
-          },
-          {
-            lastName: searchListByName(name || ""),
-          },
-        ],
-        ...filterQuery(gender),
+        // $or: [
+        //   {
+        //     firstName: searchListByName(name || ""),
+        //   },
+        //   {
+        //     lastName: searchListByName(name || ""),
+        //   },
+        // ],
+        ...filterQuery("gender", gender),
       },
       { password: 0 }
     );
+    if (name)
+      listUser = listUser.filter(
+        (user) =>
+          searchListByName(user.firstName, name) ||
+          searchListByName(user.lastName, name)
+      );
     const listFriend = await getAllFriend(username);
     res.json({ listUser, listFriend });
   } catch (error) {
@@ -80,7 +92,7 @@ const getUserList = asyncHandler(async (req, res) => {
 const getUserDetail = asyncHandler(async (req, res) => {
   const username = req.username;
   try {
-    const userDetail = await UserModel.findById(req.params.id);
+    const userDetail = await UserModel.findById(req.params.id, { password: 0 });
     if (userDetail) {
       const dateJoin =
         monthNames[userDetail?.createdAt.getMonth()] +
@@ -89,12 +101,28 @@ const getUserDetail = asyncHandler(async (req, res) => {
       const postCount = await PostModel.find({
         authorID: req.params.id,
       }).count();
+      const listUpload = await ImageModel.find({
+        userID: req.params.id,
+      });
+      const listFriend = await getAllFriend(username);
       res.json({
-        userInfo: { ...userDetail._doc, createdAt: dateJoin },
+        userInfo: { ...userDetail._doc, createdAt: dateJoin, listUpload },
+        listFriend,
         yourSelf: username.email == userDetail.email,
         postCount,
       });
     } else res.status(400).json("User ID is not valid");
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+const handleDeleteImage = asyncHandler(async (req, res) => {
+  try {
+    if (req.body.yourSelf) {
+      await ImageModel.findByIdAndDelete(req.params.id);
+      res.json("Delete success image");
+    } else res.status(400).json("Delete failed");
   } catch (error) {
     res.status(500).json(error);
   }
@@ -147,4 +175,9 @@ const handleUpdateInfo = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { getUserList, handleUpdateInfo, getUserDetail };
+module.exports = {
+  getUserList,
+  handleUpdateInfo,
+  getUserDetail,
+  handleDeleteImage,
+};

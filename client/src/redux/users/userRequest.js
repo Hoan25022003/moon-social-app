@@ -1,7 +1,7 @@
 import axios from "api/axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getUserProfile } from "./userSlice";
 import Cookies from "js-cookie";
+import { getUserProfile } from "./userSlice";
 
 export const userProfile = createAsyncThunk(
   "user/info",
@@ -12,33 +12,46 @@ export const userProfile = createAsyncThunk(
           authorization: "Bearer " + Cookies.get("tokens"),
         },
       });
+      let { userInfo, postCount, yourSelf, listFriend } = res.data;
+      if (!yourSelf) userInfo = verifyFriend(listFriend, userInfo);
+      console.log(userInfo);
       return fulfillWithValue({
-        userInfo: { ...res.data?.userInfo, postCount: res.data?.postCount },
-        yourSelf: res.data?.yourSelf,
+        userInfo: {
+          ...userInfo,
+          postCount: postCount,
+        },
+        yourSelf: yourSelf,
       });
     } catch (error) {
-      return rejectWithValue(true);
-      // console.log(error);
+      return rejectWithValue(error);
     }
   }
 );
 
-export const userFriend = createAsyncThunk("users/friend", async () => {
-  try {
-    const res = await axios.get("/users", {
-      headers: {
-        authorization: "Bearer " + Cookies.get("tokens"),
-      },
-    });
-    let { listUser, listFriend } = res.data;
-    listUser = listUser.map((user) => {
-      return verifyFriend(listFriend, user);
-    });
-    return listUser;
-  } catch (error) {
-    console.log(error);
+export const userFriend = createAsyncThunk(
+  "users/friend",
+  async ({ name, gender = "" }, { fulfillWithValue, rejectWithValue }) => {
+    console.log(gender);
+    console.log(name);
+    try {
+      const res = await axios.get(
+        `/users?name=${name || ""}&gender=${gender}`,
+        {
+          headers: {
+            authorization: "Bearer " + Cookies.get("tokens"),
+          },
+        }
+      );
+      let { listUser, listFriend } = res.data;
+      listUser = listUser.map((user) => {
+        return verifyFriend(listFriend, user);
+      });
+      return fulfillWithValue(listUser);
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   }
-});
+);
 
 function verifyFriend(listFriend, user) {
   const checkList = listFriend.filter((friend) => friend._id === user._id)[0];

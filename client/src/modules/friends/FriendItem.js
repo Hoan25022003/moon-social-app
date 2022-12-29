@@ -15,26 +15,19 @@ const FriendItem = ({
   userID = "",
 }) => {
   return (
-    <div className="flex flex-col items-center justify-between p-4 h-[300px] border rounded-xl border-strock">
-      <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center justify-between p-4 h-[280px] border rounded-xl border-strock">
+      <Link to={linkInfo} className="flex flex-col items-center">
         <Avatar alt={fullName} src={src} sx={{ width: 80, height: 80 }} />
         <h4 className="mt-2 text-lg font-bold leading-6">{fullName}</h4>
         <TextLight className="mb-1">{email}</TextLight>
-      </div>
-      <div className="flex flex-col w-full gap-y-3">
+      </Link>
+      <div className="flex flex-col w-full gap-y-2">
         <FriendStatus
+          className="w-full p-[10px] text-base font-semibold"
           status={status}
           isSender={isSender}
           userID={userID}
         ></FriendStatus>
-        <Link to={linkInfo}>
-          <Button
-            variant="outlined"
-            className="w-full p-[10px] text-base font-semibold capitalize rounded-full font-body border-primary text-primary"
-          >
-            View Info
-          </Button>
-        </Link>
       </div>
     </div>
   );

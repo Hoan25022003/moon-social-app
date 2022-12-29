@@ -11,13 +11,15 @@ import TextHeading from "components/text/TextHeading";
 import TextLight from "components/text/TextLight";
 import ProfileTabList from "modules/profile/ProfileTabList";
 import PictureCover from "components/picture/PictureCover";
-import ProfileAbout from "modules/profile/tabs/ProfileAbout";
+import ProfilePicture from "modules/profile/tabs/ProfilePicture";
 import ProfilePost from "modules/profile/tabs/ProfilePost";
 import ProfileFriend from "modules/profile/tabs/ProfileFriend";
 import ProfileLike from "modules/profile/tabs/ProfileLike";
 import PictureAvatarBig from "components/picture/PictureAvatarBig";
 import Skeleton from "@mui/material/Skeleton";
 import ProfileLoading from "modules/profile/ProfileLoading";
+import PictureDialog from "components/picture/PictureDialog";
+import useBackdropPicture from "hooks/useBackropPicture";
 
 const listTab = ["picture", "posts", "friends", "likes"];
 
@@ -27,6 +29,7 @@ const PersonalPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { keyName: tabName, switchTab } = useTurnSwitch("tab");
+  const { handleShowBackdrop, ...others } = useBackdropPicture();
   useEffect(() => {
     currentUser && dispatch(userProfile(id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -34,7 +37,6 @@ const PersonalPage = () => {
   const { loading, error, userInfo, yourSelf } = useSelector(
     (state) => state.users.profile
   );
-  // console.log(userInfo);
   const [fullName, setFullName] = useState("");
   fullName && (document.title = fullName + " | Moon Stars");
   useEffect(() => {
@@ -71,11 +73,22 @@ const PersonalPage = () => {
       ) : (
         <>
           <div className="relative">
-            <PictureCover src="https://pbs.twimg.com/profile_banners/998963083816022017/1527006522/1080x360" />
-            <PictureAvatarBig avatar={userInfo?.avatar} alt={fullName} />
+            <PictureCover
+              src={userInfo?.coverImg}
+              onClick={() => handleShowBackdrop(userInfo?.coverImg)}
+            />
+            <PictureAvatarBig
+              avatar={userInfo?.avatar}
+              alt={fullName}
+              onClick={() => handleShowBackdrop(userInfo?.avatar)}
+            />
           </div>
           <div className="px-5">
-            <ProfileFeature yourSelf={yourSelf}></ProfileFeature>
+            <ProfileFeature
+              yourSelf={yourSelf}
+              isSender={userInfo?.isSender}
+              status={userInfo?.status}
+            ></ProfileFeature>
             <div className="flex flex-col mt-6">
               <TextHeading>{fullName}</TextHeading>
               <TextLight>{userInfo?.email}</TextLight>
@@ -90,6 +103,7 @@ const PersonalPage = () => {
           </ProfileTabList>
         </>
       )}
+      <PictureDialog {...others}></PictureDialog>
     </div>
   );
 };
@@ -106,7 +120,7 @@ const ProfileTabItem = ({ tabName, yourSelf }) => {
       return <ProfileLike></ProfileLike>;
 
     default:
-      return <ProfileAbout></ProfileAbout>;
+      return <ProfilePicture></ProfilePicture>;
   }
 };
 

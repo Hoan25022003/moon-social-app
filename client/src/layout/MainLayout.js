@@ -8,6 +8,7 @@ import SideFilter from "./rightSidebar/SideFilter";
 import useChangeValue from "hooks/useChangeValue";
 import Search from "components/search/Search";
 import { useSelector } from "react-redux";
+import SideFriend from "./rightSidebar/SideFriend";
 
 const MainLayout = () => {
   const location = useLocation();
@@ -63,7 +64,7 @@ const RightContainer = ({ path }) => {
       return <div>This is chat message</div>;
 
     case "/friends":
-      return <div>This is friends page</div>;
+      return <SideFriend></SideFriend>;
 
     case "/search":
       return <SideFilter></SideFilter>;

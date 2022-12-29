@@ -4,8 +4,10 @@ import { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Backdrop, CircularProgress } from "@mui/material";
 
-const PictureDialog = ({ openState, listImg = [] }) => {
+const PictureDialog = ({ position, openState, pictureState }) => {
   const [openBackdrop, setOpenBackdrop] = openState;
+  const [pictures, setPictures] = pictureState;
+  const listImg = pictures;
   const handleClickBackdrop = (e) => {
     const classNameElement = e.target.className;
     if (
@@ -14,7 +16,10 @@ const PictureDialog = ({ openState, listImg = [] }) => {
       classNameElement.includes("picture-backdrop")
     )
       setOpenBackdrop(true);
-    else setOpenBackdrop(false);
+    else {
+      setOpenBackdrop(false);
+      setPictures();
+    }
   };
   return (
     <Backdrop
@@ -30,6 +35,7 @@ const PictureDialog = ({ openState, listImg = [] }) => {
           modules={[Navigation]}
           className="swiper-backdrop"
           slidesPerView={1}
+          initialSlide={position || 0}
           allowTouchMove={false}
         >
           {listImg.map((img, i) => (
@@ -49,7 +55,7 @@ const PictureDialog = ({ openState, listImg = [] }) => {
 
 PictureDialog.propTypes = {
   openState: PropTypes.any,
-  picture: PropTypes.array,
+  pictureState: PropTypes.any,
 };
 
 export default PictureDialog;

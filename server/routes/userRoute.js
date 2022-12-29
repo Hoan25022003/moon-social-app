@@ -5,7 +5,7 @@ const {
   getUserList,
   handleUpdateInfo,
   getUserDetail,
-  getSavedList,
+  handleDeleteImage,
 } = require("../controllers/userController");
 const verifyToken = require("../middleWare/verifyToken");
 
@@ -19,5 +19,7 @@ router.put(
   upload.array("profile", 2),
   handleUpdateInfo
 );
+
+router.delete("/image/:id", verifyToken, handleDeleteImage);
 
 module.exports = router;

@@ -2,27 +2,26 @@ import { Button, CircularProgress } from "@mui/material";
 import useAddFriend from "hooks/useAddFriend";
 import React from "react";
 
-const FriendStatus = ({ status, isSender, userID }) => {
-  const classGeneral =
-    "w-full p-[10px] text-base font-semibold capitalize rounded-full font-body";
+const FriendStatus = ({ className = "", status, isSender, userID }) => {
+  const classGeneral = `${className} capitalize rounded-full`;
   const { loadingBtn, handleInvite, handleCancel, handleAccept } =
     useAddFriend(userID);
   switch (status) {
     case 1:
       return (
         <Button
-          variant="contained"
-          className={classGeneral + "  bg-strock text-text1"}
+          variant="outlined"
+          className={`${classGeneral} hover:bg-graySoft text-primary border-primary`}
           onClick={handleCancel}
         >
-          Cancel
+          Unfriend
         </Button>
       );
 
     case 2: {
       if (!isSender)
         return (
-          <div className="grid grid-cols-2 gap-x-2">
+          <>
             <Button
               variant="contained"
               className={`${classGeneral} bg-primary text-white ${
@@ -46,7 +45,7 @@ const FriendStatus = ({ status, isSender, userID }) => {
             >
               Cancel
             </Button>
-          </div>
+          </>
         );
       return (
         <Button
@@ -54,7 +53,7 @@ const FriendStatus = ({ status, isSender, userID }) => {
           className={classGeneral + " bg-primary text-white"}
           onClick={handleCancel}
         >
-          Waiting
+          Waiting...
         </Button>
       );
     }

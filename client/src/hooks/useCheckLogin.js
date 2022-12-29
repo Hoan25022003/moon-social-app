@@ -15,6 +15,7 @@ export default function useCheckLogin(titlePage = "") {
       const decodedToken = jwtDecode(tokens);
       decodedToken ? dispatch(loginRefresh(decodedToken)) : navigate("/login");
       titlePage && (document.title = titlePage);
+      window.scrollTo(0, 0);
     } else navigate("/login");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

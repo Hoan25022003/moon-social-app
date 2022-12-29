@@ -1,23 +1,36 @@
 import React, { useEffect } from "react";
 import useChangeValue from "hooks/useChangeValue";
+import { useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { userFriend } from "redux/users/userRequest";
 import BackPage from "components/common/BackPage";
 import Search from "components/search/Search";
 import EmptyLayout from "layout/EmptyLayout";
 import FriendItem from "modules/friends/FriendItem";
 import FriendList from "modules/friends/FriendList";
 import useCheckLogin from "hooks/useCheckLogin";
-import { useDispatch, useSelector } from "react-redux";
-import { userFriend } from "redux/users/userRequest";
 import FriendSkeleton from "components/skeleton/FriendSkeleton";
+import { filterUser } from "redux/users/userSlice";
 
 const FriendPage = () => {
   const { currentUser } = useCheckLogin("Add friend | Moon Stars");
   const dispatch = useDispatch();
-  const { value: query, handleChange } = useChangeValue("");
+  const { filters } = useSelector((state) => state.users?.friend);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { value: query, handleChange } = useChangeValue(
+    searchParams.get("name") || ""
+  );
   useEffect(() => {
-    dispatch(userFriend());
+    const filterName = {
+      ...filters,
+      name: query,
+    };
+    setSearchParams(filterName);
+    dispatch(filterUser(filterName));
+    dispatch(userFriend(filterName));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+  }, [currentUser, query]);
+  console.log(searchParams.get("name"));
   const { listUsers, loading } = useSelector((state) => state.users?.friend);
   if (!currentUser) return;
   return (
@@ -35,6 +48,7 @@ const FriendPage = () => {
           isSuggested={false}
           className="py-[14px]"
           icon="user"
+          defaultValue={query}
         ></Search>
         {loading && (
           <FriendList>
@@ -43,6 +57,7 @@ const FriendPage = () => {
           </FriendList>
         )}
         {listUsers &&
+          !loading &&
           (listUsers.length > 0 ? (
             <FriendList>
               {listUsers.map((user) => (
