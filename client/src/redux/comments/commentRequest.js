@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "api/axios";
 import Cookies from "js-cookie";
-import { socket } from "../../api/axios";
 
 export const getCommentList = createAsyncThunk(
   "comments/list",

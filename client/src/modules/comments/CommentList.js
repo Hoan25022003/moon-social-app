@@ -20,7 +20,7 @@ const CommentList = ({ children }) => {
         </div>
       </div>
       {showComment && (
-        <div className="flex flex-col my-5 gap-y-5 show-comment">
+        <div className="flex flex-col my-5 gap-y-5 show-comment pb-10">
           {children}
         </div>
       )}

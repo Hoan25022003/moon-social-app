@@ -5,19 +5,22 @@ import { Avatar, Button } from "@mui/material";
 import TextLight from "components/text/TextLight";
 import FriendStatus from "./FriendStatus";
 
-const FriendItem = ({
-  src,
-  fullName,
-  email,
-  status = 3,
-  isSender = true,
-  linkInfo = "/",
-  userID = "",
-}) => {
+const FriendItem = ({ user }) => {
+  const {
+    avatar,
+    firstName,
+    lastName,
+    email,
+    status = 3,
+    isSender = true,
+    linkInfo = "/",
+    userID = "",
+  } = user;
+  const fullName = firstName + " " + lastName;
   return (
     <div className="flex flex-col items-center justify-between p-4 h-[300px] border rounded-xl border-strock">
       <div className="flex flex-col items-center">
-        <Avatar alt={fullName} src={src} sx={{ width: 80, height: 80 }} />
+        <Avatar alt={fullName} src={avatar} sx={{ width: 80, height: 80 }} />
         <h4 className="mt-2 text-lg font-bold leading-6">{fullName}</h4>
         <TextLight className="mb-1">{email}</TextLight>
       </div>

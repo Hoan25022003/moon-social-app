@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUserList, userFriend, userProfile } from "./userRequest";
+import {
+  getUserList,
+  userFriend,
+  userProfile,
+  userFilter,
+} from "./userRequest";
 
 const initProfile = {
   error: false,
@@ -59,6 +64,13 @@ const userSlice = createSlice({
         state.friend.loading = false;
         state.friend.error = true;
       });
+
+    // Users Filter
+    builder
+      .addCase(userFilter.fulfilled, (state, { payload }) => {
+        state.listUsers = payload;
+      })
+      .addCase(userFilter.rejected, (state, { payload }) => {});
   },
 });
 

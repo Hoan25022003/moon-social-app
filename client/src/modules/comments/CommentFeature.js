@@ -12,7 +12,7 @@ import { socket } from "../../api/axios";
 import { getCommentList } from "redux/comments/commentRequest";
 import { deleteComment, newComment } from "redux/comments/commentSlice";
 
-const CommentFeature = ({ modalStatus, handleHideModal, post }) => {
+const CommentFeature = ({ modalComment, handleHideModal, post }) => {
   const { _id } = post;
   const { currentUser } = useSelector((state) => state.auth.login);
   const { listComment, loading } = useSelector(
@@ -22,23 +22,24 @@ const CommentFeature = ({ modalStatus, handleHideModal, post }) => {
 
   useEffect(() => {
     dispatch(getCommentList(_id));
+    socket.connect();
     socket.emit("join", { user: currentUser._id, post: _id });
+
     socket.on("comment", ({ user, comment, time }) => {
-      console.log(comment);
       const addedComment = { ...comment, userID: user };
       dispatch(newComment(addedComment));
     });
+
     socket.on("deletedComment", (commentId) => {
       dispatch(deleteComment(commentId));
     });
+    return () => {
+      socket.disconnect();
+      socket.removeAllListeners();
+      socket.off();
+    };
   }, [_id]);
 
-  useEffect(() => {
-    if (modalStatus === false) {
-      socket.emit("disconnect");
-    }
-    console.log("MODAL STATUS: ", modalStatus);
-  }, [modalStatus]);
   return (
     <Overlay handleHideModal={handleHideModal}>
       <div className="w-[600px] mx-auto bg-white z-50 rounded-xl show-modal ">
@@ -48,8 +49,6 @@ const CommentFeature = ({ modalStatus, handleHideModal, post }) => {
         <ModalLine />
         <div className="flex flex-col px-5 py-4 max-h-[550px] overflow-auto">
           <PostMeta
-            // avatar="https://images.unsplash.com/photo-1667114790847-7653bc249e82?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
-            // fullName="Hoan Do"
             timer="22 minutes previous"
             sizeAvatar={52}
             author={currentUser}
@@ -71,7 +70,7 @@ const CommentFeature = ({ modalStatus, handleHideModal, post }) => {
           <CommentList>
             {listComment?.length > 0 ? (
               listComment?.map((comment) => (
-                <CommentItem key={comment} comment={comment} />
+                <CommentItem key={comment._id} comment={comment} />
               ))
             ) : (
               <div>No comment yet</div>

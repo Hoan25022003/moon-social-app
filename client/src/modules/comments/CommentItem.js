@@ -16,7 +16,6 @@ const CommentItem = ({ linkInfo = "", comment }) => {
   const handleDeleteComment = () => {
     socket.emit("deleteComment", comment._id);
   };
-  console.log({ comment });
   return (
     <>
       <div className="flex items-start gap-x-3 ">
