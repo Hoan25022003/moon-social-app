@@ -35,8 +35,18 @@ function shuffle(array) {
 
 const getPostList = asyncHandler(async (req, res) => {
   const username = req.username;
+  const { keyword } = req.query;
   try {
-    let listPost = await PostModel.find().populate("authorID", [
+    let listPost = await PostModel.find({
+      $or: [
+        {
+          content: {
+            $regex: keyword || "",
+            $options: "i",
+          },
+        },
+      ],
+    }).populate("authorID", [
       "_id",
       "email",
       "firstName",

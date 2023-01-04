@@ -24,6 +24,7 @@ const AlertDialog = ({
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
+      style={{ zIndex: 9999 }}
     >
       <DialogTitle id="alert-dialog-title">{textConfirm}</DialogTitle>
       <DialogContent>
@@ -35,8 +36,8 @@ const AlertDialog = ({
         <Button onClick={handleClose}>Cancel</Button>
         <Button
           onClick={() => {
-            handleClose();
             handleExtra();
+            handleClose();
           }}
         >
           Confirm

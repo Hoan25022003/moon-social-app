@@ -50,7 +50,7 @@ const ProfileEdit = ({ handleHideModal }) => {
   const watchDesc = watch("desc");
   const handleEditProfile = (values) => {
     console.log(values);
-    // dispatch(updateUserProfile(values));
+    dispatch(updateUserProfile(values));
   };
   return (
     <Overlay handleHideModal={handleHideModal} alignCenter={true}>

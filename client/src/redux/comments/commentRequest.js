@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "api/axios";
 import Cookies from "js-cookie";
-import { socket } from "../../api/axios";
 
 export const getCommentList = createAsyncThunk(
   "comments/list",
@@ -12,7 +11,7 @@ export const getCommentList = createAsyncThunk(
           authorization: "Bearer " + Cookies.get("tokens"),
         },
       });
-      return res.data.listComment;
+      return res.data?.listComment;
     } catch (error) {
       console.log(error);
     }

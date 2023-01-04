@@ -47,7 +47,7 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     removeUser(socket.id);
-    console.log("User had left!!");
+    console.log("User had DISCONNECT");
   });
 });
 

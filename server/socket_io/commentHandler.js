@@ -47,10 +47,11 @@ module.exports = function commentHandler(socket, io) {
     try {
       const deleteComment = await CommentModel.findById(commentId);
       console.log("DELETE COMMENT: ", deleteComment);
-      if (currentUser.user !== deleteComment.userID) {
+      console.log(currentUser.user);
+      if (!deleteComment && currentUser.user !== deleteComment.userID) {
         return socket.emit("error", "Authorization");
       }
-      await CommentModel.deleteOne({ _id: commentId });
+      await CommentModel.findByIdAndDelete(commentId);
       io.to(currentUser.post).emit("deletedComment", commentId);
     } catch (err) {
       console.log("DELETE COMMENT ERROR:", err);
