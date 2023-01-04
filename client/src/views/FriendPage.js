@@ -25,18 +25,19 @@ const FriendPage = () => {
       ...filters,
       name: query,
     };
-    setSearchParams(filterName);
+    if (!query) searchParams.delete("name");
+    else searchParams.set("name", query);
+    setSearchParams(searchParams);
     dispatch(filterUser(filterName));
     dispatch(userFriend(filterName));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, query]);
-  console.log(searchParams.get("name"));
   const { listUsers, loading } = useSelector((state) => state.users?.friend);
   if (!currentUser) return;
   return (
-    <div className="border-b border-x border-graySoft">
-      <BackPage>
-        <div className="flex flex-col">
+    <>
+      <BackPage haveBackBtn={false}>
+        <div className="flex flex-col px-4">
           <h4 className="text-lg font-bold">Add friend</h4>
           <p className="text-[13px] font-normal text-text4">69 friends</p>
         </div>
@@ -59,7 +60,7 @@ const FriendPage = () => {
         {listUsers &&
           !loading &&
           (listUsers.length > 0 ? (
-            <FriendList>
+            <FriendList length={listUsers.length}>
               {listUsers.map((user) => (
                 <FriendItem
                   key={user?._id}
@@ -82,7 +83,7 @@ const FriendPage = () => {
             ></EmptyLayout>
           ))}
       </div>
-    </div>
+    </>
   );
 };
 

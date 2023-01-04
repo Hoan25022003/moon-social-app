@@ -29,8 +29,8 @@ const listNav = [
     icon: <BookmarkIcon></BookmarkIcon>,
   },
   {
-    name: "Message",
-    url: "/message",
+    name: "Chat",
+    url: "/chats",
     icon: <ChatIcon></ChatIcon>,
   },
   {

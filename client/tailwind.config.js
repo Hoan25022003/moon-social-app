@@ -28,6 +28,7 @@ module.exports = {
         text3: "#808191",
         text4: "#B2B3BD",
         errorColor: "#EB5757",
+        successColor: "#4AC860",
       },
     },
   },

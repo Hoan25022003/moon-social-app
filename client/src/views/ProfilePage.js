@@ -45,7 +45,7 @@ const PersonalPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo, error]);
   return (
-    <div className="border-x border-graySoft">
+    <>
       <BackPage turnSwitchTab={switchTab}>
         <div className="flex flex-col">
           <h4 className="text-lg font-bold">
@@ -104,7 +104,7 @@ const PersonalPage = () => {
         </>
       )}
       <PictureDialog {...others}></PictureDialog>
-    </div>
+    </>
   );
 };
 

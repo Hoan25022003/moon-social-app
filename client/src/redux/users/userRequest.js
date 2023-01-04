@@ -14,7 +14,6 @@ export const userProfile = createAsyncThunk(
       });
       let { userInfo, postCount, yourSelf, listFriend } = res.data;
       if (!yourSelf) userInfo = verifyFriend(listFriend, userInfo);
-      console.log(userInfo);
       return fulfillWithValue({
         userInfo: {
           ...userInfo,
@@ -30,9 +29,10 @@ export const userProfile = createAsyncThunk(
 
 export const userFriend = createAsyncThunk(
   "users/friend",
-  async ({ name, gender = "" }, { fulfillWithValue, rejectWithValue }) => {
-    console.log(gender);
-    console.log(name);
+  async (
+    { name, gender = "", status },
+    { fulfillWithValue, rejectWithValue }
+  ) => {
     try {
       const res = await axios.get(
         `/users?name=${name || ""}&gender=${gender}`,
@@ -43,12 +43,37 @@ export const userFriend = createAsyncThunk(
         }
       );
       let { listUser, listFriend } = res.data;
-      listUser = listUser.map((user) => {
-        return verifyFriend(listFriend, user);
-      });
+      listUser = listUser.map((user) => verifyFriend(listFriend, user));
+      if (status) listUser = listUser.filter((user) => user.status === status);
       return fulfillWithValue(listUser);
     } catch (error) {
       return rejectWithValue(error);
+    }
+  }
+);
+
+export const updateUserProfile = createAsyncThunk(
+  "users/update",
+  async (data, { dispatch }) => {
+    try {
+      const formData = new FormData();
+      for (const [key, value] of Object.entries(data)) {
+        formData.append(key, value);
+      }
+
+      const res = await axios({
+        method: "POST",
+        url: "/users/update-info",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: "Bearer " + Cookies.get("tokens"),
+        },
+      });
+      console.log("UPDATE USER SUCCESS: ", res.data);
+      // dispatch(userProfile)
+    } catch (err) {
+      console.log("UPDATE USER ERROR: ", err);
     }
   }
 );

@@ -13,7 +13,7 @@ const FilterPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   console.log(searchParams.get("list") || "all");
   return (
-    <div className="border-b border-x border-graySoft">
+    <>
       <BackPage turnSwitchTab={switchTab}>
         <div className="flex flex-col">
           <h4 className="text-lg font-bold">Search</h4>
@@ -55,7 +55,7 @@ const FilterPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

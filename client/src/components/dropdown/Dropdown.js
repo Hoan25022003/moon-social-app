@@ -6,11 +6,11 @@ const Dropdown = ({ children, label, defaultValue = "", handleExtra }) => {
   const [value, setValue] = React.useState(defaultValue);
   const handleChange = (e) => {
     setValue(e.target.value);
-    handleExtra(e.target.value);
+    // handleExtra(e.target.value);
   };
   return (
     <FormControl sx={{ borderRadius: "12px" }}>
-      <Select
+      {/* <Select
         value={value}
         onChange={handleChange}
         displayEmpty
@@ -19,7 +19,21 @@ const Dropdown = ({ children, label, defaultValue = "", handleExtra }) => {
         <MenuItem value={defaultValue}>
           <em>{label}</em>
         </MenuItem>
+        <MenuItem value={10}>Ten</MenuItem>
+        <MenuItem value={20}>Twenty</MenuItem>
+        <MenuItem value={30}>Thirty</MenuItem>
         {children}
+      </Select> */}
+      <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={value}
+        label="Age"
+        onChange={handleChange}
+      >
+        <MenuItem value={10}>Ten</MenuItem>
+        <MenuItem value={20}>Twenty</MenuItem>
+        <MenuItem value={30}>Thirty</MenuItem>
       </Select>
     </FormControl>
   );

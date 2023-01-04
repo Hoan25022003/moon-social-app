@@ -2,44 +2,59 @@ const { getCurrentUser } = require("../utils/usersActive");
 const { formatComment } = require("../utils/formatComment");
 const CommentModel = require("../models/CommentModel");
 const PostModel = require("../models/PostModel");
+const UserModel = require("../models/UserModel");
 
 module.exports = function commentHandler(socket, io) {
   socket.on("sendComment", async (comment) => {
-    const currentUser = getCurrentUser(socket.id);
+    const currentUser = getCurrentUser(socket.id)[0];
     console.log(currentUser);
     try {
-      if (!comment) res.status(400).json("Please type full info");
-      const { modeComment } = await PostModel.findById(currentUser.post.id);
-      if (!modeComment) res.status(400).json("Mode comment is turned off");
-      else {
-        await CommentModel.create({
-          ...req.body,
-          userID: currentUser._id,
-          postID: currentUser.post.id,
-        });
-        res.json("Create successful!");
+      if (!comment || !currentUser) {
+        return socket.emit("error", "Server error");
       }
-    } catch (error) {
-      res.status(500).json(error);
+      const post = await PostModel.findById(currentUser.post);
+      if (!post?.modeComment) {
+        return socket.emit("error", "Server error");
+      } else {
+        const addComment = await CommentModel.create({
+          ...comment,
+          userID: currentUser.user,
+          postID: currentUser.post,
+        });
+        const newComment = await CommentModel.findById(addComment._id).populate(
+          "userID"
+        );
+        // console.log(newComment);
+        // newComment.save(function (err, comment) {
+        //   console.log(comment);
+        //   newComment._id = comment._id;
+        // });
+        // const newComment = CommentModel.findById
+        const user = await UserModel.findById(currentUser.user);
+        io.to(currentUser.post).emit(
+          "comment",
+          formatComment(user, newComment)
+        );
+      }
+    } catch (err) {
+      socket.emit("error", err);
     }
-
-    io.to(currentUser.post).emit(
-      "comment",
-      formatComment(currentUser, comment)
-    );
   });
 
   socket.on("deleteComment", async (commentId) => {
-    const currentUser = getCurrentUser(socket.id);
+    const currentUser = getCurrentUser(socket.id)[0];
+    console.log("CURRENT USER:", currentUser);
     try {
       const deleteComment = await CommentModel.findById(commentId);
-      if (currentUser._id !== deleteComment.userID) {
-        return res.status(403).json("Unauthorized");
+      console.log("DELETE COMMENT: ", deleteComment);
+      if (currentUser.user !== deleteComment.userID) {
+        return socket.emit("error", "Authorization");
       }
-      await CommentModel.deleteOne(commentId);
+      await CommentModel.deleteOne({ _id: commentId });
       io.to(currentUser.post).emit("deletedComment", commentId);
     } catch (err) {
-      res.status(500).json("Server error");
+      console.log("DELETE COMMENT ERROR:", err);
+      socket.emit("error", err);
     }
   });
 };

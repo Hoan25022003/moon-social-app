@@ -1,17 +1,23 @@
 import React from "react";
+import { socket } from "api/axios";
 import { Button, TextareaAutosize } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 
 const CommentForm = ({
   placeholder = "Comment your reply about this post",
 }) => {
+  const { currentUser } = useSelector((state) => state.auth.login);
+
   const {
     register,
-    formState: { isDirty, errors },
+    reset,
+    formState: { isDirty, errors, isSubmitting },
     handleSubmit,
   } = useForm({ mode: "onChange" });
   const handleComment = (values) => {
-    console.log(values);
+    socket.emit("sendComment", values);
+    reset();
   };
   return (
     <form
@@ -31,6 +37,8 @@ const CommentForm = ({
           variant="contained"
           type="submit"
           className={`w-[100px] bg-primary rounded-full py-[6px] transition-all ${
+            isSubmitting && "pointer-events-none bg-opacity-30"
+          } ${
             (!isDirty || errors?.content) && "pointer-events-none opacity-30"
           }`}
         >

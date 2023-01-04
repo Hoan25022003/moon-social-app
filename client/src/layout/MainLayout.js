@@ -12,9 +12,9 @@ import SideFriend from "./rightSidebar/SideFriend";
 
 const MainLayout = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { value: query, handleChange } = useChangeValue("", 0);
   const { currentUser } = useSelector((state) => state.auth.login);
-  const navigate = useNavigate();
   const handleEnterKey = (e) => {
     if (e.which === 13 && query) navigate("/search?q=" + query);
   };
@@ -39,7 +39,7 @@ const MainLayout = () => {
             ></SideUserInfo>
           </div>
         </div>
-        <div className="flex-[2.5]">
+        <div className="flex-[2.5] border-b border-x border-graySoft min-h-screen">
           <Outlet></Outlet>
         </div>
         <div className="sticky top-0 flex-[1.5] z-50 overflow-auto h-[100vh] py-4 scroll-custom">
@@ -60,9 +60,6 @@ const MainLayout = () => {
 
 const RightContainer = ({ path }) => {
   switch (path) {
-    case "/message":
-      return <div>This is chat message</div>;
-
     case "/friends":
       return <SideFriend></SideFriend>;
 

@@ -90,7 +90,11 @@ const PostItem = ({ postInfo }) => {
         </div>
       </div>
       {modalComment && (
-        <CommentFeature handleHideModal={setModalComment}></CommentFeature>
+        <CommentFeature
+          modalStatus={modalComment}
+          handleHideModal={setModalComment}
+          post={postInfo}
+        ></CommentFeature>
       )}
     </>
   );

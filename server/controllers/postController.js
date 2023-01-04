@@ -13,17 +13,38 @@ function checkSavedAndLiked(listPost, username) {
   }));
 }
 
+function shuffle(array) {
+  let currentIndex = array.length,
+    randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+
+  return array;
+}
+
 const getPostList = asyncHandler(async (req, res) => {
   const username = req.username;
   try {
-    const listPost = await PostModel.find().populate("authorID", [
+    let listPost = await PostModel.find().populate("authorID", [
       "_id",
       "email",
       "firstName",
       "lastName",
       "avatar",
     ]);
-    res.json({ listPost: checkSavedAndLiked(listPost, username) });
+    listPost = shuffle(checkSavedAndLiked(listPost, username));
+    res.json({ listPost });
   } catch (error) {
     res.status(500).json(error);
   }

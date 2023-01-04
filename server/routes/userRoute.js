@@ -16,7 +16,10 @@ router.get("/:id", verifyToken, getUserDetail);
 router.put(
   "/update-info",
   verifyToken,
-  upload.array("profile", 2),
+  upload.fields([
+    { name: "avatar", maxCount: 1 },
+    { name: "cover", maxCount: 1 },
+  ]),
   handleUpdateInfo
 );
 
