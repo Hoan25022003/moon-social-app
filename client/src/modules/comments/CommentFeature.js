@@ -21,12 +21,11 @@ const CommentFeature = ({ modalComment, handleHideModal, post }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getCommentList(_id));
-    socket.connect();
+    // socket.connect();
     socket.emit("join", { user: currentUser._id, post: _id });
 
     socket.on("comment", ({ user, comment, time }) => {
       const addedComment = { ...comment, userID: user };
-      console.log(addedComment);
       dispatch(newComment(addedComment));
     });
 
@@ -34,7 +33,7 @@ const CommentFeature = ({ modalComment, handleHideModal, post }) => {
       dispatch(deleteComment(commentId));
     });
     return () => {
-      socket.disconnect();
+      // socket.disconnect();
       socket.removeAllListeners();
       socket.off();
     };

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginRefresh } from "redux/auth/authSlice";
 
-export default function useCheckLogin(titlePage = "") {
+export default function useCheckLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const tokens = Cookies.get("tokens");
@@ -14,7 +14,6 @@ export default function useCheckLogin(titlePage = "") {
     if (tokens) {
       const decodedToken = jwtDecode(tokens);
       decodedToken ? dispatch(loginRefresh(decodedToken)) : navigate("/login");
-      titlePage && (document.title = titlePage);
       window.scrollTo(0, 0);
     } else navigate("/login");
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -22,14 +21,14 @@ export default function useCheckLogin(titlePage = "") {
   return { currentUser };
 }
 
-export function useCheckUser(titlePage) {
+export function useCheckUser() {
   const tokens = Cookies.get("tokens");
   const navigate = useNavigate();
   useEffect(() => {
     if (tokens) {
       const decodedToken = jwtDecode(tokens);
-      decodedToken ? navigate("/home") : (document.title = titlePage);
-    } else document.title = titlePage;
+      decodedToken && navigate("/home");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }

@@ -8,12 +8,12 @@ import Search from "components/search/Search";
 import EmptyLayout from "layout/EmptyLayout";
 import FriendItem from "modules/friends/FriendItem";
 import FriendList from "modules/friends/FriendList";
-import useCheckLogin from "hooks/useCheckLogin";
 import FriendSkeleton from "components/skeleton/FriendSkeleton";
 import { filterUser } from "redux/users/userSlice";
+import AlertInfo from "components/alert/AlertInfo";
 
 const FriendPage = () => {
-  const { currentUser } = useCheckLogin("Add friend | Moon Stars");
+  const { currentUser } = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.users?.friend);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -21,6 +21,7 @@ const FriendPage = () => {
     searchParams.get("name") || ""
   );
   useEffect(() => {
+    document.title = "Add Friend | Moon Stars";
     const filterName = {
       ...filters,
       name: query,
@@ -33,7 +34,6 @@ const FriendPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, query]);
   const { listUsers, loading } = useSelector((state) => state.users?.friend);
-  if (!currentUser) return;
   return (
     <>
       <BackPage haveBackBtn={false}>
@@ -83,6 +83,11 @@ const FriendPage = () => {
             ></EmptyLayout>
           ))}
       </div>
+      {/* {message && (
+        <AlertInfo severity={type} open={!!message}>
+          {message}
+        </AlertInfo>
+      )} */}
     </>
   );
 };

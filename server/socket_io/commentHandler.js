@@ -1,10 +1,21 @@
-const { getCurrentUser } = require("../utils/usersActive");
+const { getCurrentUser, userJoin } = require("../utils/usersActive");
 const { formatComment } = require("../utils/formatComment");
 const CommentModel = require("../models/CommentModel");
 const PostModel = require("../models/PostModel");
 const UserModel = require("../models/UserModel");
 
 module.exports = function commentHandler(socket, io) {
+  socket.on("join", ({ user, post }) => {
+    const newUser = userJoin(socket.id, user, post);
+    console.log("User connected success");
+
+    socket.join(newUser.post);
+
+    socket.broadcast
+      .to(user.post)
+      .emit("typing", "Someone is typing a comment");
+  });
+
   socket.on("sendComment", async (comment) => {
     const currentUser = getCurrentUser(socket.id)[0];
     console.log(currentUser);

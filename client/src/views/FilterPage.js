@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPostList } from "redux/posts/postRequest";
 
 const FilterPage = () => {
+  const { currentUser } = useSelector((state) => state.auth.login);
   const { switchTab, keyName } = useTurnSwitch("q");
   const [searchParams, setSearchParams] = useSearchParams("");
   const { listPost } = useSelector((state) => state.posts.getPost);

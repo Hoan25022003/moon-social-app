@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import SideNav from "./leftSidebar/SideNav";
 import SideDarkMode from "./leftSidebar/SideDarkMode";
@@ -7,14 +7,18 @@ import SideContact from "./rightSidebar/SideContact";
 import SideFilter from "./rightSidebar/SideFilter";
 import useChangeValue from "hooks/useChangeValue";
 import Search from "components/search/Search";
-import { useSelector } from "react-redux";
 import SideFriend from "./rightSidebar/SideFriend";
+import { socket } from "api/axios";
+import useCheckLogin from "hooks/useCheckLogin";
 
 const MainLayout = () => {
+  const { currentUser } = useCheckLogin();
   const location = useLocation();
   const navigate = useNavigate();
   const { value: query, handleChange } = useChangeValue("", 0);
-  const { currentUser } = useSelector((state) => state.auth.login);
+  useEffect(() => {
+    socket.connect();
+  }, [currentUser]);
   const handleEnterKey = (e) => {
     if (e.which === 13 && query) navigate("/search?q=" + query);
   };

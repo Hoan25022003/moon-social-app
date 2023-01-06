@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -22,8 +22,10 @@ const schema = yup.object({
 });
 
 const LoginPage = () => {
-  useCheckUser("Login | Moon Stars");
   const navigate = useNavigate();
+  useEffect(() => {
+    document.title = "Login | Moon Stars";
+  }, []);
   const {
     handleSubmit,
     control,

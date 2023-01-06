@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -48,9 +48,11 @@ const initialValue = {
 };
 
 const RegisterPage = () => {
-  useCheckUser("Register | Moon Stars");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  useEffect(() => {
+    document.title = "Register | Moon Stars";
+  }, []);
   const {
     handleSubmit,
     control,

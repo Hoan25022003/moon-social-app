@@ -7,7 +7,7 @@ const {
 } = require("../controllers/friendController");
 const verifyToken = require("../middleWare/verifyToken");
 
-router.get("/", verifyToken, getUserFriend);
+// router.get("/", verifyToken, getUserFriend);
 
 router.post("/add/:id", verifyToken, handleAddFriend);
 
