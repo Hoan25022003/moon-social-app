@@ -1,19 +1,17 @@
 import React, { useEffect } from "react";
-import useCheckLogin from "hooks/useCheckLogin";
 import useFetchMore from "hooks/useFetchMore";
 import { useDispatch, useSelector } from "react-redux";
 import { getPostList } from "redux/posts/postRequest";
 import PostFeature from "modules/posts/PostFeature";
 import PostItem from "modules/posts/PostItem";
 import PostSkeleton from "components/skeleton/PostSkeleton";
-import InfiniteScroll from "react-infinite-scroll-component";
 import PostList from "modules/posts/PostList";
 
 const HomePage = () => {
-  const { currentUser } = useCheckLogin("Home page");
-  // const { listUsers } = useSelector((state) => state.users);
+  const { currentUser } = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
   useEffect(() => {
+    document.title = "Home Page | Moon Stars";
     dispatch(getPostList());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);

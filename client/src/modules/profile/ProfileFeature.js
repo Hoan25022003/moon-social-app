@@ -17,7 +17,8 @@ const ProfileFeature = ({ yourSelf, status = 3, isSender = false }) => {
       <div className="flex items-center justify-end py-3 gap-x-3">
         <Tooltip title="Copy link to profile">
           <IconButton
-            className="hover:bg-graySoft border-graySoft"
+            className="hover:bg-graySoft"
+            style={{ border: "1px solid #ddd" }}
             aria-label="copy link"
             onClick={() => {
               navigator.clipboard.writeText(window.location.href);
@@ -40,7 +41,8 @@ const ProfileFeature = ({ yourSelf, status = 3, isSender = false }) => {
             {status === 1 && (
               <Tooltip title="Send Message">
                 <IconButton
-                  className="hover:bg-graySoft border-strock"
+                  className="hover:bg-graySoft"
+                  style={{ border: "1px solid #ddd" }}
                   aria-label="send message"
                 >
                   <SendIcon className="text-lg text-iconColor" />

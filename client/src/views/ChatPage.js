@@ -1,15 +1,17 @@
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import BackPage from "components/common/BackPage";
 import TextUsername from "components/text/TextUsername";
-import useCheckLogin from "hooks/useCheckLogin";
 import ChatItem from "modules/chats/ChatItem";
 import ChatAvatar from "modules/chats/parts/ChatAvatar";
-import ChatLatestMessage from "modules/chats/parts/ChatLatestMessage";
-import React from "react";
-import { useNavigate } from "react-router-dom";
 
 const ChatPage = () => {
-  const { currentUser } = useCheckLogin("Chat Message | Moon Stars");
+  const { currentUser } = useSelector((state) => state.auth.login);
   const navigate = useNavigate();
+  useEffect(() => {
+    document.title = "Moon Chat | Moon Stars";
+  }, [currentUser]);
   if (!currentUser) return;
   return (
     <>

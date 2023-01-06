@@ -3,8 +3,9 @@ import Cookies from "js-cookie";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userFriend } from "redux/users/userRequest";
+import { statusFriend } from "redux/users/userSlice";
 
-export default function useAddFriend(userID) {
+export default function useAddFriend(userID = "") {
   const [loadingBtn, setLoadingBtn] = useState(false);
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.users?.friend);
@@ -21,9 +22,20 @@ export default function useAddFriend(userID) {
         },
       });
       dispatch(userFriend(filters));
+      dispatch(
+        statusFriend({
+          type: "success",
+          message: "Sent invitation",
+        })
+      );
       setLoadingBtn(false);
     } catch (error) {
-      console.log(error);
+      dispatch(
+        statusFriend({
+          type: "error",
+          message: "Error, please try again!",
+        })
+      );
     }
   };
 
@@ -39,9 +51,21 @@ export default function useAddFriend(userID) {
         },
       });
       dispatch(userFriend(filters));
+      dispatch(
+        statusFriend({
+          type: "success",
+          message: "Add successful friend",
+        })
+      );
       setLoadingBtn(false);
     } catch (error) {
       console.log(error);
+      dispatch(
+        statusFriend({
+          type: "error",
+          message: "Error, please try again!",
+        })
+      );
     }
   };
 

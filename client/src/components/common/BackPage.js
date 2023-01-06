@@ -22,7 +22,7 @@ const BackPage = ({ children, haveBackBtn = true, turnSwitchTab }) => {
 
 BackPage.propTypes = {
   children: PropTypes.node,
-  turnSwitchTab: PropTypes.number,
+  turnSwitchTab: PropTypes.any,
 };
 
 export default BackPage;

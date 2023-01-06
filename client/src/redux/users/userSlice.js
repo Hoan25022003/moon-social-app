@@ -16,7 +16,6 @@ const initProfile = {
 const userSlice = createSlice({
   name: "users",
   initialState: {
-    listUsers: null,
     profile: initProfile,
     friend: {
       loading: false,
@@ -24,11 +23,18 @@ const userSlice = createSlice({
       listUsers: null,
       filters: {},
     },
+    alertInfo: {
+      type: "success",
+      message: null,
+    },
   },
   reducers: {
     // getListImage: (state, {payload}) => {
     //   state.profile.userInfo.listUpload
     // },
+    statusFriend: (state, { payload }) => {
+      state.alertInfo = { ...state.alertInfo, ...payload };
+    },
     filterUser: (state, { payload }) => {
       state.friend.filters = { ...state.friend.filters, ...payload };
     },
@@ -78,6 +84,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { resetProfile, filterUser } = userSlice.actions;
+export const { resetProfile, filterUser, statusFriend } = userSlice.actions;
 
 export default userSlice.reducer;

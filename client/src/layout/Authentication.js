@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { colorGradient } from "utils/constant";
 import AlertInfo from "components/alert/AlertInfo";
 import { useSelector } from "react-redux";
+import { socket } from "api/axios";
+import { useCheckUser } from "hooks/useCheckLogin";
 
 const Authentication = ({ children, heading }) => {
+  useCheckUser();
   const { success } = useSelector((state) => state.auth.register);
+  useEffect(() => {
+    socket.disconnect();
+  }, []);
   return (
     <div className="w-full h-[100vh] flex items-start">
       <div className="w-[1200px] mx-auto grid gap-x-8 grid-cols-[1fr,1.5fr] mt-10">

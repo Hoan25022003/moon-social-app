@@ -3,6 +3,7 @@ const cloudinary = require("../config/cloudinary");
 const ImageModel = require("../models/ImageModel");
 const PostModel = require("../models/PostModel");
 const UserModel = require("../models/UserModel");
+const shuffleArray = require("../utils/shuffleArray");
 
 function checkSavedAndLiked(listPost, username) {
   const { listSaved, _id } = username;
@@ -11,26 +12,6 @@ function checkSavedAndLiked(listPost, username) {
     saved: listSaved.includes(post._id),
     isLiked: post.listHeart.includes(_id),
   }));
-}
-
-function shuffle(array) {
-  let currentIndex = array.length,
-    randomIndex;
-
-  // While there remain elements to shuffle.
-  while (currentIndex != 0) {
-    // Pick a remaining element.
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
-  }
-
-  return array;
 }
 
 const getPostList = asyncHandler(async (req, res) => {
@@ -53,7 +34,7 @@ const getPostList = asyncHandler(async (req, res) => {
       "lastName",
       "avatar",
     ]);
-    listPost = shuffle(checkSavedAndLiked(listPost, username));
+    listPost = shuffleArray(checkSavedAndLiked(listPost, username));
     res.json({ listPost });
   } catch (error) {
     res.status(500).json(error);

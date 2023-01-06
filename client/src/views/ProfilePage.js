@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import useTurnSwitch from "hooks/useTurnSwitch";
-import useCheckLogin from "hooks/useCheckLogin";
 import { useDispatch, useSelector } from "react-redux";
 import { userProfile } from "redux/users/userRequest";
 import { useNavigate, useParams } from "react-router-dom";
@@ -24,7 +23,7 @@ import useBackdropPicture from "hooks/useBackropPicture";
 const listTab = ["picture", "posts", "friends", "likes"];
 
 const PersonalPage = () => {
-  const { currentUser } = useCheckLogin();
+  const { currentUser } = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();

@@ -5,6 +5,7 @@ const PostModel = require("../models/PostModel");
 const FriendModel = require("../models/FriendModel");
 const ImageModel = require("../models/ImageModel");
 const cloudinary = require("../config/cloudinary");
+const shuffleArray = require("../utils/shuffleArray");
 
 let monthNames = [
   "January",
