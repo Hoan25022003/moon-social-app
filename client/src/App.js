@@ -1,5 +1,5 @@
 import { socket } from "api/axios";
-import React, { lazy, Suspense, useEffect } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "swiper/scss";
 import "swiper/scss/navigation";
@@ -17,22 +17,11 @@ const SavedPage = lazy(() => import("./views/SavedPage"));
 
 function App() {
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Connected");
-    });
-
-    socket.on("disconnect", () => {
-      console.log("Disconnected");
-    });
-
-    socket.on("comment", (comment) => {
-      console.log("new comment: ", comment);
-    });
-
     socket.on("error", (err) => {
       console.log("socket error: ", err);
     });
   }, []);
+
   return (
     <Suspense>
       <Routes>

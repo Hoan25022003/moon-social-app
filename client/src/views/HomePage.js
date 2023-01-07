@@ -9,7 +9,6 @@ import PostSkeleton from "components/skeleton/PostSkeleton";
 const HomePage = () => {
   const { currentUser } = useCheckLogin("Home page");
   // const { listUsers } = useSelector((state) => state.users);
-  // console.log(listUsers);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getPostList());
