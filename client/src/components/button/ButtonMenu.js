@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useMenuNav } from "components/menu/menuContext";
@@ -19,6 +18,7 @@ const ButtonMenu = () => {
         padding: "6px",
         borderRadius: "50%",
         color: "#ccc",
+        zIndex: 100,
       }}
     >
       <MoreHorizIcon className="text-iconColor"></MoreHorizIcon>

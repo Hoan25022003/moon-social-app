@@ -9,6 +9,7 @@ const Alert = React.forwardRef((props, ref) => {
 });
 
 const AlertInfo = ({ open = true, severity = "success", children }) => {
+  // console.log(open);
   const [openAlert, setOpenAlert] = useState(open);
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -18,12 +19,7 @@ const AlertInfo = ({ open = true, severity = "success", children }) => {
     setOpenAlert(false);
   };
   return (
-    <Snackbar
-      open={openAlert}
-      autoHideDuration={3000}
-      onClose={handleClose}
-      // message={!severity && children}
-    >
+    <Snackbar open={openAlert} autoHideDuration={3000} onClose={handleClose}>
       <Alert
         onClose={handleClose}
         severity={severity}

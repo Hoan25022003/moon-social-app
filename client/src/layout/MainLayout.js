@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import SideNav from "./leftSidebar/SideNav";
 import SideDarkMode from "./leftSidebar/SideDarkMode";
@@ -7,13 +7,18 @@ import SideContact from "./rightSidebar/SideContact";
 import SideFilter from "./rightSidebar/SideFilter";
 import useChangeValue from "hooks/useChangeValue";
 import Search from "components/search/Search";
-import { useSelector } from "react-redux";
+import SideFriend from "./rightSidebar/SideFriend";
+import { socket } from "api/axios";
+import useCheckLogin from "hooks/useCheckLogin";
 
 const MainLayout = () => {
+  const { currentUser } = useCheckLogin();
   const location = useLocation();
-  const { value: query, handleChange } = useChangeValue("", 0);
-  const { currentUser } = useSelector((state) => state.auth.login);
   const navigate = useNavigate();
+  const { value: query, handleChange } = useChangeValue("", 0);
+  useEffect(() => {
+    socket.connect();
+  }, [currentUser]);
   const handleEnterKey = (e) => {
     if (e.which === 13 && query) navigate("/search?q=" + query);
   };
@@ -38,7 +43,7 @@ const MainLayout = () => {
             ></SideUserInfo>
           </div>
         </div>
-        <div className="flex-[2.5]">
+        <div className="flex-[2.5] border-b border-x border-graySoft min-h-screen">
           <Outlet></Outlet>
         </div>
         <div className="sticky top-0 flex-[1.5] z-50 overflow-auto h-[100vh] py-4 scroll-custom">
@@ -59,11 +64,8 @@ const MainLayout = () => {
 
 const RightContainer = ({ path }) => {
   switch (path) {
-    case "/message":
-      return <div>This is chat message</div>;
-
     case "/friends":
-      return <div>This is friends page</div>;
+      return <SideFriend></SideFriend>;
 
     case "/search":
       return <SideFilter></SideFilter>;

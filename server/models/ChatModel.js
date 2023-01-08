@@ -8,18 +8,15 @@ const ChatSchema = mongoose.Schema(
         ref: "users",
       },
     ],
-    friendID: {
-      type: String,
-      ref: "friends",
-    },
-    groupID: {
-      type: String,
-      ref: "groups",
-    },
+    // groupID: {
+    //   type: String,
+    //   ref: "groups",
+    // },
     latestMessage: {
       type: String,
       ref: "messages",
     },
+    show: { type: Boolean, default: true },
   },
   { timestamps: true }
 );

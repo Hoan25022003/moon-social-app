@@ -28,21 +28,11 @@ app.use("/api/auth", require("./routes/authRoute"));
 app.use("/api/users", require("./routes/userRoute"));
 app.use("/api/friends", require("./routes/friendRoute"));
 app.use("/api/posts", require("./routes/postRoute"));
+app.use("/api/chats", require("./routes/chatRoute"));
 app.use("/api/comments", require("./routes/commentRoute"));
 
 /* Socket handler */
 io.on("connection", (socket) => {
-  console.log("new connection");
-  socket.on("join", ({ user, post }) => {
-    const newUser = userJoin(socket.id, user, post);
-
-    socket.join(newUser.post);
-
-    socket.broadcast
-      .to(user.post)
-      .emit("typing", "Someone is typing a comment");
-  });
-
   commentHandler(socket, io);
 
   socket.on("disconnect", () => {

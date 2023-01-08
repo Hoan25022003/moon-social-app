@@ -7,27 +7,37 @@ import {
 } from "./userRequest";
 
 const initProfile = {
-  error: false,
   loading: false,
   userInfo: null,
   yourSelf: false,
+  error: null,
 };
 
 const userSlice = createSlice({
   name: "users",
   initialState: {
-    listUsers: null,
     profile: initProfile,
     friend: {
       loading: false,
-      error: false,
+      error: null,
       listUsers: null,
+      filters: {},
+    },
+    alertInfo: {
+      type: "success",
+      message: null,
     },
   },
   reducers: {
-    // getUserProfile: (state, { payload }) => {
-    //   state.userProfile.userInfo = payload;
+    // getListImage: (state, {payload}) => {
+    //   state.profile.userInfo.listUpload
     // },
+    statusFriend: (state, { payload }) => {
+      state.alertInfo = { ...state.alertInfo, ...payload };
+    },
+    filterUser: (state, { payload }) => {
+      state.friend.filters = { ...state.friend.filters, ...payload };
+    },
     resetProfile: (state) => {
       state.profile = initProfile;
     },
@@ -60,9 +70,9 @@ const userSlice = createSlice({
         state.friend.loading = true;
         state.friend.error = false;
       })
-      .addCase(userFriend.rejected, (state) => {
+      .addCase(userFriend.rejected, (state, { payload }) => {
         state.friend.loading = false;
-        state.friend.error = true;
+        state.friend.error = payload;
       });
 
     // Users Filter
@@ -74,6 +84,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { resetProfile } = userSlice.actions;
+export const { resetProfile, filterUser, statusFriend } = userSlice.actions;
 
 export default userSlice.reducer;

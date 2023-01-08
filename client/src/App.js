@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { socket } from "api/axios";
 import React, { lazy, Suspense, useEffect, useState } from "react";
+=======
+import React, { lazy, Suspense, useEffect } from "react";
+import { socket } from "api/axios";
+>>>>>>> f74b3da1616f2dbd47e212826f2a4b3a0c1471e7
 import { Route, Routes } from "react-router-dom";
 import "swiper/scss";
 import "swiper/scss/navigation";
@@ -12,8 +17,10 @@ const ProfilePage = lazy(() => import("./views/ProfilePage"));
 const GroupPage = lazy(() => import("./views/GroupPage"));
 const FriendPage = lazy(() => import("./views/FriendPage"));
 const FilterPage = lazy(() => import("./views/FilterPage"));
-const NotFoundPage = lazy(() => import("./views/NotFoundPage"));
 const SavedPage = lazy(() => import("./views/SavedPage"));
+const ChatPage = lazy(() => import("./views/ChatPage"));
+const MessagePage = lazy(() => import("./views/MessagePage"));
+const NotFoundPage = lazy(() => import("./views/NotFoundPage"));
 
 function App() {
   useEffect(() => {
@@ -37,6 +44,8 @@ function App() {
           ></Route>
           <Route path="/search" element={<FilterPage></FilterPage>}></Route>
           <Route path="/post-saved" element={<SavedPage></SavedPage>}></Route>
+          <Route path="/chats" element={<ChatPage />}></Route>
+          <Route path="/chats/t/:id" element={<MessagePage />}></Route>
         </Route>
         <Route path="*" element={<NotFoundPage></NotFoundPage>}></Route>
       </Routes>

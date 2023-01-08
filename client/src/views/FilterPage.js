@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPostList } from "redux/posts/postRequest";
 
 const FilterPage = () => {
+  const { currentUser } = useSelector((state) => state.auth.login);
   const { switchTab, keyName } = useTurnSwitch("q");
   const [searchParams, setSearchParams] = useSearchParams("");
   const { listPost } = useSelector((state) => state.posts.getPost);
@@ -52,7 +53,7 @@ const FilterPage = () => {
   }, [keyName, listQuery]);
 
   return (
-    <div className="border-b border-x border-graySoft">
+    <>
       <BackPage turnSwitchTab={switchTab}>
         <div className="flex flex-col">
           <h4 className="text-lg font-bold">Search</h4>
@@ -61,12 +62,12 @@ const FilterPage = () => {
           </p>
         </div>
       </BackPage>
-      {/* <EmptyLayout
+      <EmptyLayout
         className="py-10"
         linkImg="/img/searching.png"
         info="No results found for this keyword"
         support="Please try again later !"
-      ></EmptyLayout> */}
+      ></EmptyLayout>
       <div className="flex flex-col px-5 py-4 gap-y-6">
         <div>
           <TextHeading className="mb-3">People</TextHeading>
@@ -77,7 +78,7 @@ const FilterPage = () => {
           <div className="flex flex-col gap-y-3">{posts}</div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

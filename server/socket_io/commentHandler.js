@@ -1,12 +1,24 @@
-const { getCurrentUser } = require("../utils/usersActive");
+const { getCurrentUser, userJoin } = require("../utils/usersActive");
 const { formatComment } = require("../utils/formatComment");
 const CommentModel = require("../models/CommentModel");
 const PostModel = require("../models/PostModel");
 const UserModel = require("../models/UserModel");
 
 module.exports = function commentHandler(socket, io) {
+  socket.on("join", ({ user, post }) => {
+    const newUser = userJoin(socket.id, user, post);
+    console.log("User connected success");
+
+    socket.join(newUser.post);
+
+    socket.broadcast
+      .to(user.post)
+      .emit("typing", "Someone is typing a comment");
+  });
+
   socket.on("sendComment", async (comment) => {
     const currentUser = getCurrentUser(socket.id)[0];
+    console.log(currentUser);
     try {
       if (!comment || !currentUser) {
         return socket.emit("error", "Server error");
@@ -15,16 +27,20 @@ module.exports = function commentHandler(socket, io) {
       if (!post?.modeComment) {
         return socket.emit("error", "Server error");
       } else {
-        const newComment = new CommentModel({
+        const addComment = await CommentModel.create({
           ...comment,
           userID: currentUser.user,
           postID: currentUser.post,
         });
-        let returnComment;
-        newComment.save(function (err, comment) {
-          console.log(comment);
-          newComment._id = comment._id;
-        });
+        const newComment = await CommentModel.findById(addComment._id).populate(
+          "userID"
+        );
+        // console.log(newComment);
+        // newComment.save(function (err, comment) {
+        //   console.log(comment);
+        //   newComment._id = comment._id;
+        // });
+        // const newComment = CommentModel.findById
         const user = await UserModel.findById(currentUser.user);
         io.to(currentUser.post).emit(
           "comment",
@@ -42,10 +58,11 @@ module.exports = function commentHandler(socket, io) {
     try {
       const deleteComment = await CommentModel.findById(commentId);
       console.log("DELETE COMMENT: ", deleteComment);
-      if (currentUser.user !== deleteComment.userID) {
+      console.log(currentUser.user);
+      if (!deleteComment && currentUser.user !== deleteComment.userID) {
         return socket.emit("error", "Authorization");
       }
-      await CommentModel.deleteOne({ _id: commentId });
+      await CommentModel.findByIdAndDelete(commentId);
       io.to(currentUser.post).emit("deletedComment", commentId);
     } catch (err) {
       console.log("DELETE COMMENT ERROR:", err);

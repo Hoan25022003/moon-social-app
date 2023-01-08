@@ -1,49 +1,51 @@
 import React from "react";
-import { Avatar, Tooltip } from "@mui/material";
+import { useSelector } from "react-redux";
+import { socket } from "api/axios";
+import { Avatar, IconButton, Tooltip } from "@mui/material";
 import TextUsername from "components/text/TextUsername";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import AlertDialog from "components/alert/AlertDialog";
-import { useSelector } from "react-redux";
-import { socket } from "api/axios";
 
-const CommentItem = ({ linkInfo = "", comment }) => {
+const CommentItem = ({ comment }) => {
   const { currentUser } = useSelector((state) => state.auth.login);
   const { content, userID } = comment;
   const [openDialog, setOpenDialog] = React.useState(false);
-  const fullName = userID.firstName + " " + userID.lastName;
+  const fullName = userID?.firstName + " " + userID?.lastName;
   const handleDeleteComment = () => {
     socket.emit("deleteComment", comment._id);
   };
   return (
     <>
       <div className="flex items-start gap-x-3 ">
-        <Link to={linkInfo}>
+        <Link to={"/profile/" + userID?._id}>
           <Avatar
-            src="https://images.unsplash.com/photo-1667114790847-7653bc249e82?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
-            alt={userID.firstName}
+            src={userID?.avatar}
+            alt={fullName}
             sx={{ width: 52, height: 52 }}
           />
         </Link>
         <div>
-          <div className="flex items-center gap-x-2">
+          <div className="flex items-center gap-x-1">
             <TextUsername>{fullName}</TextUsername>
-            <Tooltip title="Author">
+            {/* <Tooltip title="Author">
               <VerifiedIcon className="text-xl text-primary" />
-            </Tooltip>
+            </Tooltip> */}
           </div>
-          <h5 className="text-[15px] font-normal text-text2">{content}</h5>
+          <div className="flex items-start mt-1 gap-x-2">
+            <h5 className="text-[15px] font-normal text-text2">{content}</h5>
+            {userID?._id === currentUser?._id && (
+              <Tooltip
+                title="Delete comment"
+                className="cursor-pointer opacity-80"
+                onClick={() => setOpenDialog(true)}
+              >
+                <DeleteIcon className="text-xl text-iconColor" />
+              </Tooltip>
+            )}
+          </div>
         </div>
-        {userID?._id === currentUser?._id ? (
-          <Tooltip
-            title="Delete comment"
-            className="pointer-events-auto opacity-30"
-            onClick={setOpenDialog}
-          >
-            <DeleteIcon className="text-xl text-iconColor" />
-          </Tooltip>
-        ) : null}
       </div>
       <AlertDialog
         open={openDialog}

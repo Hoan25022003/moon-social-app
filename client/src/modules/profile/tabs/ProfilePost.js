@@ -13,6 +13,7 @@ const ProfilePost = ({ yourSelf }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getPostList("/" + id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const { loading, listPost } = useSelector((state) => state.posts.getPost);
   return (

@@ -4,14 +4,7 @@ import ButtonGradient from "components/button/ButtonGradient";
 import PictureDialog from "components/picture/PictureDialog";
 
 const PostImage = ({ src = "", listImg = [] }) => {
-  // const [openBackdrop, setOpenBackdrop] = useState(false);
-  // const [picture, setPicture] = useState(null);
-  // console.log(openBackdrop);
-  // const handleShowBackdrop = () => {
-  //   setOpenBackdrop(true);
-  //   setPicture()
-  // }
-  const { openState, picture, handleShowBackdrop } = useBackdropPicture();
+  const { openState, pictureState, handleShowBackdrop } = useBackdropPicture();
   return (
     <>
       <div className="relative w-full overflow-hidden group">
@@ -35,7 +28,10 @@ const PostImage = ({ src = "", listImg = [] }) => {
           </>
         )}
       </div>
-      <PictureDialog openState={openState} listImg={picture}></PictureDialog>
+      <PictureDialog
+        openState={openState}
+        pictureState={pictureState}
+      ></PictureDialog>
     </>
   );
 };

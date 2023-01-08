@@ -28,7 +28,7 @@ const SideFilter = () => {
   }
   return (
     <div className="px-4 py-3 mt-5 border border-graySoft rounded-xl">
-      <TextHeading>Search filter</TextHeading>
+      <TextHeading>Search filters</TextHeading>
       <div className="flex flex-col my-3 gap-y-1">
         <FilterRadio
           selectedValue={selectedValue}

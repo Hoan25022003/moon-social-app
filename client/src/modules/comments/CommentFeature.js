@@ -8,21 +8,20 @@ import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
 import ModalLine from "components/modal/ModalLine";
 import CommentItem from "./CommentItem";
-import { socket } from "../../api/axios";
+import { socket } from "api/axios";
 import { getCommentList } from "redux/comments/commentRequest";
 import { deleteComment, newComment } from "redux/comments/commentSlice";
+import CommentSkeleton from "components/skeleton/CommentSkeleton";
+import LoadingType from "components/loading/LoadingType";
+import { Link } from "react-router-dom";
 
 const CommentFeature = ({ modalComment, handleHideModal, post }) => {
-  const { _id } = post;
+  const { _id, authorID } = post;
   const { currentUser } = useSelector((state) => state.auth.login);
-  const { listComment, loading } = useSelector(
-    (state) => state.comments.getComment
-  );
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(getCommentList(_id));
-    socket.connect();
+    // socket.connect();
     socket.emit("join", { user: currentUser._id, post: _id });
 
     socket.on("comment", ({ user, comment, time }) => {
@@ -34,11 +33,15 @@ const CommentFeature = ({ modalComment, handleHideModal, post }) => {
       dispatch(deleteComment(commentId));
     });
     return () => {
-      socket.disconnect();
+      // socket.disconnect();
       socket.removeAllListeners();
       socket.off();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_id]);
+  const { listComment, loading } = useSelector(
+    (state) => state.comments.getComment
+  );
 
   return (
     <Overlay handleHideModal={handleHideModal}>
@@ -51,7 +54,7 @@ const CommentFeature = ({ modalComment, handleHideModal, post }) => {
           <PostMeta
             timer="22 minutes previous"
             sizeAvatar={52}
-            author={currentUser}
+            author={authorID}
           ></PostMeta>
           <div className="px-[26px] my-2 flex items-center">
             <div className="h-[45px] w-[2px] bg-[#ddd]"></div>
@@ -60,21 +63,30 @@ const CommentFeature = ({ modalComment, handleHideModal, post }) => {
             </p>
           </div>
           <div className="flex items-start gap-x-3 ">
-            <Avatar
-              alt="Hoan"
-              src="https://images.unsplash.com/photo-1668090956076-b2c9d6193e6b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80"
-              sx={{ width: 52, height: 52 }}
-            />
+            <Link to={"/profile/" + currentUser._id}>
+              <Avatar
+                alt="Hoan"
+                src={currentUser.avatar}
+                sx={{ width: 52, height: 52 }}
+              />
+            </Link>
             <CommentForm></CommentForm>
           </div>
           <CommentList>
-            {listComment?.length > 0 ? (
-              listComment?.map((comment) => (
+            {loading && (
+              <>
+                <CommentSkeleton></CommentSkeleton>
+                <CommentSkeleton></CommentSkeleton>
+              </>
+            )}
+            {!loading && listComment?.length > 0 ? (
+              listComment.map((comment) => (
                 <CommentItem key={comment._id} comment={comment} />
               ))
             ) : (
               <div>No comment yet</div>
             )}
+            <LoadingType message="Someone is typing a comment" />
           </CommentList>
         </div>
       </div>

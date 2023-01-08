@@ -1,46 +1,30 @@
 const asyncHandler = require("express-async-handler");
+const ChatModel = require("../models/ChatModel");
 const FriendModel = require("../models/FriendModel");
 const UserModel = require("../models/UserModel");
 
-async function getAllFriend(username) {
-  const listFriend = await FriendModel.find({
-    $or: [
-      {
-        from: username._id,
-      },
-      { to: username._id },
-    ],
-  }).populate(["from", "to"]);
-  var listUser = [];
-  listFriend.map((item) => {
-    if (item.from.email === username.email) listUser = [...listUser, item.to];
-    else listUser = [...listUser, item.from];
-  });
-  return listUser;
-}
-
-const getUserFriend = asyncHandler(async (req, res) => {
-  const username = req.username;
-  try {
-    // const listFriend = await FriendModel.find({
-    //   $or: [
-    //     {
-    //       from: username._id,
-    //     },
-    //     { to: username._id },
-    //   ],
-    // }).populate(["from", "to"]);
-    // var listUser = [];
-    // listFriend.map((item) => {
-    //   if (item.from.email === username.email) listUser = [...listUser, item.to];
-    //   else listUser = [...listUser, item.from];
-    // });
-    const listAllFriend = await getAllFriend(username);
-    res.json({ listAllFriend });
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
+// const getUserFriend = asyncHandler(async (req, res) => {
+//   const username = req.username;
+//   try {
+//     const listFriend = await FriendModel.find({
+//       $or: [
+//         {
+//           from: username._id,
+//         },
+//         { to: username._id },
+//       ],
+//     }).populate(["from", "to"]);
+//     var listUser = [];
+//     listFriend.map((item) => {
+//       if (item.from.email === username.email) listUser = [...listUser, item.to];
+//       else listUser = [...listUser, item.from];
+//     });
+//     const listAllFriend = await getAllFriend(username);
+//     res.json({ listAllFriend });
+//   } catch (error) {
+//     res.status(500).json(error);
+//   }
+// });
 
 async function checkExisted(yourID, userID) {
   return await FriendModel.findOne({
@@ -81,6 +65,14 @@ const handleAcceptFriend = asyncHandler(async (req, res) => {
       await FriendModel.findByIdAndUpdate(friendExisted._id, {
         isConfirmed: true,
       });
+      const chatInfo = await ChatModel.findOne({
+        participant: { $all: [username._id, req.params.id] },
+      });
+      if (!chatInfo) {
+        await ChatModel.create({
+          participant: [username._id, req.params.id],
+        });
+      } else await ChatModel.updateOne(chatInfo, { show: true });
       res.json("Accept successful");
     } else res.status(400).json("Accept failed");
   } catch (error) {
@@ -93,7 +85,17 @@ const handleCancelFriend = asyncHandler(async (req, res) => {
   try {
     const friendExisted = await checkExisted(username._id, req.params.id);
     if (friendExisted) {
+      console.log(friendExisted);
       await FriendModel.findByIdAndDelete(friendExisted._id);
+      const chatInfo = await ChatModel.findOneAndUpdate(
+        {
+          participant: { $all: [username._id, req.params.id] },
+        },
+        {
+          show: false,
+        }
+      );
+      console.log(chatInfo);
       res.json("Cancel friend successful");
     } else
       res.status(400).json("This user haven't already existed in list friend");
@@ -103,7 +105,7 @@ const handleCancelFriend = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  getUserFriend,
+  // getUserFriend,
   handleAddFriend,
   handleAcceptFriend,
   handleCancelFriend,

@@ -4,10 +4,12 @@ import { Button, IconButton, Tooltip } from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
 import SendIcon from "@mui/icons-material/Send";
 import ProfileEdit from "./ProfileEdit";
+import FriendStatus from "modules/friends/FriendStatus";
+import { useParams } from "react-router-dom";
 
-const ProfileFeature = ({ yourSelf, status = 1 }) => {
-  const classGeneral = "px-4 py-1 font-semibold capitalize rounded-full";
-  const [toggleInvite, setToggleInvite] = useToggle(status === 2);
+const ProfileFeature = ({ yourSelf, status = 3, isSender = false }) => {
+  const { id } = useParams();
+  const classGeneral = "px-4 py-1 font-semibold";
   const [showEdit, setShowEdit] = useToggle(false);
   return (
     <>
@@ -15,7 +17,8 @@ const ProfileFeature = ({ yourSelf, status = 1 }) => {
       <div className="flex items-center justify-end py-3 gap-x-3">
         <Tooltip title="Copy link to profile">
           <IconButton
-            className="hover:bg-graySoft border-graySoft"
+            className="hover:bg-graySoft"
+            style={{ border: "1px solid #ddd" }}
             aria-label="copy link"
             onClick={() => {
               navigator.clipboard.writeText(window.location.href);
@@ -28,40 +31,62 @@ const ProfileFeature = ({ yourSelf, status = 1 }) => {
         {yourSelf ? (
           <Button
             variant="outlined"
-            className={`${classGeneral} hover:bg-graySoft text-text1 border-strock`}
+            className={`${classGeneral} rounded-full capitalize hover:bg-graySoft text-text1 border-strock`}
             onClick={setShowEdit}
           >
             Edit profile
           </Button>
-        ) : status === 1 ? (
-          <>
-            <Tooltip title="Send Message">
-              <IconButton
-                className="hover:bg-graySoft border-strock"
-                aria-label="send message"
-              >
-                <SendIcon className="text-lg text-iconColor" />
-              </IconButton>
-            </Tooltip>
-            <Button
-              variant="outlined"
-              className={`${classGeneral} hover:bg-graySoft text-primary border-primary`}
-            >
-              Unfriend
-            </Button>
-          </>
         ) : (
-          <Button
-            variant="contained"
-            className={`${classGeneral} text-white bg-primary`}
-            onClick={setToggleInvite}
-          >
-            {toggleInvite ? "Pending" : "Add friend"}
-          </Button>
+          <>
+            {status === 1 && (
+              <Tooltip title="Send Message">
+                <IconButton
+                  className="hover:bg-graySoft"
+                  style={{ border: "1px solid #ddd" }}
+                  aria-label="send message"
+                >
+                  <SendIcon className="text-lg text-iconColor" />
+                </IconButton>
+              </Tooltip>
+            )}
+            <FriendStatus
+              isSender={isSender}
+              status={status}
+              userID={id}
+              className={classGeneral}
+            ></FriendStatus>
+          </>
         )}
       </div>
     </>
   );
 };
+
+// status === 1 ? (
+//   <>
+//     <Tooltip title="Send Message">
+//       <IconButton
+//         className="hover:bg-graySoft border-strock"
+//         aria-label="send message"
+//       >
+//         <SendIcon className="text-lg text-iconColor" />
+//       </IconButton>
+//     </Tooltip>
+//     <Button
+//       variant="outlined"
+//       className={`${classGeneral} hover:bg-graySoft text-primary border-primary`}
+//     >
+//       Unfriend
+//     </Button>
+//   </>
+// ) : (
+//   <Button
+//     variant="contained"
+//     className={`${classGeneral} text-white bg-primary`}
+//     onClick={setToggleInvite}
+//   >
+//     {toggleInvite ? "Pending" : "Add friend"}
+//   </Button>
+// )
 
 export default ProfileFeature;

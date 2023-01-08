@@ -3,6 +3,7 @@ const cloudinary = require("../config/cloudinary");
 const ImageModel = require("../models/ImageModel");
 const PostModel = require("../models/PostModel");
 const UserModel = require("../models/UserModel");
+const shuffleArray = require("../utils/shuffleArray");
 
 function checkSavedAndLiked(listPost, username) {
   const { listSaved, _id } = username;
@@ -17,7 +18,7 @@ const getPostList = asyncHandler(async (req, res) => {
   const username = req.username;
   const { keyword } = req.query;
   try {
-    const listPost = await PostModel.find({
+    let listPost = await PostModel.find({
       $or: [
         {
           content: {
@@ -33,7 +34,8 @@ const getPostList = asyncHandler(async (req, res) => {
       "lastName",
       "avatar",
     ]);
-    res.json({ listPost: checkSavedAndLiked(listPost, username) });
+    listPost = shuffleArray(checkSavedAndLiked(listPost, username));
+    res.json({ listPost });
   } catch (error) {
     res.status(500).json(error);
   }
