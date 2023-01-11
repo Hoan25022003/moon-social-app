@@ -20,12 +20,8 @@ const commentSlice = createSlice({
       state.getComment.listComment.push(payload);
     },
     deleteComment: (state, { payload }) => {
-<<<<<<< HEAD
-      state.getComment.listComment = state.getComment.listComment.filter(
-=======
       const { listComment } = state.getComment;
       state.getComment.listComment = listComment.filter(
->>>>>>> f74b3da1616f2dbd47e212826f2a4b3a0c1471e7
         (comment) => comment._id !== payload
       );
     },

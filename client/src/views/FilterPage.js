@@ -19,38 +19,59 @@ const FilterPage = () => {
   const { listUsers } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   const listQuery = searchParams.get("list") || "all";
+  const commentQuery = searchParams.get("comment");
+  const latestQuery = searchParams.get("latest");
+
+  const empty = (
+    <EmptyLayout
+      className="py-10"
+      linkImg="/img/searching.png"
+      info="No results found for this keyword"
+      support="Please try again later !"
+    ></EmptyLayout>
+  );
   const users =
-    (listQuery === "people" || listQuery === "all") &
-    (listUsers?.length > 0) ? (
-      listUsers.map((user) => (
-        <FriendItem key={user._id} user={user}></FriendItem>
-      ))
-    ) : (listQuery === "people" || listQuery === "all") &
-      (listPost?.length === 0) ? (
-      <p>No user found</p>
-    ) : null;
+    (listQuery === "people" || listQuery === "all") && listUsers?.length > 0
+      ? listUsers.map((user) => (
+          <FriendItem key={user._id} user={user}></FriendItem>
+        ))
+      : listQuery === "people" && listPost?.length === 0
+      ? empty
+      : null;
 
   const posts =
-    (listQuery === "post" || listQuery === "all") & (listPost.length > 0) ? (
-      listPost.map((post) => (
-        <PostItem key={post?._id} postInfo={post}></PostItem>
-      ))
-    ) : (listQuery === "post" || listQuery === "all") &
-      (listPost.length === 0) ? (
-      <p>No post found</p>
-    ) : null;
+    (listQuery === "post" || listQuery === "all") && listPost.length > 0
+      ? listPost.map((post) => (
+          <PostItem key={post?._id} postInfo={post}></PostItem>
+        ))
+      : listQuery === "post" && listPost.length === 0
+      ? empty
+      : null;
 
   useEffect(() => {
-    console.log(listPost);
     if (listQuery === "post") {
-      dispatch(getPostList(`?keyword=${keyName}`));
+      dispatch(
+        getPostList(
+          `?keyword=${keyName}&comment=${
+            commentQuery === "false" ? "false" : "true"
+          }${latestQuery === "true" ? "&latest=true" : ""}`
+        )
+      );
     } else if (listQuery === "people") {
       dispatch(userFilter(keyName));
     } else {
       dispatch(userFilter(keyName));
-      dispatch(getPostList(`?keyword=${keyName}`));
+      dispatch(
+        getPostList(
+          `?keyword=${keyName}&comment=${
+            commentQuery === "false" ? "false" : "true"
+          }`
+        )
+      );
     }
-  }, [keyName, listQuery]);
+  }, [keyName, listQuery, commentQuery, latestQuery]);
+
+  console.log(commentQuery);
 
   return (
     <>
@@ -62,22 +83,24 @@ const FilterPage = () => {
           </p>
         </div>
       </BackPage>
-      <EmptyLayout
-        className="py-10"
-        linkImg="/img/searching.png"
-        info="No results found for this keyword"
-        support="Please try again later !"
-      ></EmptyLayout>
-      <div className="flex flex-col px-5 py-4 gap-y-6">
-        <div>
-          <TextHeading className="mb-3">People</TextHeading>
-          <FriendList>{users}</FriendList>
+      {listPost?.length === 0 && listUsers?.length === 0 ? (
+        empty
+      ) : (
+        <div className="flex flex-col px-5 py-4 gap-y-6">
+          {listQuery !== "post" ? (
+            <div>
+              <TextHeading className="mb-3">People</TextHeading>
+              <FriendList>{users}</FriendList>
+            </div>
+          ) : null}
+          {listQuery !== "people" ? (
+            <div>
+              <TextHeading className="mb-3">Posts</TextHeading>
+              <div className="flex flex-col gap-y-3">{posts}</div>
+            </div>
+          ) : null}
         </div>
-        <div>
-          <TextHeading className="mb-3">Posts</TextHeading>
-          <div className="flex flex-col gap-y-3">{posts}</div>
-        </div>
-      </div>
+      )}
     </>
   );
 };

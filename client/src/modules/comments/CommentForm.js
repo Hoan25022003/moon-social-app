@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { socket } from "api/axios";
 import { Button, TextareaAutosize } from "@mui/material";
 import { useForm } from "react-hook-form";
@@ -6,19 +6,42 @@ import { useSelector } from "react-redux";
 
 const CommentForm = ({
   placeholder = "Comment your reply about this post",
+  emitTyping,
+  emitStopTyping,
+  isTyping,
 }) => {
   const { currentUser } = useSelector((state) => state.auth.login);
 
   const {
     register,
     reset,
-    formState: { isDirty, errors, isSubmitting },
+    watch,
+    formState: { isDirty, errors, isSubmitting, touchedFields },
     handleSubmit,
   } = useForm({ mode: "onChange" });
   const handleComment = (values) => {
     socket.emit("sendComment", values);
     reset();
   };
+  const content = watch("content");
+
+  useEffect(() => {
+    const timer1 = setTimeout(() => {
+      if (content?.length > 0) {
+        emitTyping();
+      }
+    }, 3000);
+
+    const timer2 = setTimeout(() => {
+      emitStopTyping();
+    }, 6000);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
+  }, [content]);
+
   return (
     <form
       onSubmit={handleSubmit(handleComment)}

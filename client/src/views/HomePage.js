@@ -8,12 +8,7 @@ import PostSkeleton from "components/skeleton/PostSkeleton";
 import PostList from "modules/posts/PostList";
 
 const HomePage = () => {
-<<<<<<< HEAD
-  const { currentUser } = useCheckLogin("Home page");
-  // const { listUsers } = useSelector((state) => state.users);
-=======
   const { currentUser } = useSelector((state) => state.auth.login);
->>>>>>> f74b3da1616f2dbd47e212826f2a4b3a0c1471e7
   const dispatch = useDispatch();
   useEffect(() => {
     document.title = "Home Page | Moon Stars";

@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import { socket } from "api/axios";
-import React, { lazy, Suspense, useEffect, useState } from "react";
-=======
 import React, { lazy, Suspense, useEffect } from "react";
 import { socket } from "api/axios";
->>>>>>> f74b3da1616f2dbd47e212826f2a4b3a0c1471e7
 import { Route, Routes } from "react-router-dom";
 import "swiper/scss";
 import "swiper/scss/navigation";

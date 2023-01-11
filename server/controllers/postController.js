@@ -1,8 +1,10 @@
 const asyncHandler = require("express-async-handler");
 const cloudinary = require("../config/cloudinary");
+const CommentModel = require("../models/CommentModel");
 const ImageModel = require("../models/ImageModel");
 const PostModel = require("../models/PostModel");
 const UserModel = require("../models/UserModel");
+const removeTones = require("../utils/removeTones");
 const shuffleArray = require("../utils/shuffleArray");
 
 function checkSavedAndLiked(listPost, username) {
@@ -14,30 +16,73 @@ function checkSavedAndLiked(listPost, username) {
   }));
 }
 
+function searchListByContent(str, content) {
+  return removeTones(str.toLowerCase()).includes(
+    removeTones(content.toLowerCase())
+  );
+}
+
+function mergeArrayUnique(Arr1, Arr2) {
+  const Arr = [...Arr1, ...Arr2];
+  const ArToObj = {};
+  const res = [];
+  for (const item of Arr) {
+    ArToObj[item._id] = item;
+  }
+
+  for (const [key, value] of Object.entries(ArToObj)) {
+    res.push(value);
+  }
+  return res;
+}
+
 const getPostList = asyncHandler(async (req, res) => {
   const username = req.username;
-  const { keyword } = req.query;
+  const { keyword, comment, latest } = req.query;
+
   try {
-    let listPost = await PostModel.find({
-      $or: [
-        {
-          content: {
-            $regex: keyword || "",
-            $options: "i",
-          },
-        },
-      ],
-    }).populate("authorID", [
+    let listPost = await PostModel.find({}).populate("authorID", [
       "_id",
       "email",
       "firstName",
       "lastName",
       "avatar",
     ]);
-    listPost = shuffleArray(checkSavedAndLiked(listPost, username));
+    if (keyword) {
+      listPost = listPost.filter((post) =>
+        searchListByContent(post.content, keyword)
+      );
+
+      if (comment !== "false") {
+        const comments = await CommentModel.find({});
+        const listCommentsByPostId = comments
+          .filter((comment) => searchListByContent(comment.content, keyword))
+          .map((comment) => comment.postID);
+        const listPostByComment = await PostModel.find({
+          _id: { $in: listCommentsByPostId },
+        }).populate("authorID", [
+          "_id",
+          "email",
+          "firstName",
+          "lastName",
+          "avatar",
+        ]);
+        listPost = mergeArrayUnique(listPost, listPostByComment);
+      }
+    }
+
+    if (!latest) {
+      listPost = shuffleArray(checkSavedAndLiked(listPost, username));
+    } else {
+      listPost = listPost.sort((a, b) =>
+        a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0
+      );
+      listPost = checkSavedAndLiked(listPost, username);
+    }
     res.json({ listPost });
   } catch (error) {
-    res.status(500).json(error);
+    const errorMsg = JSON.stringify(error);
+    res.status(500).json(errorMsg);
   }
 });
 
@@ -99,16 +144,17 @@ const getPostFeature = asyncHandler(async (req, res) => {
 
 const getPostFilter = asyncHandler(async (req, res) => {
   const { query, comment } = req.query;
+  console.log("QUERy: ", query);
   try {
     let conditionFilter = {};
     if (!query) res.status(400).json("Please type key word to search!");
     else {
       conditionFilter.modeComment = comment || true;
       const listPost = await PostModel.find({
-        content: {
-          $regex: req.query?.query || "",
-          $options: "i",
-        },
+        // content: {
+        //   $regex: req.query?.query || "",
+        //   $options: "i",
+        // },
         ...conditionFilter,
       });
       res.json({ listPost: checkSavedPost(listPost, req.username.listSaved) });

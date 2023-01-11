@@ -7,20 +7,23 @@ import FriendStatus from "./FriendStatus";
 import TextUsername from "components/text/TextUsername";
 
 const FriendItem = ({
-  src,
-  email,
-  status = 3,
-  isSender = true,
-  linkInfo = "/",
-  userID = "",
-  fullName,
+  user: {
+    avatar,
+    email,
+    status = 3,
+    isSender = true,
+    linkInfo = "/",
+    userID = "",
+    firstName,
+    lastName,
+  },
 }) => {
   return (
     <div className="flex flex-col items-center justify-between p-4 h-[280px] border rounded-xl border-strock">
       <Link to={linkInfo} className="flex flex-col items-center">
-        <Avatar alt={fullName} src={src} sx={{ width: 80, height: 80 }} />
+        <Avatar alt={avatar} src={avatar} sx={{ width: 80, height: 80 }} />
         <TextUsername type="bold" className="mt-2 text-lg">
-          {fullName}
+          {firstName + " " + lastName}
         </TextUsername>
         <TextLight className="mb-1">{email}</TextLight>
       </Link>
