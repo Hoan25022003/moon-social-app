@@ -51,8 +51,8 @@ export const logoutUser = async (dispatch) => {
   try {
     await axios.post("/auth/logout");
     Cookies.remove("tokens");
-    dispatch(logoutAccount());
     window.location.href = "/login";
+    dispatch(logoutAccount());
   } catch (error) {
     console.log(error);
   }

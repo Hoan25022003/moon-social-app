@@ -7,7 +7,7 @@ import ProfileEdit from "./ProfileEdit";
 import FriendStatus from "modules/friends/FriendStatus";
 import { useParams } from "react-router-dom";
 
-const ProfileFeature = ({ yourSelf, status = 3, isSender = false }) => {
+const ProfileFeature = ({ yourSelf, status = 3, isSender = true }) => {
   const { id } = useParams();
   const classGeneral = "px-4 py-1 font-semibold";
   const [showEdit, setShowEdit] = useToggle(false);

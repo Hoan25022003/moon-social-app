@@ -1,4 +1,4 @@
-const { getCurrentUser, userJoin } = require("../utils/usersActive");
+const { getCurrentUser, userJoin, removeUser } = require("../utils/usersJoin");
 const { formatComment } = require("../utils/formatComment");
 const CommentModel = require("../models/CommentModel");
 const PostModel = require("../models/PostModel");
@@ -68,5 +68,10 @@ module.exports = function commentHandler(socket, io) {
       console.log("DELETE COMMENT ERROR:", err);
       socket.emit("error", err);
     }
+  });
+
+  socket.on("remove-event-comment", () => {
+    console.log("Turn off comment modal");
+    removeUser(socket.id);
   });
 };

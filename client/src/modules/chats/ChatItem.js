@@ -4,7 +4,13 @@ import TextUsername from "components/text/TextUsername";
 import ChatAvatar from "./parts/ChatAvatar";
 import ChatLatestMessage from "./parts/ChatLatestMessage";
 
-const ChatItem = ({ avatar, username, latestMessage = "", id = "1234" }) => {
+const ChatItem = ({
+  avatar,
+  username,
+  latestMessage = "",
+  id = "1234",
+  isActive,
+}) => {
   const navigate = useNavigate();
   return (
     <div
@@ -16,10 +22,10 @@ const ChatItem = ({ avatar, username, latestMessage = "", id = "1234" }) => {
           avatar={avatar}
           size={54}
           alt={username}
-          isActive={true}
+          isActive={isActive}
         ></ChatAvatar>
-        <div>
-          <TextUsername>{username}</TextUsername>
+        <div className="flex flex-col gap-y-1">
+          <TextUsername className="leading-5">{username}</TextUsername>
           <ChatLatestMessage>{latestMessage}</ChatLatestMessage>
         </div>
       </div>

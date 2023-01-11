@@ -1,16 +1,29 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import BackPage from "components/common/BackPage";
-import TextUsername from "components/text/TextUsername";
 import ChatItem from "modules/chats/ChatItem";
-import ChatAvatar from "modules/chats/parts/ChatAvatar";
+import { chatUserList } from "redux/chats/chatRequest";
+import { socket } from "api/axios";
 
 const ChatPage = () => {
   const { currentUser } = useSelector((state) => state.auth.login);
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { listUserActive, listChats, loading } = useSelector(
+    (state) => state.chats.chatInfo
+  );
   useEffect(() => {
     document.title = "Moon Chat | Moon Stars";
+    socket.connect();
+    dispatch(chatUserList());
+    socket.on("receive-info", (userID) => {
+      if (userID === currentUser._id) dispatch(chatUserList());
+    });
+
+    return () => {
+      socket.disconnect();
+      socket.off();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
   if (!currentUser) return;
   return (
@@ -19,12 +32,12 @@ const ChatPage = () => {
         <div className="flex flex-col px-2">
           <h4 className="text-lg font-bold">Moon Chat</h4>
           <p className="text-[13px] font-normal text-text4">
-            12 user | 20 group
+            {listChats?.length} user | 20 group
           </p>
         </div>
       </BackPage>
       <div className="px-5 py-3">
-        <div className="grid grid-cols-5 mb-3 gap-x-2">
+        {/* <div className="grid grid-cols-5 mb-3 gap-x-2">
           <div
             onClick={() => navigate("/")}
             className="flex flex-col items-center p-2 rounded-lg cursor-pointer gap-y-1 hover:bg-whiteSoft"
@@ -36,9 +49,31 @@ const ChatPage = () => {
             ></ChatAvatar>
             <TextUsername className="line-clamp-2">Hoan Do</TextUsername>
           </div>
-        </div>
+        </div> */}
         <div className="flex flex-col">
-          <ChatItem
+          {!loading
+            ? listChats?.length > 0 &&
+              listChats.map((chat) => (
+                <ChatItem
+                  key={chat._id}
+                  id={chat._id}
+                  avatar={chat.participant.avatar}
+                  isActive={
+                    !!listUserActive?.filter(
+                      (user) => user._id === chat.participant._id
+                    )[0]
+                  }
+                  username={
+                    chat.participant.firstName + " " + chat.participant.lastName
+                  }
+                  latestMessage={
+                    chat.latestMessage?.content ||
+                    "✌️ Let's send message to get acquainted new friend"
+                  }
+                ></ChatItem>
+              ))
+            : "Loading"}
+          {/* <ChatItem
             avatar="uploads/avatar-man.png"
             username="Do Hoan"
             latestMessage="You: Hello guys"
@@ -47,12 +82,7 @@ const ChatPage = () => {
             avatar="uploads/avatar-man.png"
             username="Do Hoan"
             latestMessage="You: Hello guys"
-          ></ChatItem>
-          <ChatItem
-            avatar="uploads/avatar-man.png"
-            username="Do Hoan"
-            latestMessage="You: Hello guys"
-          ></ChatItem>
+          ></ChatItem> */}
         </div>
       </div>
     </>

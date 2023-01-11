@@ -10,15 +10,23 @@ import Search from "components/search/Search";
 import SideFriend from "./rightSidebar/SideFriend";
 import { socket } from "api/axios";
 import useCheckLogin from "hooks/useCheckLogin";
+import { useDispatch } from "react-redux";
+import { addUserActive } from "redux/chats/chatSlice";
 
 const MainLayout = () => {
   const { currentUser } = useCheckLogin();
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { value: query, handleChange } = useChangeValue("", 0);
   useEffect(() => {
-    socket.connect();
+    socket.emit("client-connect", currentUser);
+    socket.on("user-active", (data) => {
+      dispatch(addUserActive(data));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
+
   const handleEnterKey = (e) => {
     if (e.which === 13 && query) navigate("/search?q=" + query);
   };

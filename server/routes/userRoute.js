@@ -6,10 +6,13 @@ const {
   handleUpdateInfo,
   getUserDetail,
   handleDeleteImage,
+  getChatList,
 } = require("../controllers/userController");
 const verifyToken = require("../middleWare/verifyToken");
 
 router.get("/", verifyToken, getUserList);
+
+// router.get("/chat", verifyToken, getChatList);
 
 router.get("/:id", verifyToken, getUserDetail);
 

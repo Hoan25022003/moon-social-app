@@ -22,6 +22,10 @@ const UserSchema = mongoose.Schema(
         ref: "posts",
       },
     ],
+    isActive: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

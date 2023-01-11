@@ -21,7 +21,7 @@ const CommentFeature = ({ modalComment, handleHideModal, post }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getCommentList(_id));
-    // socket.connect();
+    socket.connect();
     socket.emit("join", { user: currentUser._id, post: _id });
 
     socket.on("comment", ({ user, comment, time }) => {
@@ -33,8 +33,8 @@ const CommentFeature = ({ modalComment, handleHideModal, post }) => {
       dispatch(deleteComment(commentId));
     });
     return () => {
-      // socket.disconnect();
-      socket.removeAllListeners();
+      socket.emit("remove-event-comment");
+      socket.disconnect();
       socket.off();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

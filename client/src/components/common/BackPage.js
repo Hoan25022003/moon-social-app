@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 const BackPage = ({ children, haveBackBtn = true, turnSwitchTab }) => {
   const navigate = useNavigate();
   return (
-    <div className="sticky top-0 flex items-center px-3 py-1 bg-white bg-opacity-50 shadow-sm z-[100] gap-x-4">
+    <div className="sticky top-0 flex items-center px-3 py-1 bg-white bg-opacity-70 shadow-sm z-[100] gap-x-4">
       {haveBackBtn && (
         <div
           className="flex items-center justify-center transition-colors bg-transparent rounded-full cursor-pointer w-9 h-9 hover:bg-graySoft"

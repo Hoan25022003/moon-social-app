@@ -2,19 +2,36 @@ import React from "react";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import SendIcon from "@mui/icons-material/Send";
 import { useForm } from "react-hook-form";
+import { socket } from "api/axios";
+import { useParams } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-const MessageForm = () => {
+const schema = yup.object({
+  content: yup.string().required(),
+});
+
+const MessageForm = ({ yourID, userInfo }) => {
   const {
     register,
     formState: { isDirty },
     handleSubmit,
-  } = useForm();
+    reset,
+  } = useForm({
+    mode: "onSubmit",
+    resolver: yupResolver(schema),
+  });
+  const { id } = useParams();
   const handleChatMessage = (values) => {
-    console.log(values);
+    socket.emit("send-message", { ...values, chatID: id, sender: yourID });
+    reset({
+      content: "",
+    });
+    socket.emit("send-info", { yourID, userInfo });
   };
   return (
     <form
-      className="flex items-end w-full gap-x-3"
+      className={`flex items-center w-full gap-x-3 px-5 py-3 sticky bottom-0 left-0 bg-white bg-opacity-95`}
       onSubmit={handleSubmit(handleChatMessage)}
     >
       <TextareaAutosize
@@ -24,7 +41,7 @@ const MessageForm = () => {
         placeholder="Type message in here"
         autoFocus={true}
         className="w-full px-4 py-3 overflow-auto text-sm transition-all border border-none h-fit rounded-3xl text-text2 bg-whiteSoft focus:bg-graySoft"
-        {...register("message")}
+        {...register("content")}
       ></TextareaAutosize>
       <button
         className={`flex items-center justify-center p-2 transition-all bg-transparent rounded-full cursor-pointer hover:bg-graySoft ${

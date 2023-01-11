@@ -5,8 +5,11 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
-const { userJoin, removeUser } = require("./utils/usersActive");
 const commentHandler = require("./socket_io/commentHandler");
+const ChatModel = require("./models/ChatModel");
+const UserModel = require("./models/UserModel");
+const MessageModel = require("./models/MessageModel");
+const chatsHandler = require("./socket_io/chatsHandler");
 
 const app = express();
 const server = http.createServer(app);
@@ -28,16 +31,73 @@ app.use("/api/auth", require("./routes/authRoute"));
 app.use("/api/users", require("./routes/userRoute"));
 app.use("/api/friends", require("./routes/friendRoute"));
 app.use("/api/posts", require("./routes/postRoute"));
-app.use("/api/chats", require("./routes/chatRoute"));
 app.use("/api/comments", require("./routes/commentRoute"));
+app.use("/api/chats", require("./routes/chatRoute"));
 
 /* Socket handler */
 io.on("connection", (socket) => {
+  socket.on("client-connect", async (currentUser) => {
+    if (!currentUser) return;
+    try {
+      await UserModel.findByIdAndUpdate(currentUser._id, {
+        isActive: true,
+      });
+      const listActive = await UserModel.find(
+        {
+          isActive: true,
+        },
+        {
+          listSaved: 0,
+          coverImg: 0,
+          detailInfo: 0,
+          password: 0,
+        }
+      );
+      socket.broadcast.emit("user-active", listActive);
+    } catch (error) {
+      socket.emit("error", error);
+    }
+  });
+
+  socket.on("logout-active", async (currentUser) => {
+    if (!currentUser) return;
+    try {
+      await UserModel.findByIdAndUpdate(currentUser._id, {
+        isActive: false,
+      });
+      const listActive = await UserModel.find(
+        {
+          isActive: true,
+        },
+        {
+          listSaved: 0,
+          coverImg: 0,
+          detailInfo: 0,
+          password: 0,
+        }
+      );
+      socket.broadcast.emit("user-active", listActive);
+    } catch (error) {
+      socket.emit("error", error);
+    }
+  });
+
+  chatsHandler(socket, io);
+
   commentHandler(socket, io);
 
-  socket.on("disconnect", () => {
-    removeUser(socket.id);
-    console.log("User had DISCONNECT");
+  socket.on("disconnect", async (reason) => {
+    console.log("User 1 disconnected because " + reason);
+    try {
+      await UserModel.updateMany(
+        { isActive: true },
+        {
+          isActive: false,
+        }
+      );
+    } catch (error) {
+      socket.emit("error", error);
+    }
   });
 });
 

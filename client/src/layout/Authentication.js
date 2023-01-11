@@ -9,9 +9,9 @@ import { useCheckUser } from "hooks/useCheckLogin";
 const Authentication = ({ children, heading }) => {
   useCheckUser();
   const { success } = useSelector((state) => state.auth.register);
-  useEffect(() => {
-    socket.disconnect();
-  }, []);
+  // useEffect(() => {
+  //   socket.disconnect();
+  // }, []);
   return (
     <div className="w-full h-[100vh] flex items-start">
       <div className="w-[1200px] mx-auto grid gap-x-8 grid-cols-[1fr,1.5fr] mt-10">

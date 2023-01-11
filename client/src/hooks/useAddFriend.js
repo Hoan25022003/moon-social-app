@@ -2,13 +2,13 @@ import axios from "api/axios";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { userFriend } from "redux/users/userRequest";
 import { statusFriend } from "redux/users/userSlice";
 
-export default function useAddFriend(userID = "") {
+export default function useAddFriend(userID = "", status) {
   const [loadingBtn, setLoadingBtn] = useState(false);
+  const [newStatus, setNewStatus] = useState(status);
   const dispatch = useDispatch();
-  const { filters } = useSelector((state) => state.users?.friend);
+  // const { filters } = useSelector((state) => state.users?.friend);
 
   // Send invitation
   const handleInvite = async () => {
@@ -21,14 +21,14 @@ export default function useAddFriend(userID = "") {
           authorization: "Bearer " + Cookies.get("tokens"),
         },
       });
-      dispatch(userFriend(filters));
-      dispatch(
-        statusFriend({
-          type: "success",
-          message: "Sent invitation",
-        })
-      );
+      // dispatch(
+      //   statusFriend({
+      //     type: "success",
+      //     message: "Sent invitation",
+      //   })
+      // );
       setLoadingBtn(false);
+      setNewStatus(2);
     } catch (error) {
       dispatch(
         statusFriend({
@@ -50,14 +50,15 @@ export default function useAddFriend(userID = "") {
           authorization: "Bearer " + Cookies.get("tokens"),
         },
       });
-      dispatch(userFriend(filters));
-      dispatch(
-        statusFriend({
-          type: "success",
-          message: "Add successful friend",
-        })
-      );
+      // dispatch(userFriend(filters));
+      // dispatch(
+      //   statusFriend({
+      //     type: "success",
+      //     message: "Add successful friend",
+      //   })
+      // );
       setLoadingBtn(false);
+      setNewStatus(1);
     } catch (error) {
       console.log(error);
       dispatch(
@@ -79,7 +80,8 @@ export default function useAddFriend(userID = "") {
           authorization: "Bearer " + Cookies.get("tokens"),
         },
       });
-      dispatch(userFriend(filters));
+      // dispatch(userFriend(filters));
+      setNewStatus(3);
     } catch (error) {
       console.log(error);
     }
@@ -87,6 +89,7 @@ export default function useAddFriend(userID = "") {
 
   return {
     loadingBtn,
+    newStatus,
     handleInvite,
     handleAccept,
     handleCancel,
