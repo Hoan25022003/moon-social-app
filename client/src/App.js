@@ -1,6 +1,7 @@
 import React, { lazy, Suspense, useEffect } from "react";
 import { socket } from "api/axios";
-import { Route, Routes } from "react-router-dom";
+// import { Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-loading";
 import "swiper/scss";
 import "swiper/scss/navigation";
 
@@ -30,7 +31,7 @@ function App() {
         <Route path="/login" element={<LoginPage></LoginPage>}></Route>
         <Route path="/register" element={<RegisterPage></RegisterPage>}></Route>
         <Route element={<MainLayout></MainLayout>}>
-          <Route path="/home" element={<HomePage></HomePage>}></Route>
+          <Route path="/home" element={<HomePage></HomePage>} loading></Route>
           <Route path="/friends" element={<FriendPage></FriendPage>}></Route>
           <Route path="/groups" element={<GroupPage></GroupPage>}></Route>
           <Route

@@ -6,17 +6,25 @@ import PostFeature from "modules/posts/PostFeature";
 import PostItem from "modules/posts/PostItem";
 import PostSkeleton from "components/skeleton/PostSkeleton";
 import PostList from "modules/posts/PostList";
+import { useLoadingContext } from "react-router-loading";
 
 const HomePage = () => {
+  const loadingContext = useLoadingContext();
   const { currentUser } = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
   useEffect(() => {
     document.title = "Home Page | Moon Stars";
+
     dispatch(getPostList());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
-  const { listPost, loading } = useSelector((state) => state.posts.getPost);
+  const { listPost, loading: getPostLoading } = useSelector(
+    (state) => state.posts.getPost
+  );
   const { hasMore, countItem, fetchMoreData } = useFetchMore(listPost?.length);
+  if (!getPostLoading) {
+    loadingContext.done();
+  }
   return (
     <div className="p-3">
       <PostFeature
@@ -26,7 +34,7 @@ const HomePage = () => {
       ></PostFeature>
       {listPost?.length > 0 && (
         <PostList dataLength={countItem} next={fetchMoreData} hasMore={hasMore}>
-          {currentUser && !loading ? (
+          {currentUser && !getPostLoading ? (
             listPost.map(
               (post, i) =>
                 i < countItem && (
