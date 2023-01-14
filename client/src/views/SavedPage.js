@@ -6,8 +6,10 @@ import PostItem from "modules/posts/PostItem";
 import PostSkeleton from "components/skeleton/PostSkeleton";
 import useFetchMore from "hooks/useFetchMore";
 import PostList from "modules/posts/PostList";
+import { useLoadingContext } from "react-router-loading";
 
 const SavedPage = () => {
+  const loadingContext = useLoadingContext();
   const { currentUser } = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -18,6 +20,9 @@ const SavedPage = () => {
   const { listPost, loading } = useSelector((state) => state.posts.getPost);
   const { hasMore, countItem, fetchMoreData } = useFetchMore(listPost?.length);
   if (!currentUser) return;
+  if (!loading) {
+    loadingContext.done();
+  }
   return (
     <>
       <BackPage haveBackBtn={false}>

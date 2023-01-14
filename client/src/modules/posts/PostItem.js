@@ -12,6 +12,7 @@ import PostTheme from "./parts/PostTheme";
 import CommentFeature from "modules/comments/CommentFeature";
 import axios from "api/axios";
 import Cookies from "js-cookie";
+import renderTime from "utils/renderTime";
 
 const PostItem = ({ postInfo }) => {
   const {
@@ -24,6 +25,7 @@ const PostItem = ({ postInfo }) => {
     type,
     listImg,
     listHeart,
+    createdAt,
   } = postInfo;
   const [like, setLike] = useToggle(isLiked);
   const [modalComment, setModalComment] = useToggle(false);
@@ -47,7 +49,7 @@ const PostItem = ({ postInfo }) => {
     <>
       <div className="flex flex-col px-4 rounded-xl bg-whiteSoft">
         <div className="flex items-start justify-between mt-5 mb-3">
-          <PostMeta timer="22 minutes previous" author={authorID}></PostMeta>
+          <PostMeta timer={renderTime(createdAt)} author={authorID}></PostMeta>
           <PostSaved isSaved={saved} postID={_id}></PostSaved>
         </div>
         {type === "theme" ? (

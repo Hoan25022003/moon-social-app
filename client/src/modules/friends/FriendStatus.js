@@ -4,9 +4,9 @@ import React from "react";
 
 const FriendStatus = ({ className = "", status, isSender, userID }) => {
   const classGeneral = `${className} capitalize rounded-full`;
-  const { loadingBtn, handleInvite, handleCancel, handleAccept } =
-    useAddFriend(userID);
-  switch (status) {
+  const { loadingBtn, newStatus, handleInvite, handleCancel, handleAccept } =
+    useAddFriend(userID, status);
+  switch (newStatus) {
     case 1:
       return (
         <Button

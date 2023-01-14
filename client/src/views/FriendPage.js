@@ -11,8 +11,10 @@ import FriendList from "modules/friends/FriendList";
 import FriendSkeleton from "components/skeleton/FriendSkeleton";
 import { filterUser } from "redux/users/userSlice";
 import AlertInfo from "components/alert/AlertInfo";
+import { useLoadingContext } from "react-router-loading";
 
 const FriendPage = () => {
+  const loadingContext = useLoadingContext();
   const { currentUser } = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.users?.friend);
@@ -34,6 +36,9 @@ const FriendPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, query]);
   const { listUsers, loading } = useSelector((state) => state.users?.friend);
+  if (!loading) {
+    loadingContext.done();
+  }
   return (
     <>
       <BackPage haveBackBtn={false}>

@@ -19,12 +19,6 @@ const MessagePage = lazy(() => import("./views/MessagePage"));
 const NotFoundPage = lazy(() => import("./views/NotFoundPage"));
 
 function App() {
-  useEffect(() => {
-    socket.on("error", (err) => {
-      console.log("socket error: ", err);
-    });
-  }, []);
-
   return (
     <Suspense>
       <Routes>
@@ -32,16 +26,29 @@ function App() {
         <Route path="/register" element={<RegisterPage></RegisterPage>}></Route>
         <Route element={<MainLayout></MainLayout>}>
           <Route path="/home" element={<HomePage></HomePage>} loading></Route>
-          <Route path="/friends" element={<FriendPage></FriendPage>}></Route>
+          <Route
+            path="/friends"
+            element={<FriendPage></FriendPage>}
+            loading
+          ></Route>
           <Route path="/groups" element={<GroupPage></GroupPage>}></Route>
           <Route
             path="/profile/:id"
             element={<ProfilePage></ProfilePage>}
+            loading
           ></Route>
-          <Route path="/search" element={<FilterPage></FilterPage>}></Route>
-          <Route path="/post-saved" element={<SavedPage></SavedPage>}></Route>
-          <Route path="/chats" element={<ChatPage />}></Route>
-          <Route path="/chats/t/:id" element={<MessagePage />}></Route>
+          <Route
+            path="/search"
+            element={<FilterPage></FilterPage>}
+            loading
+          ></Route>
+          <Route
+            path="/post-saved"
+            element={<SavedPage></SavedPage>}
+            loading
+          ></Route>
+          <Route path="/chats" element={<ChatPage />} loading></Route>
+          <Route path="/chats/t/:id" element={<MessagePage />} loading></Route>
         </Route>
         <Route path="*" element={<NotFoundPage></NotFoundPage>}></Route>
       </Routes>

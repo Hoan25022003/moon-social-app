@@ -5,9 +5,7 @@ const userJoin = (sId, user, post) => {
   const index = users.findIndex(
     (user) => user.post === post && user.sId === sId
   );
-  if (index !== -1) {
-    return users[index];
-  }
+  if (index !== -1) return users[index];
   users.push(newUser);
   console.log(newUser);
   return newUser;

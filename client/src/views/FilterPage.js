@@ -10,12 +10,15 @@ import EmptyLayout from "layout/EmptyLayout";
 import { userFilter } from "redux/users/userRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { getPostList } from "redux/posts/postRequest";
+import { useLoadingContext } from "react-router-loading";
 
 const FilterPage = () => {
-  const { currentUser } = useSelector((state) => state.auth.login);
+  const loadingContext = useLoadingContext();
   const { switchTab, keyName } = useTurnSwitch("q");
   const [searchParams, setSearchParams] = useSearchParams("");
-  const { listPost } = useSelector((state) => state.posts.getPost);
+  const { listPost, loading: getPostLoading } = useSelector(
+    (state) => state.posts.getPost
+  );
   const { listUsers } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   const listQuery = searchParams.get("list") || "all";
@@ -71,8 +74,9 @@ const FilterPage = () => {
     }
   }, [keyName, listQuery, commentQuery, latestQuery]);
 
-  console.log(commentQuery);
-
+  if (!getPostLoading) {
+    loadingContext.done();
+  }
   return (
     <>
       <BackPage turnSwitchTab={switchTab}>

@@ -7,10 +7,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import AlertDialog from "components/alert/AlertDialog";
+import renderTime from "utils/renderTime";
 
 const CommentItem = ({ comment }) => {
   const { currentUser } = useSelector((state) => state.auth.login);
-  const { content, userID } = comment;
+  const { content, userID, createdAt } = comment;
   const [openDialog, setOpenDialog] = React.useState(false);
   const fullName = userID?.firstName + " " + userID?.lastName;
   const handleDeleteComment = () => {
@@ -27,11 +28,14 @@ const CommentItem = ({ comment }) => {
           />
         </Link>
         <div>
-          <div className="flex items-center gap-x-1">
+          <div className="flex items-center gap-x-2">
             <TextUsername>{fullName}</TextUsername>
             {/* <Tooltip title="Author">
               <VerifiedIcon className="text-xl text-primary" />
             </Tooltip> */}
+            <p className="text-[13px] font-normal text-text4">
+              {renderTime(createdAt)}
+            </p>
           </div>
           <div className="flex items-start mt-1 gap-x-2">
             <h5 className="text-[15px] font-normal text-text2">{content}</h5>

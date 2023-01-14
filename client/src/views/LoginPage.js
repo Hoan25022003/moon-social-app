@@ -11,7 +11,6 @@ import Input from "components/form/Input";
 import ErrorMessage from "components/form/ErrorMessage";
 import ButtonGradient from "components/button/ButtonGradient";
 import { loginUser } from "redux/auth/authRequest";
-import { useCheckUser } from "hooks/useCheckLogin";
 
 const schema = yup.object({
   email: yup

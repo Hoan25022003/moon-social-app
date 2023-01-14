@@ -50,8 +50,8 @@ const CommentFeature = ({ modalComment, handleHideModal, post }) => {
       dispatch(deleteComment(commentId));
     });
     return () => {
-      // socket.disconnect();
-      socket.removeAllListeners();
+      socket.emit("remove-event-comment");
+      socket.disconnect();
       socket.off();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

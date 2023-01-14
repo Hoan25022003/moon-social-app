@@ -95,7 +95,6 @@ const handleCancelFriend = asyncHandler(async (req, res) => {
           show: false,
         }
       );
-      console.log(chatInfo);
       res.json("Cancel friend successful");
     } else
       res.status(400).json("This user haven't already existed in list friend");
