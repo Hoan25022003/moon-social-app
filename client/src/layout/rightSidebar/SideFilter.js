@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import TextHeading from "components/text/TextHeading";
 import FilterRadio from "components/filter/FilterRadio";
-import FilterSwitch from "components/filter/FilterSwitch";
+import FilterOption from "components/filter/FilterOption";
 
 const SideFilter = () => {
   const [searchParams, setSearchParams] = useSearchParams("");
@@ -10,12 +9,19 @@ const SideFilter = () => {
   const [selectedValue, setSelectedValue] = useState(
     getParamName("list") || "all"
   );
-  const [checkedComment, setCheckedComment] = useState(
-    getParamName("comment") || true
-  );
-  const [checkedLatest, setCheckedLatest] = useState(
-    getParamName("latest") || false
-  );
+  const [filterPost, setFilterPost] = useState("");
+  useEffect(() => {
+    if (selectedValue === "post") {
+      searchParams.set("by", getParamName("by") || "latest");
+      getParamName("by") && setFilterPost(getParamName("by") || "latest");
+    } else searchParams.delete("by");
+    setSearchParams(searchParams);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedValue]);
+  useEffect(() => {
+    setSelectedValue("all");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getParamName("q")]);
   function handleFilterByParams(
     [value, setValue],
     param = "list",
@@ -26,10 +32,19 @@ const SideFilter = () => {
     if (value !== except) searchParams.append(param, value.toString());
     setSearchParams(searchParams);
   }
+  // function handleFilterPost(checked, by = "") {
+  //   const newFilterPost = !checked
+  //     ? filterPost.filter((i) => i !== by)
+  //     : [...filterPost, by];
+  //   setFilterPost(newFilterPost);
+  //   searchParams.delete("by");
+  //   newFilterPost.length > 0 &&
+  //     searchParams.append("by", newFilterPost.join("+"));
+  //   setSearchParams(searchParams);
+  // }
   return (
-    <div className="px-4 py-3 mt-5 border border-graySoft rounded-xl">
-      <TextHeading>Search filters</TextHeading>
-      <div className="flex flex-col my-3 gap-y-1">
+    <>
+      <FilterOption heading="Search filters">
         <FilterRadio
           selectedValue={selectedValue}
           handleChange={(e) =>
@@ -54,34 +69,52 @@ const SideFilter = () => {
           value="post"
           label="Post"
         />
-        {selectedValue === "post" && (
-          <div className="flex flex-col gap-y-[6px]">
-            <FilterSwitch
+        {/* {selectedValue === "post" && (
+          <div className="flex flex-col">
+            <FilterCheckbox
               label="Comment"
-              checked={!!checkedComment}
+              checked={filterPost.includes("comment")}
               handleChange={(e) =>
-                handleFilterByParams(
-                  [e.target.checked, setCheckedComment],
-                  "comment",
-                  true
-                )
+                handleFilterPost(e.target.checked, "comment")
               }
             />
-            <FilterSwitch
+            <FilterCheckbox
               label="Latest"
-              checked={!!checkedLatest}
-              handleChange={(e) =>
-                handleFilterByParams(
-                  [e.target.checked, setCheckedLatest],
-                  "latest",
-                  false
-                )
-              }
+              checked={filterPost.includes("latest")}
+              handleChange={(e) => handleFilterPost(e.target.checked, "latest")}
             />
           </div>
-        )}
-      </div>
-    </div>
+        )} */}
+      </FilterOption>
+      {getParamName("list") === "post" && (
+        <FilterOption heading="Sort by">
+          <FilterRadio
+            label="Latest"
+            selectedValue={filterPost}
+            handleChange={(e) =>
+              handleFilterByParams([e.target.value, setFilterPost], "by")
+            }
+            value="latest"
+          ></FilterRadio>
+          <FilterRadio
+            label="Most like"
+            selectedValue={filterPost}
+            handleChange={(e) =>
+              handleFilterByParams([e.target.value, setFilterPost], "by")
+            }
+            value="like"
+          ></FilterRadio>
+          <FilterRadio
+            label="Most comment"
+            selectedValue={filterPost}
+            handleChange={(e) =>
+              handleFilterByParams([e.target.value, setFilterPost], "by")
+            }
+            value="comment"
+          ></FilterRadio>
+        </FilterOption>
+      )}
+    </>
   );
 };
 

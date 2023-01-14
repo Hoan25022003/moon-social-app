@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar } from "@mui/material";
 import Overlay from "components/common/Overlay";
@@ -18,15 +18,32 @@ import { Link } from "react-router-dom";
 const CommentFeature = ({ modalComment, handleHideModal, post }) => {
   const { _id, authorID } = post;
   const { currentUser } = useSelector((state) => state.auth.login);
+  const [isTyping, setIsTyping] = useState(false);
   const dispatch = useDispatch();
+  const emitTyping = useCallback(() => {
+    socket.emit("typing");
+  }, []);
+  const emitStopTyping = useCallback(() => {
+    socket.emit("stopTyping");
+  }, []);
   useEffect(() => {
     dispatch(getCommentList(_id));
     socket.connect();
     socket.emit("join", { user: currentUser._id, post: _id });
 
+    socket.on("typing", () => {
+      setIsTyping(true);
+    });
+
+    socket.on("stopTyping", () => {
+      setIsTyping(false);
+    });
+
     socket.on("comment", ({ user, comment, time }) => {
       const addedComment = { ...comment, userID: user };
       dispatch(newComment(addedComment));
+      const el = document.querySelector(".commentList");
+      el.scrollTop = el.scrollHeight;
     });
 
     socket.on("deletedComment", (commentId) => {
@@ -39,6 +56,11 @@ const CommentFeature = ({ modalComment, handleHideModal, post }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_id]);
+
+  useEffect(() => {
+    return () => emitStopTyping();
+  }, []);
+
   const { listComment, loading } = useSelector(
     (state) => state.comments.getComment
   );
@@ -62,7 +84,7 @@ const CommentFeature = ({ modalComment, handleHideModal, post }) => {
               Replying to <b className="text-thirdColor">Hoan Do</b>
             </p>
           </div>
-          <div className="flex items-start gap-x-3 ">
+          <div className="flex items-start gap-x-3">
             <Link to={"/profile/" + currentUser._id}>
               <Avatar
                 alt="Hoan"
@@ -70,7 +92,11 @@ const CommentFeature = ({ modalComment, handleHideModal, post }) => {
                 sx={{ width: 52, height: 52 }}
               />
             </Link>
-            <CommentForm></CommentForm>
+            <CommentForm
+              isTyping={isTyping}
+              emitTyping={emitTyping}
+              emitStopTyping={emitStopTyping}
+            ></CommentForm>
           </div>
           <CommentList>
             {loading && (
@@ -86,7 +112,9 @@ const CommentFeature = ({ modalComment, handleHideModal, post }) => {
             ) : (
               <div>No comment yet</div>
             )}
-            <LoadingType message="Someone is typing a comment" />
+            {isTyping ? (
+              <LoadingType message="Someone is typing a comment" />
+            ) : null}
           </CommentList>
         </div>
       </div>

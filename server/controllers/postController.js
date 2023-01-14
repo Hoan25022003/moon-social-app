@@ -1,43 +1,91 @@
 const asyncHandler = require("express-async-handler");
 const cloudinary = require("../config/cloudinary");
+const CommentModel = require("../models/CommentModel");
 const ImageModel = require("../models/ImageModel");
 const PostModel = require("../models/PostModel");
 const UserModel = require("../models/UserModel");
+const removeTones = require("../utils/removeTones");
 const shuffleArray = require("../utils/shuffleArray");
 
 function checkSavedAndLiked(listPost, username) {
   const { listSaved, _id } = username;
   return listPost.map((post) => ({
-    ...post._doc,
+    ...(post._doc || post),
     saved: listSaved.includes(post._id),
     isLiked: post.listHeart.includes(_id),
   }));
 }
 
+function searchListByContent(str, content) {
+  return removeTones(str.toLowerCase()).includes(
+    removeTones(content.toLowerCase())
+  );
+}
+
+function mergeArrayUnique(Arr1, Arr2) {
+  const Arr = [...Arr1, ...Arr2];
+  const ArToObj = {};
+  const res = [];
+  for (const item of Arr) {
+    ArToObj[item._id] = item;
+  }
+
+  for (const [key, value] of Object.entries(ArToObj)) {
+    res.push(value);
+  }
+  return res;
+}
+
 const getPostList = asyncHandler(async (req, res) => {
   const username = req.username;
-  const { keyword } = req.query;
+  const { keyword, by } = req.query;
+
   try {
-    let listPost = await PostModel.find({
-      $or: [
-        {
-          content: {
-            $regex: keyword || "",
-            $options: "i",
-          },
-        },
-      ],
-    }).populate("authorID", [
+    let listPost = await PostModel.find({}).populate("authorID", [
       "_id",
       "email",
       "firstName",
       "lastName",
       "avatar",
     ]);
-    listPost = shuffleArray(checkSavedAndLiked(listPost, username));
+    if (keyword) {
+      listPost = listPost.filter((post) =>
+        searchListByContent(post.content, keyword)
+      );
+    }
+
+    if (by) {
+      switch (by) {
+        case "like":
+          listPost = listPost.sort((a, b) =>
+            a.listHeart.length < b.listHeart.length ? 1 : -1
+          );
+          break;
+
+        case "comment":
+          const newListPost = listPost.map(async (post) => {
+            const commentCount = await CommentModel.find({
+              postID: post._id,
+            }).count();
+            return { ...post._doc, commentCount };
+          });
+          listPost = (await Promise.all(newListPost)).sort((a, b) =>
+            a.commentCount < b.commentCount ? 1 : -1
+          );
+          break;
+
+        default:
+          listPost = listPost.sort((a, b) =>
+            a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0
+          );
+          break;
+      }
+      listPost = checkSavedAndLiked(listPost, username);
+    } else listPost = shuffleArray(checkSavedAndLiked(listPost, username));
     res.json({ listPost });
   } catch (error) {
-    res.status(500).json(error);
+    const errorMsg = JSON.stringify(error);
+    res.status(500).json(errorMsg);
   }
 });
 
@@ -105,10 +153,10 @@ const getPostFilter = asyncHandler(async (req, res) => {
     else {
       conditionFilter.modeComment = comment || true;
       const listPost = await PostModel.find({
-        content: {
-          $regex: req.query?.query || "",
-          $options: "i",
-        },
+        // content: {
+        //   $regex: req.query?.query || "",
+        //   $options: "i",
+        // },
         ...conditionFilter,
       });
       res.json({ listPost: checkSavedPost(listPost, req.username.listSaved) });

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import SearchHistory from "./SearchHistory";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
+import { useLocation } from "react-router-dom";
 
 const Search = ({
   onChange = () => {},
@@ -14,13 +15,14 @@ const Search = ({
   ...props
 }) => {
   const [focus, setFocus] = React.useState(false);
+  const location = useLocation();
 
-  const handleClickAway = () => {
+  useEffect(() => {
     setFocus(false);
-  };
+  }, [location.pathname]);
 
   return (
-    <ClickAwayListener onClickAway={handleClickAway}>
+    <ClickAwayListener onClickAway={() => setFocus(false)}>
       <div className="relative z-50">
         <label
           className={`flex items-center w-full pl-4 overflow-hidden rounded-full ${
@@ -49,7 +51,9 @@ const Search = ({
             {...props}
           />
         </label>
-        {isSuggested && focus && <SearchHistory></SearchHistory>}
+        {isSuggested && focus && (
+          <SearchHistory stateFocus={[focus, setFocus]}></SearchHistory>
+        )}
       </div>
     </ClickAwayListener>
   );

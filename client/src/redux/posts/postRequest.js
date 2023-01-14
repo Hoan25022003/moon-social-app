@@ -40,9 +40,9 @@ export const addNewPost = createAsyncThunk(
 
 export const getPostList = createAsyncThunk(
   "posts/list",
-  async (newUrl = "") => {
+  async (query = "") => {
     try {
-      const res = await axios.get("/posts" + newUrl, {
+      const res = await axios.get("/posts" + query, {
         headers: {
           authorization: "Bearer " + Cookies.get("tokens"),
         },

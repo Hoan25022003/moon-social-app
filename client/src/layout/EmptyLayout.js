@@ -21,7 +21,7 @@ const EmptyLayout = ({ linkImg, className, info, support, children }) => {
 EmptyLayout.propTypes = {
   linkImg: PropTypes.string,
   className: PropTypes.string,
-  info: PropTypes.string.isRequired,
+  info: PropTypes.string,
   support: PropTypes.string,
 };
 

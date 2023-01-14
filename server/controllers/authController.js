@@ -46,14 +46,8 @@ const handleLogin = asyncHandler(async (req, res) => {
     if (username) {
       const result = await bcrypt.compare(req.body.password, username.password);
       if (result) {
-        const { _id, firstName, lastName, email, avatar } = username._doc;
-        const token = generateToken({
-          _id,
-          firstName,
-          lastName,
-          email,
-          avatar,
-        });
+        const { _id, email, firstName, lastName, avatar } = username._doc;
+        const token = generateToken({ _id });
         res.cookie("tokens", token, {
           httpOnly: true,
           secure: false,

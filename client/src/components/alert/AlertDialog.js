@@ -20,6 +20,7 @@ const AlertDialog = ({
 
   return (
     <Dialog
+      className="z-[999999]"
       open={open}
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"

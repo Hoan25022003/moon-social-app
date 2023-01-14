@@ -1,7 +1,7 @@
 import React from "react";
 import HomeIcon from "@mui/icons-material/Home";
 import PeopleIcon from "@mui/icons-material/People";
-import GroupsIcon from "@mui/icons-material/Groups";
+// import GroupsIcon from "@mui/icons-material/Groups";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ChatIcon from "@mui/icons-material/Chat";
@@ -18,11 +18,11 @@ const listNav = [
     url: "/friends",
     icon: <PeopleIcon></PeopleIcon>,
   },
-  {
-    name: "Group",
-    url: "/group",
-    icon: <GroupsIcon></GroupsIcon>,
-  },
+  // {
+  //   name: "Group",
+  //   url: "/group",
+  //   icon: <GroupsIcon></GroupsIcon>,
+  // },
   {
     name: "Saved",
     url: "/post-saved",

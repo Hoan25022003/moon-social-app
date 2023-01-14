@@ -17,7 +17,7 @@ const commentSlice = createSlice({
   },
   reducers: {
     newComment: (state, { payload }) => {
-      state.getComment.listComment.push(payload);
+      state.getComment.listComment.unshift(payload);
     },
     deleteComment: (state, { payload }) => {
       const { listComment } = state.getComment;
@@ -27,19 +27,6 @@ const commentSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // builder
-    //   .addCase(addNewComment.fulfilled, (state) => {
-    //     state.createComment.success = true;
-    //     state.createComment.loading = false;
-    //   })
-    //   .addCase(addNewComment.pending, (state) => {
-    //     state.createComment.loading = true;
-    //     state.createComment.error = false;
-    //   })
-    //   .addCase(addNewComment.rejected, (state) => {
-    //     state.createComment.loading = false;
-    //     state.createComment.error = true;
-    //   });
     builder
       .addCase(getCommentList.fulfilled, (state, { payload }) => {
         state.getComment.listComment = payload;

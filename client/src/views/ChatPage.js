@@ -25,6 +25,7 @@ const ChatPage = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
+
   if (!currentUser) return;
   return (
     <>
@@ -32,7 +33,7 @@ const ChatPage = () => {
         <div className="flex flex-col px-2">
           <h4 className="text-lg font-bold">Moon Chat</h4>
           <p className="text-[13px] font-normal text-text4">
-            {listChats?.length} user | 20 group
+            {listChats?.length} friends
           </p>
         </div>
       </BackPage>
@@ -58,6 +59,7 @@ const ChatPage = () => {
                   key={chat._id}
                   id={chat._id}
                   avatar={chat.participant.avatar}
+                  // createdAt={chat.latestMessage?.createdAt}
                   isActive={
                     !!listUserActive?.filter(
                       (user) => user._id === chat.participant._id
@@ -73,16 +75,6 @@ const ChatPage = () => {
                 ></ChatItem>
               ))
             : "Loading"}
-          {/* <ChatItem
-            avatar="uploads/avatar-man.png"
-            username="Do Hoan"
-            latestMessage="You: Hello guys"
-          ></ChatItem>
-          <ChatItem
-            avatar="uploads/avatar-man.png"
-            username="Do Hoan"
-            latestMessage="You: Hello guys"
-          ></ChatItem> */}
         </div>
       </div>
     </>

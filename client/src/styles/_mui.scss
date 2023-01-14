@@ -20,6 +20,15 @@
   }
 }
 
+// Customize checkbox
+.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root {
+  &.Mui-checked,
+  &.MuiCheckbox-indeterminate {
+    color: #0072ff !important;
+  }
+  color: #a2a2a8 !important;
+}
+
 // Customize Switch
 .css-julti5-MuiSwitch-root {
   .css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked {

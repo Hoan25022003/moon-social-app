@@ -16,9 +16,9 @@ router.get("/", verifyToken, getPostList);
 
 router.get("/:id", verifyToken, getPostPersonal);
 
-router.get("/:id/:by", verifyToken, getPostFeature);
+// router.get("/:id/:by", verifyToken, getPostFeature);
 
-router.get("/filter", verifyToken, getPostFilter);
+// router.get("/filter", verifyToken, getPostFilter);
 
 router.post("/saved/:id", verifyToken, handleSavePost);
 

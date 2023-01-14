@@ -26,6 +26,7 @@ const UserSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    searchHistory: [String],
   },
   { timestamps: true }
 );

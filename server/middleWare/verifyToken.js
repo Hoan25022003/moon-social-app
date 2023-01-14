@@ -8,7 +8,7 @@ module.exports = function verifyToken(req, res, next) {
   jwt.verify(token, process.env.TOKEN_SECRET, async (err, data) => {
     if (err) res.status(403).json("Token is not valid");
     else {
-      req.username = await UserModel.findOne({ email: data.email });
+      req.username = await UserModel.findById(data._id);
       next();
     }
   });

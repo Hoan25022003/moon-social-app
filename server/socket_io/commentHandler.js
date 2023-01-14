@@ -6,19 +6,32 @@ const UserModel = require("../models/UserModel");
 
 module.exports = function commentHandler(socket, io) {
   socket.on("join", ({ user, post }) => {
+    // console.log("new user join");
     const newUser = userJoin(socket.id, user, post);
-    console.log("User connected success");
-
     socket.join(newUser.post);
+  });
 
-    socket.broadcast
-      .to(user.post)
-      .emit("typing", "Someone is typing a comment");
+  socket.on("typing", () => {
+    const currentUser = getCurrentUser(socket.id)[0];
+    if (!currentUser) {
+      return socket.emit("error", "Server error");
+    }
+
+    socket.broadcast.to(currentUser.post).emit("typing");
+  });
+
+  socket.on("stopTyping", () => {
+    const currentUser = getCurrentUser(socket.id)[0];
+
+    if (!currentUser) {
+      return socket.emit("error", "Server error");
+    }
+
+    socket.broadcast.to(currentUser.post).emit("stopTyping");
   });
 
   socket.on("sendComment", async (comment) => {
     const currentUser = getCurrentUser(socket.id)[0];
-    console.log(currentUser);
     try {
       if (!comment || !currentUser) {
         return socket.emit("error", "Server error");
@@ -54,11 +67,10 @@ module.exports = function commentHandler(socket, io) {
 
   socket.on("deleteComment", async (commentId) => {
     const currentUser = getCurrentUser(socket.id)[0];
-    console.log("CURRENT USER:", currentUser);
     try {
       const deleteComment = await CommentModel.findById(commentId);
-      console.log("DELETE COMMENT: ", deleteComment);
-      console.log(currentUser.user);
+      // console.log("DELETE COMMENT: ", deleteComment);
+      // console.log(currentUser.user);
       if (!deleteComment && currentUser.user !== deleteComment.userID) {
         return socket.emit("error", "Authorization");
       }
@@ -71,7 +83,6 @@ module.exports = function commentHandler(socket, io) {
   });
 
   socket.on("remove-event-comment", () => {
-    console.log("Turn off comment modal");
     removeUser(socket.id);
   });
 };

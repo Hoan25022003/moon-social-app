@@ -38,7 +38,7 @@ const MessagePage = () => {
     (state) => state.chats.messageInfo
   );
   if (!participant) return;
-  if (listMessage.length > 0) document.body.scrollIntoView(false);
+  // if (listMessage.length > 0) document.body.scrollIntoView(false);
   return (
     <>
       <BackPage turnSwitchTab="/chats">

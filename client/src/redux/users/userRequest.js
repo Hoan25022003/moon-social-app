@@ -1,7 +1,6 @@
 import axios from "api/axios";
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
-import { getUserProfile } from "./userSlice";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const userProfile = createAsyncThunk(
   "user/info",
@@ -78,22 +77,22 @@ export const updateUserProfile = createAsyncThunk(
   }
 );
 
-export const userFilter = createAsyncThunk("users/filter", async (keyName) => {
-  try {
-    const res = await axios.get(`/users?name=${keyName}`, {
-      headers: {
-        authorization: "Bearer " + Cookies.get("tokens"),
-      },
-    });
-    let { listUser, listFriend } = res.data;
-    listUser = listUser.map((user) => {
-      return verifyFriend(listFriend, user);
-    });
-    return listUser;
-  } catch (error) {
-    console.log(error);
-  }
-});
+// export const userFilter = createAsyncThunk("users/filter", async (keyName) => {
+//   try {
+//     const res = await axios.get(`/users?name=${keyName}`, {
+//       headers: {
+//         authorization: "Bearer " + Cookies.get("tokens"),
+//       },
+//     });
+//     let { listUser, listFriend } = res.data;
+//     listUser = listUser.map((user) => {
+//       return verifyFriend(listFriend, user);
+//     });
+//     return listUser;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
 
 function verifyFriend(listFriend, user) {
   const checkList = listFriend.filter((friend) => friend._id === user._id)[0];

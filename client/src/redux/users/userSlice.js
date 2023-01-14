@@ -20,18 +20,16 @@ const userSlice = createSlice({
     friend: {
       loading: false,
       error: null,
-      listUsers: null,
+      listUsers: [],
       filters: {},
     },
     alertInfo: {
       type: "success",
       message: null,
     },
+    searchHistory: null,
   },
   reducers: {
-    // getListImage: (state, {payload}) => {
-    //   state.profile.userInfo.listUpload
-    // },
     statusFriend: (state, { payload }) => {
       state.alertInfo = { ...state.alertInfo, ...payload };
     },
@@ -40,6 +38,9 @@ const userSlice = createSlice({
     },
     resetProfile: (state) => {
       state.profile = initProfile;
+    },
+    getSearchHistory: (state, { payload }) => {
+      state.searchHistory = payload.slice(0, 5);
     },
   },
   extraReducers: (builder) => {
@@ -74,16 +75,10 @@ const userSlice = createSlice({
         state.friend.loading = false;
         state.friend.error = payload;
       });
-
-    // Users Filter
-    builder
-      .addCase(userFilter.fulfilled, (state, { payload }) => {
-        state.listUsers = payload;
-      })
-      .addCase(userFilter.rejected, (state, { payload }) => {});
   },
 });
 
-export const { resetProfile, filterUser, statusFriend } = userSlice.actions;
+export const { resetProfile, filterUser, statusFriend, getSearchHistory } =
+  userSlice.actions;
 
 export default userSlice.reducer;

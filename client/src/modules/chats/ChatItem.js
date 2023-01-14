@@ -8,6 +8,7 @@ const ChatItem = ({
   avatar,
   username,
   latestMessage = "",
+  // createdAt,
   id = "1234",
   isActive,
 }) => {
@@ -15,17 +16,17 @@ const ChatItem = ({
   return (
     <div
       onClick={() => navigate("/chats/t/" + id)}
-      className="flex items-center justify-between transition-all cursor-pointer rounded-xl hover:bg-whiteSoft "
+      className="flex items-center justify-between px-4 transition-all cursor-pointer rounded-xl hover:bg-whiteSoft "
     >
-      <div className="flex items-start p-3 gap-x-3">
+      <div className="flex items-start py-3 gap-x-5">
         <ChatAvatar
           avatar={avatar}
-          size={54}
+          size={50}
           alt={username}
           isActive={isActive}
         ></ChatAvatar>
-        <div className="flex flex-col gap-y-1">
-          <TextUsername className="leading-5">{username}</TextUsername>
+        <div className="flex flex-col">
+          <TextUsername>{username}</TextUsername>
           <ChatLatestMessage>{latestMessage}</ChatLatestMessage>
         </div>
       </div>

@@ -26,7 +26,7 @@ const SavedPage = () => {
           <p className="text-[13px] font-normal text-text4">12 posts</p>
         </div>
       </BackPage>
-      <div className="px-4">
+      <div className="px-4 my-3">
         <PostList dataLength={countItem} next={fetchMoreData} hasMore={hasMore}>
           {loading ? (
             <>

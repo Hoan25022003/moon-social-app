@@ -49,10 +49,6 @@ async function getAllFriend(username) {
 }
 
 function searchListByName(str, name) {
-  // return {
-  //   $regex: removeTones(name),
-  //   $options: "i",
-  // };
   return removeTones(str.toLowerCase()).includes(
     removeTones(name.toLowerCase())
   );
@@ -63,18 +59,9 @@ const getUserList = asyncHandler(async (req, res) => {
   try {
     const { gender, name, status } = req.query;
     const filterQuery = (key, query) => query && { [key]: query };
-    // console.log(filterQuery(gender));
     let listUser = await UserModel.find(
       {
         email: { $ne: username.email },
-        // $or: [
-        //   {
-        //     firstName: searchListByName(name || ""),
-        //   },
-        //   {
-        //     lastName: searchListByName(name || ""),
-        //   },
-        // ],
         ...filterQuery("gender", gender),
       },
       { password: 0 }
@@ -86,7 +73,7 @@ const getUserList = asyncHandler(async (req, res) => {
           searchListByName(user.lastName, name)
       );
     const listFriend = await getAllFriend(username);
-    res.json({ listUser, listFriend });
+    res.json({ listUser: shuffleArray(listUser), listFriend });
   } catch (error) {
     res.status(500).json(error);
   }
@@ -120,6 +107,48 @@ const getUserDetail = asyncHandler(async (req, res) => {
   }
 });
 
+const handleSearchHistory = asyncHandler(async (req, res) => {
+  const username = req.username;
+  try {
+    const { searchHistory } = username;
+    if (!searchHistory.includes(req.query.keyword.trim())) {
+      await UserModel.findByIdAndUpdate(username._id, {
+        searchHistory: [req.query.keyword.trim(), ...searchHistory],
+      });
+    } else {
+      await UserModel.findByIdAndUpdate(username._id, {
+        searchHistory: [
+          req.query.keyword,
+          ...searchHistory.filter((q) => q !== req.query.keyword.trim()),
+        ],
+      });
+    }
+    const userInfo = await UserModel.findById(username._id);
+    res.json(userInfo.searchHistory);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+const handleRemoveSearch = asyncHandler(async (req, res) => {
+  const username = req.username;
+  try {
+    if (req.params.slug == "all") {
+      await UserModel.findByIdAndUpdate(username._id, { searchHistory: [] });
+    } else if (req.query.keyword) {
+      await UserModel.findByIdAndUpdate(username._id, {
+        searchHistory: username.searchHistory.filter(
+          (q) => q !== req.query.keyword.trim()
+        ),
+      });
+    } else res.status(400).json("Please type keyword to search");
+    const userInfo = await UserModel.findById(username._id);
+    res.json(userInfo.searchHistory);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 const handleDeleteImage = asyncHandler(async (req, res) => {
   try {
     if (req.body.yourSelf) {
@@ -135,7 +164,6 @@ const handleUpdateInfo = asyncHandler(async (req, res) => {
   try {
     const username = req.username;
     const files = req.files;
-    // console.log(files);
     let newAvatar;
     let newCoverImg;
     if (files) {
@@ -169,8 +197,6 @@ const handleUpdateInfo = asyncHandler(async (req, res) => {
       }
     }
 
-    console.log("NEW COVER IMAGE: ", newCoverImg);
-
     await UserModel.findByIdAndUpdate(username._id, {
       avatar: newAvatar.link || username.avatar || "",
       coverImg: newCoverImg.link || username.coverImg || "",
@@ -193,4 +219,6 @@ module.exports = {
   getUserDetail,
   handleUpdateInfo,
   handleDeleteImage,
+  handleSearchHistory,
+  handleRemoveSearch,
 };

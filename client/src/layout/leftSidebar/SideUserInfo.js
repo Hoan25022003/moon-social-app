@@ -9,7 +9,7 @@ import MenuNavItem from "components/menu/MenuNavItem";
 import TextLight from "components/text/TextLight";
 import { socket } from "api/axios";
 
-const SideUserInfo = ({ url = "/profile/123456", avatar, username, email }) => {
+const SideUserInfo = ({ url = "/profile/", avatar, username, email }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth.login);

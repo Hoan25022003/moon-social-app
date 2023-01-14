@@ -3,18 +3,21 @@ const path = require("path");
 const upload = require("../utils/uploadStorage");
 const {
   getUserList,
-  handleUpdateInfo,
   getUserDetail,
+  handleUpdateInfo,
   handleDeleteImage,
-  getChatList,
+  handleSearchHistory,
+  handleRemoveSearch,
 } = require("../controllers/userController");
 const verifyToken = require("../middleWare/verifyToken");
 
 router.get("/", verifyToken, getUserList);
 
-// router.get("/chat", verifyToken, getChatList);
-
 router.get("/:id", verifyToken, getUserDetail);
+
+router.post("/search", verifyToken, handleSearchHistory);
+
+router.delete("/search/:slug", verifyToken, handleRemoveSearch);
 
 router.put(
   "/update-info",

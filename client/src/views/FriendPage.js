@@ -10,7 +10,6 @@ import FriendItem from "modules/friends/FriendItem";
 import FriendList from "modules/friends/FriendList";
 import FriendSkeleton from "components/skeleton/FriendSkeleton";
 import { filterUser } from "redux/users/userSlice";
-import AlertInfo from "components/alert/AlertInfo";
 
 const FriendPage = () => {
   const { currentUser } = useSelector((state) => state.auth.login);
