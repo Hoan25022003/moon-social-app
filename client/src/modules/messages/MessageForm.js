@@ -35,14 +35,14 @@ const MessageForm = ({ yourID, userInfo }) => {
       onSubmit={handleSubmit(handleChatMessage)}
     >
       <TextareaAutosize
-        aria-label="empty textarea"
         minRows={1}
-        maxRows={4}
+        // maxRows={5}
         placeholder="Type message in here"
         autoFocus={true}
-        className="w-full px-4 py-3 overflow-auto text-sm transition-all border border-none h-fit rounded-3xl text-text2 bg-whiteSoft focus:bg-graySoft"
+        name="content"
+        className="w-full px-4 py-3 text-sm transition-all border border-none rounded-3xl text-text2 bg-whiteSoft focus:bg-graySoft"
         {...register("content")}
-      ></TextareaAutosize>
+      />
       <button
         className={`flex items-center justify-center p-2 transition-all bg-transparent rounded-full cursor-pointer hover:bg-graySoft ${
           !isDirty && "pointer-events-none"

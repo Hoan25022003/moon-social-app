@@ -19,10 +19,12 @@ import Skeleton from "@mui/material/Skeleton";
 import ProfileLoading from "modules/profile/ProfileLoading";
 import PictureDialog from "components/picture/PictureDialog";
 import useBackdropPicture from "hooks/useBackropPicture";
+import { useLoadingContext } from "react-router-loading";
 
 const listTab = ["picture", "posts", "friends", "likes"];
 
 const PersonalPage = () => {
+  const loadingContext = useLoadingContext();
   const { currentUser } = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,6 +45,7 @@ const PersonalPage = () => {
     else error && navigate("/home");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo, error]);
+  if (!loading) loadingContext.done();
   return (
     <>
       <BackPage turnSwitchTab={switchTab}>

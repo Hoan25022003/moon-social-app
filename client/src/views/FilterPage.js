@@ -11,8 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPostList } from "redux/posts/postRequest";
 import FriendSkeleton from "components/skeleton/FriendSkeleton";
 import PostSkeleton from "components/skeleton/PostSkeleton";
+import { useLoadingContext } from "react-router-loading";
 
 const FilterPage = () => {
+  const loadingContext = useLoadingContext();
   const { switchTab, keyName } = useTurnSwitch("q");
   const [searchParams, setSearchParams] = useSearchParams("");
   const { listPost, loading: loadPost } = useSelector(
@@ -72,6 +74,9 @@ const FilterPage = () => {
     }
   }, [keyName, listQuery, sortBy]);
 
+  if (!loadPost && !loadUser) {
+    loadingContext.done();
+  }
   return (
     <>
       <BackPage turnSwitchTab={switchTab}>

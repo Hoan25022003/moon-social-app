@@ -12,11 +12,12 @@ import ButtonGradient from "components/button/ButtonGradient";
 import FormGroup from "components/form/FormGroup";
 import Label from "components/form/Label";
 import Input from "components/form/Input";
-import { TextareaAutosize, MenuItem } from "@mui/material";
+import { TextareaAutosize } from "@mui/material";
 import Dropdown from "components/dropdown/Dropdown";
 import ModalLine from "components/modal/ModalLine";
 import { updateUserProfile } from "../../redux/users/userRequest";
 import { useDispatch, useSelector } from "react-redux";
+import DropdownItem from "components/dropdown/DropdownItem";
 
 const schema = yup.object({
   firstName: yup
@@ -50,7 +51,7 @@ const ProfileEdit = ({ handleHideModal }) => {
   const watchDesc = watch("desc");
   const handleEditProfile = (values) => {
     console.log(values);
-    dispatch(updateUserProfile(values));
+    // dispatch(updateUserProfile(values));
   };
   return (
     <Overlay handleHideModal={handleHideModal} alignCenter={true}>
@@ -129,50 +130,55 @@ const ProfileEdit = ({ handleHideModal }) => {
                   className="w-full px-5 py-4 text-base transition-all border border-strock rounded-xl focus:border-primary"
                   name="desc"
                   minRows={3}
-                  maxRows={3}
-                  watch={watch}
+                  maxRows={10}
                   {...register("desc")}
                 />
               </FormGroup>
               <FormGroup>
                 <Label className="mb-2">Birthday</Label>
                 <div className="grid grid-cols-3 gap-x-4">
-                  <Dropdown
-                    label="Day"
-                    handleExtra={(value) => setValue("day", value)}
-                  >
+                  <Dropdown label="Day" value={watch("day")}>
                     {Array(31)
                       .fill()
                       .map((item, i) => (
-                        <MenuItem value={i + 1} key={i + 1}>
+                        <DropdownItem
+                          key={i + 1}
+                          value={i + 1}
+                          className="text-sm text-text1"
+                          onClick={() => setValue("day", i + 1)}
+                        >
                           {i + 1}
-                        </MenuItem>
+                        </DropdownItem>
                       ))}
                   </Dropdown>
-                  <Dropdown
-                    label="Month"
-                    handleExtra={(value) => setValue("month", value)}
-                  >
+                  <Dropdown label="Month" value={watch("month")}>
                     {Array(12)
                       .fill()
                       .map((item, i) => (
-                        <MenuItem value={i + 1} key={i + 1}>
+                        <DropdownItem
+                          key={i + 1}
+                          value={i + 1}
+                          className="text-sm text-text1"
+                          onClick={() => setValue("month", i + 1)}
+                        >
                           {i + 1}
-                        </MenuItem>
+                        </DropdownItem>
                       ))}
                   </Dropdown>
-                  <Dropdown
-                    label="Year"
-                    handleExtra={(value) => setValue("year", value)}
-                  >
+                  <Dropdown label="Year" value={watch("year")}>
                     {Array(2022)
                       .fill()
                       .map(
                         (item, i) =>
                           i + 1 > 1970 && (
-                            <MenuItem value={i + 1} key={i + 1}>
+                            <DropdownItem
+                              value={i + 1}
+                              key={i + 1}
+                              className="text-sm text-text1"
+                              onClick={() => setValue("year", i + 1)}
+                            >
                               {i + 1}
-                            </MenuItem>
+                            </DropdownItem>
                           )
                       )}
                   </Dropdown>

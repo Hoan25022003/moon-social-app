@@ -4,8 +4,10 @@ import BackPage from "components/common/BackPage";
 import ChatItem from "modules/chats/ChatItem";
 import { chatUserList } from "redux/chats/chatRequest";
 import { socket } from "api/axios";
+import { useLoadingContext } from "react-router-loading";
 
 const ChatPage = () => {
+  const loadingContext = useLoadingContext();
   const { currentUser } = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
   const { listUserActive, listChats, loading } = useSelector(
@@ -27,6 +29,9 @@ const ChatPage = () => {
   }, [currentUser]);
 
   if (!currentUser) return;
+  if (!loading) {
+    loadingContext.done();
+  }
   return (
     <>
       <BackPage haveBackBtn={false}>

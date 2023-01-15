@@ -33,15 +33,15 @@ const postSlice = createSlice({
     builder
       .addCase(getPostList.fulfilled, (state, { payload }) => {
         state.getPost.listPost = payload;
-        state.createPost.loading = false;
+        state.getPost.loading = false;
       })
       .addCase(getPostList.pending, (state) => {
-        state.createPost.loading = true;
-        state.createPost.error = false;
+        state.getPost.loading = true;
+        state.getPost.error = false;
       })
       .addCase(getPostList.rejected, (state) => {
-        state.createPost.loading = false;
-        state.createPost.error = true;
+        state.getPost.loading = false;
+        state.getPost.error = true;
       });
   },
 });

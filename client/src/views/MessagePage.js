@@ -8,8 +8,10 @@ import BackPage from "components/common/BackPage";
 import MessageForm from "modules/messages/MessageForm";
 import MessageProfile from "modules/messages/MessageProfile";
 import MessageItem from "modules/messages/MessageItem";
+import { useLoadingContext } from "react-router-loading";
 
 const MessagePage = () => {
+  const loadingContext = useLoadingContext();
   const { currentUser } = useSelector((state) => state.auth.login);
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -24,7 +26,6 @@ const MessagePage = () => {
     });
 
     socket.on("receive-again", (data) => {
-      // console.log(data);
       dispatch(removeMessage(data));
     });
     return () => {
@@ -38,7 +39,10 @@ const MessagePage = () => {
     (state) => state.chats.messageInfo
   );
   if (!participant) return;
-  // if (listMessage.length > 0) document.body.scrollIntoView(false);
+  if (listMessage.length > 0) document.body.scrollIntoView(false);
+  if (!loading) {
+    loadingContext.done();
+  }
   return (
     <>
       <BackPage turnSwitchTab="/chats">

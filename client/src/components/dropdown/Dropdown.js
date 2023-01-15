@@ -1,47 +1,37 @@
-import React from "react";
-import { FormControl, MenuItem, Select } from "@mui/material";
+import React, { useState } from "react";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import PropTypes from "prop-types";
+import DropdownMenu from "./DropdownMenu";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import { ClickAwayListener } from "@mui/material";
 
-const Dropdown = ({ children, label, defaultValue = "", handleExtra }) => {
-  const [value, setValue] = React.useState(defaultValue);
-  const handleChange = (e) => {
-    setValue(e.target.value);
-    // handleExtra(e.target.value);
-  };
+const Dropdown = ({ children, label, value }) => {
+  const [toggleDropdown, setToggleDropdown] = useState(false);
   return (
-    <FormControl sx={{ borderRadius: "12px" }}>
-      {/* <Select
-        value={value}
-        onChange={handleChange}
-        displayEmpty
-        inputProps={{ "aria-label": "Without label" }}
+    <ClickAwayListener onClickAway={() => setToggleDropdown(false)}>
+      <div
+        className={`relative w-full px-5 py-4 bg-transparent border cursor-pointer rounded-xl transition-all ${
+          toggleDropdown ? "border-primary" : "border-strock"
+        }`}
+        onClick={() => setToggleDropdown(!toggleDropdown)}
       >
-        <MenuItem value={defaultValue}>
-          <em>{label}</em>
-        </MenuItem>
-        <MenuItem value={10}>Ten</MenuItem>
-        <MenuItem value={20}>Twenty</MenuItem>
-        <MenuItem value={30}>Thirty</MenuItem>
-        {children}
-      </Select> */}
-      <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={value}
-        label="Age"
-        onChange={handleChange}
-      >
-        <MenuItem value={10}>Ten</MenuItem>
-        <MenuItem value={20}>Twenty</MenuItem>
-        <MenuItem value={30}>Thirty</MenuItem>
-      </Select>
-    </FormControl>
+        <div className="flex items-center justify-between">
+          <span className={`text-base ${value ? "text-text2" : "text-text4"}`}>
+            {value || label}
+          </span>
+          {toggleDropdown ? (
+            <ArrowDropUpIcon className="text-text3" />
+          ) : (
+            <ArrowDropDownIcon className="text-text3" />
+          )}
+        </div>
+        {toggleDropdown && <DropdownMenu>{children}</DropdownMenu>}
+      </div>
+    </ClickAwayListener>
   );
 };
 
 Dropdown.propTypes = {
-  defaultValue: PropTypes.any,
-  handleChange: PropTypes.func,
   children: PropTypes.node,
   label: PropTypes.string,
 };
