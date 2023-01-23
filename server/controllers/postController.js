@@ -120,49 +120,67 @@ const getPostPersonal = asyncHandler(async (req, res) => {
   }
 });
 
-const getPostFeature = asyncHandler(async (req, res) => {
+// const getPostFeature = asyncHandler(async (req, res) => {
+//   const username = req.username;
+//   try {
+//     const { id, by } = req.params;
+//     const userInfo = await UserModel.findById(id);
+//     if (userInfo) {
+//       const listPost = await PostModel.find().populate("authorID", [
+//         "_id",
+//         "email",
+//         "firstName",
+//         "lastName",
+//         "avatar",
+//       ]);
+//       const listNewPost = checkSavedAndLiked(listPost, userInfo).filter(
+//         (post) => {
+//           if (by === "liked") return post.isLiked;
+//           return post.saved;
+//         }
+//       );
+//     } else res.status(400).json("Invalid user");
+//   } catch (error) {
+//     res.status(500).json(error);
+//   }
+// });
+
+// const getPostFilter = asyncHandler(async (req, res) => {
+//   const { query, comment } = req.query;
+//   try {
+//     let conditionFilter = {};
+//     if (!query) res.status(400).json("Please type key word to search!");
+//     else {
+//       conditionFilter.modeComment = comment || true;
+//       const listPost = await PostModel.find({
+//         // content: {
+//         //   $regex: req.query?.query || "",
+//         //   $options: "i",
+//         // },
+//         ...conditionFilter,
+//       });
+//       res.json({ listPost: checkSavedPost(listPost, req.username.listSaved) });
+//     }
+//   } catch (error) {
+//     res.status(500).json("Server error");
+//   }
+// });
+
+const handleModeComment = asyncHandler(async (req, res) => {
   const username = req.username;
   try {
-    const { id, by } = req.params;
-    const userInfo = await UserModel.findById(id);
-    if (userInfo) {
-      const listPost = await PostModel.find().populate("authorID", [
-        "_id",
-        "email",
-        "firstName",
-        "lastName",
-        "avatar",
-      ]);
-      const listNewPost = checkSavedAndLiked(listPost, userInfo).filter(
-        (post) => {
-          if (by === "liked") return post.isLiked;
-          return post.saved;
-        }
-      );
-    } else res.status(400).json("Invalid user");
+    const postInfo = await PostModel.findOne({
+      _id: req.params.id,
+      authorID: username._id,
+    });
+    if (postInfo) {
+      await PostModel.findByIdAndUpdate(postInfo._id, {
+        modeComment: !postInfo.modeComment,
+      });
+      res.json("Turn on/off mode comment");
+    } else res.status(400).json("Catch error");
   } catch (error) {
     res.status(500).json(error);
-  }
-});
-
-const getPostFilter = asyncHandler(async (req, res) => {
-  const { query, comment } = req.query;
-  try {
-    let conditionFilter = {};
-    if (!query) res.status(400).json("Please type key word to search!");
-    else {
-      conditionFilter.modeComment = comment || true;
-      const listPost = await PostModel.find({
-        // content: {
-        //   $regex: req.query?.query || "",
-        //   $options: "i",
-        // },
-        ...conditionFilter,
-      });
-      res.json({ listPost: checkSavedPost(listPost, req.username.listSaved) });
-    }
-  } catch (error) {
-    res.status(500).json("Server error");
   }
 });
 
@@ -246,9 +264,26 @@ const handleSavePost = asyncHandler(async (req, res) => {
 });
 
 const handleDeletePost = asyncHandler(async (req, res) => {
+  const username = req.username;
   try {
-    await PostModel.findByIdAndDelete(req.params.id);
-    res.json("Delete successful");
+    const postInfo = await PostModel.findOneAndDelete({
+      _id: req.params.id,
+      authorID: username._id,
+    });
+    if (postInfo) {
+      await CommentModel.deleteMany({
+        postID: postInfo._id,
+      });
+      const listUserSavedPost = await UserModel.find({
+        listSaved: req.params.id,
+      });
+      for (const user of listUserSavedPost) {
+        await UserModel.findByIdAndUpdate(user._id, {
+          listSaved: user.listSaved.filter((postID) => postID != req.params.id),
+        });
+      }
+      res.json("Delete success");
+    } else res.status(400).json("Catch error");
   } catch (error) {
     res.status(500).json("Server error");
   }
@@ -256,10 +291,9 @@ const handleDeletePost = asyncHandler(async (req, res) => {
 
 module.exports = {
   getPostList,
-  getPostFilter,
   getPostPersonal,
-  getPostFeature,
   handleCreatePost,
+  handleModeComment,
   handleDeletePost,
   handleShowHeart,
   handleSavePost,

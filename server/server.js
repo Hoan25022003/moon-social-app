@@ -5,11 +5,9 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
-const commentHandler = require("./socket_io/commentHandler");
-const ChatModel = require("./models/ChatModel");
 const UserModel = require("./models/UserModel");
-const MessageModel = require("./models/MessageModel");
 const chatsHandler = require("./socket_io/chatsHandler");
+const commentHandler = require("./socket_io/commentHandler");
 
 const app = express();
 const server = http.createServer(app);

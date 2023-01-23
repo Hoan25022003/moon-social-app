@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import TextUsername from "components/text/TextUsername";
 import ChatAvatar from "./parts/ChatAvatar";
 import ChatLatestMessage from "./parts/ChatLatestMessage";
+import TextLight from "components/text/TextLight";
+import renderTime from "utils/renderTime";
 
 const ChatItem = ({
   avatar,
   username,
   latestMessage = "",
-  // createdAt,
+  createdAt,
   id = "1234",
   isActive,
 }) => {
@@ -26,7 +28,12 @@ const ChatItem = ({
           isActive={isActive}
         ></ChatAvatar>
         <div className="flex flex-col">
-          <TextUsername>{username}</TextUsername>
+          <div className="flex items-center gap-x-2">
+            <TextUsername>{username}</TextUsername>
+            <TextLight className="text-text4 text-[13px]">
+              {renderTime(createdAt) || ""}
+            </TextLight>
+          </div>
           <ChatLatestMessage>{latestMessage}</ChatLatestMessage>
         </div>
       </div>

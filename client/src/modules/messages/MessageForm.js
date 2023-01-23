@@ -1,5 +1,4 @@
 import React from "react";
-import TextareaAutosize from "@mui/base/TextareaAutosize";
 import SendIcon from "@mui/icons-material/Send";
 import { useForm } from "react-hook-form";
 import { socket } from "api/axios";
@@ -18,7 +17,7 @@ const MessageForm = ({ yourID, userInfo }) => {
     handleSubmit,
     reset,
   } = useForm({
-    mode: "onSubmit",
+    mode: "onChange",
     resolver: yupResolver(schema),
   });
   const { id } = useParams();
@@ -27,20 +26,33 @@ const MessageForm = ({ yourID, userInfo }) => {
     reset({
       content: "",
     });
-    socket.emit("send-info", { yourID, userInfo });
+  };
+  const handleTypingChat = (e) => {
+    if (e.key !== "Backspace" && e.key !== "Alt" && e.key !== "Tab")
+      socket.emit("typing-message", id);
   };
   return (
     <form
       className={`flex items-center w-full gap-x-3 px-5 py-3 sticky bottom-0 left-0 bg-white bg-opacity-95`}
       onSubmit={handleSubmit(handleChatMessage)}
+      autoComplete="off"
     >
-      <TextareaAutosize
+      {/* <TextareaAutosize
         minRows={1}
-        // maxRows={5}
+        maxRows={5}
         placeholder="Type message in here"
         autoFocus={true}
         name="content"
         className="w-full px-4 py-3 text-sm transition-all border border-none rounded-3xl text-text2 bg-whiteSoft focus:bg-graySoft"
+        {...register("content")}
+      /> */}
+      <input
+        type="text"
+        placeholder="Type message in here"
+        autoFocus={true}
+        name="content"
+        className="w-full px-4 py-3 text-sm transition-all border border-none rounded-3xl text-text2 bg-whiteSoft focus:bg-graySoft"
+        onKeyDown={handleTypingChat}
         {...register("content")}
       />
       <button

@@ -92,13 +92,13 @@ const FilterPage = () => {
       ) : (
         <div className="flex flex-col px-5 py-4">
           {listQuery !== "post" ? (
-            <div className={(loadUser || listUsers.length > 0) && "mb-6"}>
+            <div className={loadUser || listUsers.length > 0 ? "mb-6" : ""}>
               {(loadUser || listUsers.length > 0) && (
                 <TextHeading className="mb-3">People</TextHeading>
               )}
               <div
                 className={`grid ${
-                  (loadUser || listUsers.length > 0) && "grid-cols-2"
+                  loadUser || listUsers.length > 0 ? "grid-cols-2" : ""
                 } gap-x-5 gap-y-4`}
               >
                 {!loadUser ? users : <FriendSkeleton></FriendSkeleton>}

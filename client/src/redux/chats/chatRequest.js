@@ -10,6 +10,7 @@ export const chatUserList = createAsyncThunk("chat/list", async () => {
       },
     });
     let { username, listChat } = res.data;
+    // eslint-disable-next-line array-callback-return
     listChat = listChat.map((user) => {
       if (user.show)
         return {

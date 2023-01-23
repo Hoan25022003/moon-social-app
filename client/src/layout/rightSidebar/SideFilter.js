@@ -6,14 +6,12 @@ import FilterOption from "components/filter/FilterOption";
 const SideFilter = () => {
   const [searchParams, setSearchParams] = useSearchParams("");
   const getParamName = (name) => searchParams.get(name);
-  const [selectedValue, setSelectedValue] = useState(
-    getParamName("list") || "all"
-  );
-  const [filterPost, setFilterPost] = useState("");
+  const [filterPost, setFilterPost] = useState(getParamName("by") || "latest");
+  const [selectedValue, setSelectedValue] = useState("all");
   useEffect(() => {
+    setSelectedValue(getParamName("list") || "all");
     if (selectedValue === "post") {
-      searchParams.set("by", getParamName("by") || "latest");
-      getParamName("by") && setFilterPost(getParamName("by") || "latest");
+      searchParams.set("by", filterPost);
     } else searchParams.delete("by");
     setSearchParams(searchParams);
     // eslint-disable-next-line react-hooks/exhaustive-deps

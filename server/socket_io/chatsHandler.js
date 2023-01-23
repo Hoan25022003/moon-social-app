@@ -39,12 +39,35 @@ module.exports = function chatsHandler(socket, io) {
     }
   });
 
-  socket.on("send-info", async ({ yourID, userInfo }) => {
+  socket.on("send-info", async (userID) => {
     try {
       const listChat = await ChatModel.find({
-        participant: { $all: [yourID, userInfo._id] },
-      });
-      if (listChat[0]) io.sockets.emit("receive-info", userInfo._id);
+        participant: userID,
+        show: true,
+      })
+        .sort({ updatedAt: -1 })
+        .populate("participant", [
+          "_id",
+          "email",
+          "firstName",
+          "lastName",
+          "avatar",
+          "isActive",
+        ])
+        .populate("latestMessage");
+      if (listChat.length > 0)
+        io.sockets.emit("receive-info", { listChat, userID });
+      else socket.emit("error", "Catch error");
+    } catch (error) {
+      socket.emit("error", error);
+    }
+  });
+
+  socket.on("typing-message", async (chatID) => {
+    try {
+      const chatInfo = await ChatModel.findById(chatID);
+      if (chatInfo) socket.broadcast.to(chatID).emit("receive-typing");
+      else socket.emit("error", "Catch error");
     } catch (error) {
       socket.emit("error", error);
     }

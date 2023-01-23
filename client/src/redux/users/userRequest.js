@@ -16,7 +16,7 @@ export const userProfile = createAsyncThunk(
       return fulfillWithValue({
         userInfo: {
           ...userInfo,
-          postCount: postCount,
+          postCount,
         },
         yourSelf: yourSelf,
       });

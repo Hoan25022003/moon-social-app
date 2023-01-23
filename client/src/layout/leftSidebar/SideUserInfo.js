@@ -28,7 +28,9 @@ const SideUserInfo = ({ url = "/profile/", avatar, username, email }) => {
         />
         <div>
           <h3 className="text-[15px] font-semibold">{username || ""}</h3>
-          <TextLight>{email || "@gmail.com"}</TextLight>
+          <TextLight>
+            {email?.length > 15 ? email.slice(0, 15) + "..." : email}
+          </TextLight>
         </div>
       </Link>
       <div>

@@ -7,7 +7,7 @@ import {
 } from "./userRequest";
 
 const initProfile = {
-  loading: false,
+  loading: true,
   userInfo: null,
   yourSelf: false,
   error: null,
@@ -18,7 +18,7 @@ const userSlice = createSlice({
   initialState: {
     profile: initProfile,
     friend: {
-      loading: false,
+      loading: true,
       error: null,
       listUsers: [],
       filters: {},

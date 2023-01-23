@@ -7,6 +7,7 @@ import PostSkeleton from "components/skeleton/PostSkeleton";
 import useFetchMore from "hooks/useFetchMore";
 import PostList from "modules/posts/PostList";
 import { useLoadingContext } from "react-router-loading";
+import EmptyLayout from "layout/EmptyLayout";
 
 const SavedPage = () => {
   const loadingContext = useLoadingContext();
@@ -32,22 +33,29 @@ const SavedPage = () => {
         </div>
       </BackPage>
       <div className="px-4 my-3">
-        <PostList dataLength={countItem} next={fetchMoreData} hasMore={hasMore}>
-          {loading ? (
-            <>
-              <PostSkeleton></PostSkeleton>
-              <PostSkeleton></PostSkeleton>
-            </>
-          ) : (
-            listPost?.length > 0 &&
-            listPost.map(
+        {!loading && listPost.length === 0 ? (
+          <EmptyLayout
+            linkImg="/img/profile-empty.png"
+            info="You haven't already saved any the post"
+            support="Let's save to watch again"
+            className="h-[250px] gap-y-6"
+          ></EmptyLayout>
+        ) : !loading ? (
+          <PostList
+            dataLength={countItem}
+            next={fetchMoreData}
+            hasMore={hasMore}
+          >
+            {listPost.map(
               (post, i) =>
                 i < countItem && (
                   <PostItem key={post._id} postInfo={post}></PostItem>
                 )
-            )
-          )}
-        </PostList>
+            )}
+          </PostList>
+        ) : (
+          <PostSkeleton></PostSkeleton>
+        )}
       </div>
     </>
   );

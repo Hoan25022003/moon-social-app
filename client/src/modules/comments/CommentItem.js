@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { socket } from "api/axios";
-import { Avatar, IconButton, Tooltip } from "@mui/material";
+import { Avatar, Tooltip } from "@mui/material";
 import TextUsername from "components/text/TextUsername";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";

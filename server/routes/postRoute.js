@@ -1,13 +1,12 @@
 const router = require("express").Router();
 const {
-  handleCreatePost,
   getPostList,
+  handleCreatePost,
+  handleModeComment,
   handleDeletePost,
-  getPostFilter,
   handleSavePost,
   handleShowHeart,
   getPostPersonal,
-  getPostFeature,
 } = require("../controllers/postController");
 const verifyToken = require("../middleWare/verifyToken");
 const upload = require("../utils/uploadStorage");
@@ -16,11 +15,9 @@ router.get("/", verifyToken, getPostList);
 
 router.get("/:id", verifyToken, getPostPersonal);
 
-// router.get("/:id/:by", verifyToken, getPostFeature);
-
-// router.get("/filter", verifyToken, getPostFilter);
-
 router.post("/saved/:id", verifyToken, handleSavePost);
+
+router.put("/mode-comment/:id", verifyToken, handleModeComment);
 
 router.post(
   "/public",

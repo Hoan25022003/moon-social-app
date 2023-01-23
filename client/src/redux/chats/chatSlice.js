@@ -19,7 +19,6 @@ const chatSlice = createSlice({
   },
   reducers: {
     addUserActive: (state, { payload }) => {
-      // const { listUserActive } = state.chatInfo;
       state.chatInfo.listUserActive = payload;
     },
     removeUserActive: (state, { payload }) => {
@@ -32,6 +31,9 @@ const chatSlice = createSlice({
       state.messageInfo.listMessage = state.messageInfo.listMessage.filter(
         (mess) => mess._id !== payload._id
       );
+    },
+    newChatList: (state, { payload }) => {
+      state.chatInfo.listChats = payload;
     },
   },
   extraReducers: (builder) => {
@@ -68,7 +70,12 @@ const chatSlice = createSlice({
   },
 });
 
-export const { addUserActive, removeUserActive, addMessage, removeMessage } =
-  chatSlice.actions;
+export const {
+  addUserActive,
+  removeUserActive,
+  addMessage,
+  removeMessage,
+  newChatList,
+} = chatSlice.actions;
 
 export default chatSlice.reducer;

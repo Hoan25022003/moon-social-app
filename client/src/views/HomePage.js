@@ -26,7 +26,7 @@ const HomePage = () => {
     loadingContext.done();
   }
   return (
-    <div className="p-3">
+    <div className="px-4 py-3">
       <PostFeature
         username={currentUser?.firstName}
         avatar={currentUser?.avatar}

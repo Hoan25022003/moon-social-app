@@ -1,9 +1,9 @@
 import React from "react";
 import TextLight from "./TextLight";
 
-const TextInfo = ({ children, content = "" }) => {
+const TextInfo = ({ children, content = "", className = "" }) => {
   return (
-    <div className="flex items-start text-text3 gap-x-2">
+    <div className={`flex items-start text-text3 gap-x-2 ${className}`}>
       {children}
       <TextLight>{content}</TextLight>
     </div>

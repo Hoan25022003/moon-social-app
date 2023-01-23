@@ -1,4 +1,5 @@
 import React from "react";
+import parse from "html-react-parser";
 
 const PostTheme = ({ children, theme }) => {
   return (
@@ -15,7 +16,7 @@ const PostTheme = ({ children, theme }) => {
           theme?.textColor || "text-text1"
         }`}
       >
-        {children}
+        {parse(children)}
       </h3>
     </div>
   );

@@ -6,7 +6,7 @@ const postSlice = createSlice({
   initialState: {
     getPost: {
       listPost: [],
-      loading: false,
+      loading: true,
       error: false,
     },
     createPost: {
@@ -15,7 +15,21 @@ const postSlice = createSlice({
       error: false,
     },
   },
-  reducers: {},
+  reducers: {
+    setModeComment: (state, { payload }) => {
+      // eslint-disable-next-line array-callback-return
+      state.getPost.listPost = state.getPost.listPost.map((post) =>
+        post._id === payload
+          ? { ...post, modeComment: !post.modeComment }
+          : { ...post }
+      );
+    },
+    deletePost: (state, { payload }) => {
+      state.getPost.listPost = state.getPost.listPost.filter(
+        (post) => post._id !== payload
+      );
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(addNewPost.fulfilled, (state) => {
@@ -45,5 +59,7 @@ const postSlice = createSlice({
       });
   },
 });
+
+export const { setModeComment, deletePost } = postSlice.actions;
 
 export default postSlice.reducer;

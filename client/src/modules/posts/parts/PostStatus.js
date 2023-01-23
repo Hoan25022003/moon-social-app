@@ -7,11 +7,12 @@ const PostStatus = ({
   children,
   onClick = () => {},
   title,
+  className = "",
   textColor = "",
 }) => {
   return (
     <div
-      className={`flex items-center cursor-pointer group gap-x-2 select-none text-text3`}
+      className={`flex items-center cursor-pointer group gap-x-2 select-none text-text3 ${className}`}
       title={title}
       onClick={onClick}
     >

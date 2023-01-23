@@ -94,10 +94,22 @@ const getUserDetail = asyncHandler(async (req, res) => {
       const listUpload = await ImageModel.find({
         userID: req.params.id,
       });
-      const listFriend = await getAllFriend(username);
+      const listUserFriend = await FriendModel.find({
+        $or: [
+          {
+            from: req.params.id,
+          },
+          { to: req.params.id },
+        ],
+      }).populate(["from", "to"]);
       res.json({
-        userInfo: { ...userDetail._doc, createdAt: dateJoin, listUpload },
-        listFriend,
+        userInfo: {
+          ...userDetail._doc,
+          createdAt: dateJoin,
+          listUpload,
+          listUserFriend,
+        },
+        listFriend: await getAllFriend(username),
         yourSelf: username.email == userDetail.email,
         postCount,
       });

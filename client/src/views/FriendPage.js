@@ -11,6 +11,7 @@ import FriendList from "modules/friends/FriendList";
 import FriendSkeleton from "components/skeleton/FriendSkeleton";
 import { filterUser } from "redux/users/userSlice";
 import { useLoadingContext } from "react-router-loading";
+import useFetchMore from "hooks/useFetchMore";
 
 const FriendPage = () => {
   const loadingContext = useLoadingContext();
@@ -35,6 +36,11 @@ const FriendPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, query]);
   const { listUsers, loading } = useSelector((state) => state.users?.friend);
+  const { hasMore, countItem, fetchMoreData } = useFetchMore(
+    listUsers?.length,
+    6,
+    4
+  );
   if (!loading) {
     loadingContext.done();
   }
@@ -43,10 +49,12 @@ const FriendPage = () => {
       <BackPage haveBackBtn={false}>
         <div className="flex flex-col px-4">
           <h4 className="text-lg font-bold">Add friend</h4>
-          <p className="text-[13px] font-normal text-text4">69 friends</p>
+          <p className="text-[13px] font-normal text-text4">
+            {listUsers.filter((user) => user?.status === 1).length} friends
+          </p>
         </div>
       </BackPage>
-      <div className="flex flex-col px-5 py-3 gap-y-4">
+      <div className="flex flex-col px-4 py-3 gap-y-4">
         <Search
           onChange={handleChange}
           placeholder="Search username"
@@ -55,17 +63,14 @@ const FriendPage = () => {
           icon="user"
           defaultValue={query}
         ></Search>
-        {loading && (
-          <FriendList>
-            <FriendSkeleton />
-            <FriendSkeleton />
-          </FriendList>
-        )}
-        {listUsers &&
-          !loading &&
-          (listUsers.length > 0 ? (
-            <FriendList length={listUsers.length}>
-              {listUsers.map((user) => (
+        {listUsers.length > 0 ? (
+          <FriendList
+            dataLength={countItem}
+            next={fetchMoreData}
+            hasMore={hasMore}
+          >
+            {!loading ? (
+              listUsers.map((user) => (
                 <FriendItem
                   key={user?._id}
                   userID={user?._id}
@@ -76,16 +81,22 @@ const FriendPage = () => {
                   status={user?.status}
                   isSender={user?.isSender}
                 ></FriendItem>
-              ))}
-            </FriendList>
-          ) : (
-            <EmptyLayout
-              linkImg="/img/remove-user.png"
-              info="No users found in this list"
-              support="Let's try again later"
-              className="h-[300px] gap-y-6"
-            ></EmptyLayout>
-          ))}
+              ))
+            ) : (
+              <>
+                <FriendSkeleton></FriendSkeleton>
+                <FriendSkeleton></FriendSkeleton>
+              </>
+            )}
+          </FriendList>
+        ) : (
+          <EmptyLayout
+            linkImg="/img/remove-user.png"
+            info="No users found in this list"
+            support="Let's try again later"
+            className="h-[300px] gap-y-6"
+          ></EmptyLayout>
+        )}
       </div>
       {/* {message && (
         <AlertInfo severity={type} open={!!message}>

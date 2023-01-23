@@ -1,12 +1,11 @@
 import React from "react";
 import useToggle from "hooks/useToggle";
+import useSnackbarInfo from "hooks/useSnackbarInfo";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import PropTypes from "prop-types";
 import Checkbox from "@mui/material/Checkbox";
 import Snackbar from "@mui/material/Snackbar";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
 import axios from "api/axios";
 import Cookies from "js-cookie";
 
@@ -14,15 +13,9 @@ const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const PostSaved = ({ isSaved = false, postID = "" }) => {
   const [saved, setSaved] = useToggle(isSaved);
-  const [open, setOpen] = React.useState(false);
+  const { action, handleClose, stateOpen } = useSnackbarInfo();
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
+  const [open, setOpen] = stateOpen;
   const handleSaved = async () => {
     try {
       setSaved();
@@ -38,18 +31,6 @@ const PostSaved = ({ isSaved = false, postID = "" }) => {
       console.log(error);
     }
   };
-  const action = (
-    <React.Fragment>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleClose}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
   return (
     <>
       <Checkbox

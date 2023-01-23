@@ -8,6 +8,7 @@ import ButtonRemoveAll from "components/button/ButtonRemoveAll";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addNewPost } from "redux/posts/postRequest";
+import convertLineBreak from "utils/convertLineBreak";
 
 const PostAddImage = () => {
   const {
@@ -62,7 +63,11 @@ const PostAddImage = () => {
     setValue("publicImg", null);
   };
   const handlePostImage = (value) => {
-    const data = { ...value, type: "image" };
+    const data = {
+      ...value,
+      content: convertLineBreak(value.content),
+      type: "image",
+    };
     dispatch(addNewPost({ data, navigate, reset }));
   };
   return (

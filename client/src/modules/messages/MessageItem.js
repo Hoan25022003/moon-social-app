@@ -44,23 +44,25 @@ const MessageItem = ({
       >
         {children}
       </div>
-      <div className="flex items-center opacity-0 gap-x-1 group-hover:opacity-100">
-        {yourself && (
-          <Tooltip title="Delete">
-            <IconButton
-              onClick={() => setOpenDialog(true)}
-              className="mt-1 transition-all w-7 h-7 bg-graySoft hover:bg-strock"
-            >
-              <DeleteIcon className="text-base text-text3" />
+      {messageID && (
+        <div className="flex items-center opacity-0 gap-x-1 group-hover:opacity-100">
+          {yourself && (
+            <Tooltip title="Delete">
+              <IconButton
+                onClick={() => setOpenDialog(true)}
+                className="mt-1 transition-all w-7 h-7 bg-graySoft hover:bg-strock"
+              >
+                <DeleteIcon className="text-base text-text3" />
+              </IconButton>
+            </Tooltip>
+          )}
+          <Tooltip title="Like">
+            <IconButton className="mt-1 transition-all w-7 h-7 bg-graySoft hover:bg-strock">
+              <FavoriteIcon className="text-base text-text3" />
             </IconButton>
           </Tooltip>
-        )}
-        <Tooltip title="Like">
-          <IconButton className="mt-1 transition-all w-7 h-7 bg-graySoft hover:bg-strock">
-            <FavoriteIcon className="text-base text-text3" />
-          </IconButton>
-        </Tooltip>
-      </div>
+        </div>
+      )}
       <AlertDialog
         open={openDialog}
         setOpen={setOpenDialog}

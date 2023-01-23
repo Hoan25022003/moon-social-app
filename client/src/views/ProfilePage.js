@@ -3,6 +3,7 @@ import useTurnSwitch from "hooks/useTurnSwitch";
 import { useDispatch, useSelector } from "react-redux";
 import { userProfile } from "redux/users/userRequest";
 import { useNavigate, useParams } from "react-router-dom";
+import { useLoadingContext } from "react-router-loading";
 import BackPage from "components/common/BackPage";
 import ProfileFeature from "modules/profile/ProfileFeature";
 import ProfileGeneral from "modules/profile/ProfileGeneral";
@@ -19,7 +20,6 @@ import Skeleton from "@mui/material/Skeleton";
 import ProfileLoading from "modules/profile/ProfileLoading";
 import PictureDialog from "components/picture/PictureDialog";
 import useBackdropPicture from "hooks/useBackropPicture";
-import { useLoadingContext } from "react-router-loading";
 
 const listTab = ["picture", "posts", "friends", "likes"];
 
@@ -94,13 +94,17 @@ const PersonalPage = () => {
             <div className="flex flex-col mt-6">
               <TextHeading>{fullName}</TextHeading>
               <TextLight>{userInfo?.email}</TextLight>
-              <ProfileGeneral dateJoin={userInfo?.createdAt}></ProfileGeneral>
+              <ProfileGeneral
+                dateJoin={userInfo?.createdAt}
+                friendCount={userInfo?.listUserFriend.length}
+              ></ProfileGeneral>
             </div>
           </div>
           <ProfileTabList listTab={listTab}>
             <ProfileTabItem
               tabName={tabName}
               yourSelf={yourSelf}
+              listUserFriend={userInfo?.listUserFriend}
             ></ProfileTabItem>
           </ProfileTabList>
         </>
@@ -110,13 +114,13 @@ const PersonalPage = () => {
   );
 };
 
-const ProfileTabItem = ({ tabName, yourSelf }) => {
+const ProfileTabItem = ({ tabName, yourSelf, listUserFriend = [] }) => {
   switch (tabName) {
     case "posts":
       return <ProfilePost yourSelf={yourSelf}></ProfilePost>;
 
     case "friends":
-      return <ProfileFriend></ProfileFriend>;
+      return <ProfileFriend listUserFriend={listUserFriend}></ProfileFriend>;
 
     case "likes":
       return <ProfileLike></ProfileLike>;

@@ -48,7 +48,6 @@ module.exports = function commentHandler(socket, io) {
         const newComment = await CommentModel.findById(addComment._id).populate(
           "userID"
         );
-        // console.log(newComment);
         // newComment.save(function (err, comment) {
         //   console.log(comment);
         //   newComment._id = comment._id;

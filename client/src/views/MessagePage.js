@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { messageHistory } from "redux/chats/chatRequest";
 import { addMessage, removeMessage } from "redux/chats/chatSlice";
@@ -9,12 +9,16 @@ import MessageForm from "modules/messages/MessageForm";
 import MessageProfile from "modules/messages/MessageProfile";
 import MessageItem from "modules/messages/MessageItem";
 import { useLoadingContext } from "react-router-loading";
+import MessageSkeleton from "components/skeleton/MessageSkeleton";
+import LoadingType from "components/loading/LoadingType";
 
 const MessagePage = () => {
   const loadingContext = useLoadingContext();
   const { currentUser } = useSelector((state) => state.auth.login);
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [typing, setTyping] = useState(false);
+
   useEffect(() => {
     socket.connect();
     dispatch(messageHistory(id));
@@ -23,11 +27,18 @@ const MessagePage = () => {
 
     socket.on("receive-message", (data) => {
       dispatch(addMessage(data));
+      socket.emit("send-info", participant?._id);
     });
 
     socket.on("receive-again", (data) => {
       dispatch(removeMessage(data));
+      socket.emit("send-info", participant?._id);
     });
+
+    socket.on("receive-typing", () => {
+      setTyping(true);
+    });
+
     return () => {
       socket.disconnect();
       socket.off();
@@ -38,7 +49,14 @@ const MessagePage = () => {
   const { listMessage, loading, participant } = useSelector(
     (state) => state.chats.messageInfo
   );
+
+  setTimeout(() => {
+    if (typing) setTyping(false);
+  }, 2000);
+
   if (!participant) return;
+
+  document.title = `${participant?.firstName} ${participant?.lastName} | Moon Stars`;
   if (listMessage.length > 0) document.body.scrollIntoView(false);
   if (!loading) {
     loadingContext.done();
@@ -57,22 +75,36 @@ const MessagePage = () => {
       </BackPage>
       <div className="flex flex-col pt-3 gap-y-5">
         <MessageProfile userInfo={participant}></MessageProfile>
-        <div className="flex flex-col w-full px-5 gap-y-3">
-          {!loading
-            ? listMessage.length > 0 &&
-              listMessage.map((mess) => (
-                <MessageItem
-                  key={mess._id}
-                  yourself={mess.sender._id === currentUser._id}
-                  messageID={mess._id}
-                  senderInfo={mess.sender}
-                  userID={{ yourID: currentUser?._id, userInfo: participant }}
-                  fullName={mess.sender.firstName + " " + mess.sender.lastName}
-                >
-                  {mess.content}
-                </MessageItem>
-              ))
-            : "Loading message"}
+        <div className="flex flex-col w-full px-5 gap-y-3 min-h-[333px]">
+          {!loading ? (
+            listMessage.length > 0 &&
+            listMessage.map((mess) => (
+              <MessageItem
+                key={mess._id}
+                yourself={mess.sender._id === currentUser?._id}
+                messageID={mess._id}
+                senderInfo={mess.sender}
+                userID={{ yourID: currentUser?._id, userInfo: participant }}
+                fullName={mess.sender.firstName + " " + mess.sender.lastName}
+              >
+                {mess.content}
+              </MessageItem>
+            ))
+          ) : (
+            <>
+              <MessageSkeleton yourself />
+              <MessageSkeleton yourself={false} />
+            </>
+          )}
+          {typing && (
+            <MessageItem
+              yourself={false}
+              senderInfo={participant}
+              fullName={participant.firstName + " " + participant.lastName}
+            >
+              <LoadingType className="h-[22px]"></LoadingType>
+            </MessageItem>
+          )}
         </div>
         <MessageForm
           yourID={currentUser?._id}

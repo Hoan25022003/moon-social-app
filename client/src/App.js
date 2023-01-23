@@ -35,13 +35,17 @@ function App() {
         <Route path="/login" element={<LoginPage></LoginPage>}></Route>
         <Route path="/register" element={<RegisterPage></RegisterPage>}></Route>
         <Route element={<MainLayout></MainLayout>}>
-          <Route path="/home" element={<HomePage></HomePage>} loading></Route>
+          <Route path="/home" element={<HomePage></HomePage>}></Route>
           <Route
             path="/friends"
             element={<FriendPage></FriendPage>}
             loading
           ></Route>
-          <Route path="/groups" element={<GroupPage></GroupPage>}></Route>
+          <Route
+            path="/groups"
+            element={<GroupPage></GroupPage>}
+            loading
+          ></Route>
           <Route
             path="/profile/:id"
             element={<ProfilePage></ProfilePage>}
@@ -57,8 +61,8 @@ function App() {
             element={<SavedPage></SavedPage>}
             loading
           ></Route>
-          <Route path="/chats" element={<ChatPage />} loading></Route>
-          <Route path="/chats/t/:id" element={<MessagePage />} loading></Route>
+          <Route path="/chats" element={<ChatPage />}></Route>
+          <Route path="/chats/t/:id" element={<MessagePage />}></Route>
         </Route>
         <Route path="*" element={<NotFoundPage></NotFoundPage>}></Route>
       </Routes>

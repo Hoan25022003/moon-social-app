@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import useToggle from "hooks/useToggle";
+import parse from "html-react-parser";
 
 const PostContent = ({ children }) => {
   const [viewAll, setViewAll] = useToggle(false);
@@ -11,7 +12,7 @@ const PostContent = ({ children }) => {
           !viewAll && "line-clamp-3"
         }`}
       >
-        {children}
+        {parse(children)}
       </div>
       {children.length > 200 && (
         <span

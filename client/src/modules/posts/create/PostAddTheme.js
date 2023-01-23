@@ -7,6 +7,7 @@ import { Navigation } from "swiper";
 import { listTheme } from "utils/constant";
 import ButtonGradient from "components/button/ButtonGradient";
 import { useNavigate } from "react-router-dom";
+import convertLineBreak from "utils/convertLineBreak";
 
 const PostAddTheme = () => {
   const {
@@ -28,8 +29,11 @@ const PostAddTheme = () => {
   const watchTheme = watch("theme");
   const { loading, error } = useSelector((state) => state.posts.createPost);
   const handleAddPost = async (value) => {
-    console.log(value);
-    const data = { ...value, type: "theme" };
+    const data = {
+      ...value,
+      content: convertLineBreak(value.content),
+      type: "theme",
+    };
     dispatch(addNewPost({ data, navigate, reset }));
   };
   return (
