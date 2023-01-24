@@ -15,7 +15,6 @@ import useFetchMore from "hooks/useFetchMore";
 
 const FriendPage = () => {
   const loadingContext = useLoadingContext();
-  const { currentUser } = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.users?.friend);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -34,7 +33,7 @@ const FriendPage = () => {
     dispatch(filterUser(filterName));
     dispatch(userFriend(filterName));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser, query]);
+  }, [query]);
   const { listUsers, loading } = useSelector((state) => state.users?.friend);
   const { hasMore, countItem, fetchMoreData } = useFetchMore(
     listUsers?.length,

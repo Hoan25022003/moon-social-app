@@ -37,12 +37,6 @@ const LoginPage = () => {
   });
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.auth.login);
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (currentUser) navigate("/home");
-  //   else document.title = "Login | Moon Star";
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [currentUser]);
   const handleLogin = (values) => {
     dispatch(loginUser({ userData: values, reset, setError, navigate }));
   };

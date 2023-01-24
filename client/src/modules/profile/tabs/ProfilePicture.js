@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useBackdropPicture from "hooks/useBackropPicture";
 import PictureDialog from "components/picture/PictureDialog";
 import EmptyLayout from "layout/EmptyLayout";
@@ -8,6 +8,9 @@ import MenuNavItem from "components/menu/MenuNavItem";
 import axios from "api/axios";
 import Cookies from "js-cookie";
 import AlertDialog from "components/alert/AlertDialog";
+import { updateImageProfile } from "redux/users/userSlice";
+import { Snackbar } from "@mui/material";
+import useSnackbarInfo from "hooks/useSnackbarInfo";
 
 const ProfilePicture = () => {
   let {
@@ -15,10 +18,13 @@ const ProfilePicture = () => {
     yourSelf,
     error,
   } = useSelector((state) => state.users.profile);
+  const dispatch = useDispatch();
   const { handleShowBackdrop, ...others } = useBackdropPicture();
-  const [open, setOpen] = useState(false);
+  const { action, handleClose, stateOpen } = useSnackbarInfo();
+  const [openAlert, setOpenAlert] = useState(false);
   const [position, setPosition] = useState(0);
   const [imageID, setImageID] = useState();
+  const [open, setOpen] = stateOpen;
   if (!yourSelf) listUpload = listUpload.filter((item) => !item.private);
   if (error) return;
   const handleViewPicture = (i) => {
@@ -32,11 +38,12 @@ const ProfilePicture = () => {
   const handleDeleteImg = async () => {
     try {
       await axios.delete("/users/image/" + imageID, {
-        data: { yourSelf },
         headers: {
           authorization: "Bearer " + Cookies.get("tokens"),
         },
       });
+      setOpen(true);
+      dispatch(updateImageProfile(imageID));
     } catch (err) {
       console.log(err);
     }
@@ -61,16 +68,16 @@ const ProfilePicture = () => {
                 alt={img.name}
               />
               <div
-                className="absolute inset-0 invisible bg-black bg-opacity-30 group-hover:visible"
+                className="absolute inset-0 invisible bg-black bg-opacity-40 group-hover:visible"
                 onClick={() => handleViewPicture(i)}
               ></div>
               {yourSelf && (
                 <div className="absolute right-1 top-1">
                   <MenuNav>
-                    <MenuNavItem>Turn off public</MenuNavItem>
+                    <MenuNavItem>Disable public</MenuNavItem>
                     <MenuNavItem
                       handleExtra={() => {
-                        setOpen(true);
+                        setOpenAlert(true);
                         setImageID(img._id);
                       }}
                     >
@@ -92,10 +99,17 @@ const ProfilePicture = () => {
       <PictureDialog position={position} {...others}></PictureDialog>
       <AlertDialog
         textConfirm="Are you sure you want to delete?"
-        handleExtra={() => handleDeleteImg()}
-        open={open}
-        setOpen={setOpen}
+        handleExtra={handleDeleteImg}
+        open={openAlert}
+        setOpen={setOpenAlert}
       ></AlertDialog>
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        message={"Deleted successfully image"}
+        action={action}
+      />
     </div>
   );
 };

@@ -7,13 +7,15 @@ const UserModel = require("../models/UserModel");
 const removeTones = require("../utils/removeTones");
 const shuffleArray = require("../utils/shuffleArray");
 
-function checkSavedAndLiked(listPost, username) {
+async function checkSavedAndLiked(listPost, username) {
   const { listSaved, _id } = username;
-  return listPost.map((post) => ({
+  const listNewPost = listPost.map(async (post) => ({
     ...(post._doc || post),
     saved: listSaved.includes(post._id),
     isLiked: post.listHeart.includes(_id),
+    commentCount: await CommentModel.find({ postID: post._id }).count(),
   }));
+  return await Promise.all(listNewPost);
 }
 
 function searchListByContent(str, content) {
@@ -80,8 +82,9 @@ const getPostList = asyncHandler(async (req, res) => {
           );
           break;
       }
-      listPost = checkSavedAndLiked(listPost, username);
-    } else listPost = shuffleArray(checkSavedAndLiked(listPost, username));
+      listPost = await checkSavedAndLiked(listPost, username);
+    } else
+      listPost = shuffleArray(await checkSavedAndLiked(listPost, username));
     res.json({ listPost });
   } catch (error) {
     const errorMsg = JSON.stringify(error);
@@ -104,13 +107,13 @@ const getPostPersonal = asyncHandler(async (req, res) => {
         "lastName",
         "avatar",
       ]);
-      let listNewPost;
+      let listNewPost = await checkSavedAndLiked(listPost, username);
       if (by) {
-        listNewPost = checkSavedAndLiked(listPost, userInfo).filter((post) => {
+        listNewPost = listNewPost.filter((post) => {
           if (by === "liked") return post.isLiked;
           return post.saved;
         });
-      } else listNewPost = checkSavedAndLiked(listPost, username);
+      }
       res.json({
         listPost: listNewPost,
       });
@@ -119,52 +122,6 @@ const getPostPersonal = asyncHandler(async (req, res) => {
     res.status(500).json(error);
   }
 });
-
-// const getPostFeature = asyncHandler(async (req, res) => {
-//   const username = req.username;
-//   try {
-//     const { id, by } = req.params;
-//     const userInfo = await UserModel.findById(id);
-//     if (userInfo) {
-//       const listPost = await PostModel.find().populate("authorID", [
-//         "_id",
-//         "email",
-//         "firstName",
-//         "lastName",
-//         "avatar",
-//       ]);
-//       const listNewPost = checkSavedAndLiked(listPost, userInfo).filter(
-//         (post) => {
-//           if (by === "liked") return post.isLiked;
-//           return post.saved;
-//         }
-//       );
-//     } else res.status(400).json("Invalid user");
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// });
-
-// const getPostFilter = asyncHandler(async (req, res) => {
-//   const { query, comment } = req.query;
-//   try {
-//     let conditionFilter = {};
-//     if (!query) res.status(400).json("Please type key word to search!");
-//     else {
-//       conditionFilter.modeComment = comment || true;
-//       const listPost = await PostModel.find({
-//         // content: {
-//         //   $regex: req.query?.query || "",
-//         //   $options: "i",
-//         // },
-//         ...conditionFilter,
-//       });
-//       res.json({ listPost: checkSavedPost(listPost, req.username.listSaved) });
-//     }
-//   } catch (error) {
-//     res.status(500).json("Server error");
-//   }
-// });
 
 const handleModeComment = asyncHandler(async (req, res) => {
   const username = req.username;

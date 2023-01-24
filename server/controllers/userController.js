@@ -6,7 +6,6 @@ const FriendModel = require("../models/FriendModel");
 const ImageModel = require("../models/ImageModel");
 const cloudinary = require("../config/cloudinary");
 const shuffleArray = require("../utils/shuffleArray");
-const ChatModel = require("../models/ChatModel");
 
 let monthNames = [
   "January",
@@ -162,10 +161,16 @@ const handleRemoveSearch = asyncHandler(async (req, res) => {
 });
 
 const handleDeleteImage = asyncHandler(async (req, res) => {
+  const username = req.username;
   try {
-    if (req.body.yourSelf) {
-      await ImageModel.findByIdAndDelete(req.params.id);
-      res.json("Delete success image");
+    const pictureInfo = await ImageModel.findOneAndDelete({
+      _id: req.params.id,
+      userID: username._id,
+    });
+    if (pictureInfo) {
+      const publicID = pictureInfo.link.split("/").pop().split(".")[0];
+      await cloudinary.destroy("moon-stars/" + publicID);
+      res.json("Deleted successful image");
     } else res.status(400).json("Delete failed");
   } catch (error) {
     res.status(500).json(error);

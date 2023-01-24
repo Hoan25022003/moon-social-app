@@ -14,6 +14,7 @@ import { deleteComment, newComment } from "redux/comments/commentSlice";
 import CommentSkeleton from "components/skeleton/CommentSkeleton";
 import LoadingType from "components/loading/LoadingType";
 import { Link } from "react-router-dom";
+import EmptyLayout from "layout/EmptyLayout";
 
 const CommentFeature = ({ modalComment, handleHideModal, post }) => {
   const { _id, authorID } = post;
@@ -59,6 +60,7 @@ const CommentFeature = ({ modalComment, handleHideModal, post }) => {
 
   useEffect(() => {
     return () => emitStopTyping();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { listComment, loading } = useSelector(
@@ -110,7 +112,12 @@ const CommentFeature = ({ modalComment, handleHideModal, post }) => {
                 <CommentItem key={comment._id} comment={comment} />
               ))
             ) : (
-              <div>No comment yet</div>
+              <EmptyLayout
+                linkImg="/img/no-comment.png"
+                info="No comment yet"
+                support="Let's become to first person comment this post"
+                className="py-3"
+              ></EmptyLayout>
             )}
             {isTyping ? (
               <LoadingType message="Someone is typing a comment" />

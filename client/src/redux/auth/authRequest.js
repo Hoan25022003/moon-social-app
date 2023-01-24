@@ -11,7 +11,7 @@ export const loginUser = createAsyncThunk(
       const res = await axios.post("/auth/login", userData);
       reset({ email: "", password: "" });
       Cookies.set("tokens", res.data?.token, {
-        expires: 1 / 24,
+        expires: 30,
         path: "/",
       });
       navigate("/home");

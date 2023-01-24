@@ -10,13 +10,11 @@ const CommentForm = ({
   emitStopTyping,
   isTyping,
 }) => {
-  const { currentUser } = useSelector((state) => state.auth.login);
-
   const {
     register,
     reset,
     watch,
-    formState: { isDirty, errors, isSubmitting, touchedFields },
+    formState: { isDirty, errors, isSubmitting },
     handleSubmit,
   } = useForm({ mode: "onChange" });
   const handleComment = (values) => {
@@ -40,6 +38,7 @@ const CommentForm = ({
       clearTimeout(timer1);
       clearTimeout(timer2);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content]);
 
   return (
@@ -52,7 +51,7 @@ const CommentForm = ({
         minRows={3}
         placeholder={placeholder}
         autoFocus={true}
-        className="px-4 py-3 border text-text2 rounded-xl border-strock"
+        className="px-4 py-3 transition-all border text-text2 rounded-xl border-strock focus:border-primary"
         {...register("content", { required: true })}
       />
       <div className="my-3 text-right">

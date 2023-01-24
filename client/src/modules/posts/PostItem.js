@@ -32,6 +32,7 @@ const PostItem = ({ postInfo }) => {
     theme,
     authorID,
     modeComment,
+    commentCount,
     type,
     listImg,
     listHeart,
@@ -62,7 +63,6 @@ const PostItem = ({ postInfo }) => {
   };
   const handleModeComment = async () => {
     try {
-      setOpen(true);
       setTextAlert(modeComment ? "Disabled comment" : "Enabled comment");
       await axios({
         method: "PUT",
@@ -71,6 +71,7 @@ const PostItem = ({ postInfo }) => {
           authorization: "Bearer " + Cookies.get("tokens"),
         },
       });
+      setOpen(true);
       dispatch(setModeComment(_id));
     } catch (error) {
       console.log(error);
@@ -78,11 +79,11 @@ const PostItem = ({ postInfo }) => {
   };
   const handleDeletePost = async () => {
     try {
-      setOpen(true);
-      setTextAlert("Post deleted successfully");
       setTimeout(async () => {
         dispatch(deletePost(_id));
       }, 3000);
+      setTextAlert("Post deleted successfully");
+      setOpen(true);
       await axios.delete("/posts/" + _id, {
         headers: {
           authorization: "Bearer " + Cookies.get("tokens"),
@@ -141,7 +142,7 @@ const PostItem = ({ postInfo }) => {
             <PostStatus
               hoverColor="group-hover:bg-thirdColor group-hover:text-thirdColor"
               textColor="group-hover:text-thirdColor"
-              quantity={400}
+              quantity={commentCount}
               className={!modeComment ? "pointer-events-none opacity-60" : ""}
               title="Comment"
               onClick={setModalComment}

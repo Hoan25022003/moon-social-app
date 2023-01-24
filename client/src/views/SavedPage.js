@@ -10,14 +10,14 @@ import { useLoadingContext } from "react-router-loading";
 import EmptyLayout from "layout/EmptyLayout";
 
 const SavedPage = () => {
-  const loadingContext = useLoadingContext();
   const { currentUser } = useSelector((state) => state.auth.login);
+  const loadingContext = useLoadingContext();
   const dispatch = useDispatch();
   useEffect(() => {
     document.title = "Saved Post | Moon Stars";
     currentUser && dispatch(getPostList(`/${currentUser._id}?by=saved`));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+  }, []);
   const { listPost, loading } = useSelector((state) => state.posts.getPost);
   const { hasMore, countItem, fetchMoreData } = useFetchMore(listPost?.length);
   if (!currentUser) return;

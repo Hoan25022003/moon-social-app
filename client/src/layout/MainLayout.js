@@ -39,7 +39,10 @@ const MainLayout = () => {
             <SideDarkMode></SideDarkMode>
             <SideUserInfo
               avatar={currentUser?.avatar}
-              username={currentUser?.firstName + " " + currentUser?.lastName}
+              username={
+                currentUser &&
+                currentUser?.firstName + " " + currentUser?.lastName
+              }
               email={currentUser?.email}
               url={"/profile/" + currentUser?._id}
             ></SideUserInfo>

@@ -14,10 +14,9 @@ const HomePage = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     document.title = "Home Page | Moon Stars";
-
     dispatch(getPostList());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+  }, []);
   const { listPost, loading: getPostLoading } = useSelector(
     (state) => state.posts.getPost
   );
@@ -32,23 +31,21 @@ const HomePage = () => {
         avatar={currentUser?.avatar}
         linkInfo={"/profile/" + currentUser?._id}
       ></PostFeature>
-      {listPost?.length > 0 && (
-        <PostList dataLength={countItem} next={fetchMoreData} hasMore={hasMore}>
-          {currentUser && !getPostLoading ? (
-            listPost.map(
-              (post, i) =>
-                i < countItem && (
-                  <PostItem key={post?._id} postInfo={post}></PostItem>
-                )
-            )
-          ) : (
-            <>
-              <PostSkeleton />
-              <PostSkeleton />
-            </>
-          )}
-        </PostList>
-      )}
+      <PostList dataLength={countItem} next={fetchMoreData} hasMore={hasMore}>
+        {currentUser && !getPostLoading ? (
+          listPost.map(
+            (post, i) =>
+              i < countItem && (
+                <PostItem key={post?._id} postInfo={post}></PostItem>
+              )
+          )
+        ) : (
+          <>
+            <PostSkeleton />
+            <PostSkeleton />
+          </>
+        )}
+      </PostList>
     </div>
   );
 };

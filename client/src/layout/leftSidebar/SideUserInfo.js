@@ -8,12 +8,17 @@ import MenuNav from "components/menu/MenuNav";
 import MenuNavItem from "components/menu/MenuNavItem";
 import TextLight from "components/text/TextLight";
 import { socket } from "api/axios";
+import { Skeleton } from "@mui/material";
 
-const SideUserInfo = ({ url = "/profile/", avatar, username, email }) => {
+const SideUserInfo = ({
+  url = "/profile/",
+  avatar,
+  username = "",
+  email = "",
+}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth.login);
-  // console.log(avatar);
   const handleLogout = () => {
     logoutUser(dispatch);
     socket.emit("logout-active", currentUser);
@@ -21,20 +26,31 @@ const SideUserInfo = ({ url = "/profile/", avatar, username, email }) => {
   return (
     <div className="flex items-center justify-between">
       <Link to={url} className="flex items-center gap-x-3 w-fit">
-        <Avatar
-          alt={username || ""}
-          src={avatar}
-          sx={{ width: 48, height: 48 }}
-        />
+        {avatar ? (
+          <Avatar alt={username} src={avatar} sx={{ width: 48, height: 48 }} />
+        ) : (
+          <Skeleton variant="circular" width={48} height={48} />
+        )}
         <div>
-          <h3 className="text-[15px] font-semibold">{username || ""}</h3>
-          <TextLight>
-            {email?.length > 15 ? email.slice(0, 15) + "..." : email}
-          </TextLight>
+          {username ? (
+            <h3 className="text-[15px] font-semibold">{username || ""}</h3>
+          ) : (
+            <Skeleton variant="text" sx={{ fontSize: "15px", width: "50px" }} />
+          )}
+          {email ? (
+            <TextLight>
+              {email?.length > 15 ? email.slice(0, 15) + "..." : email}
+            </TextLight>
+          ) : (
+            <Skeleton
+              variant="text"
+              sx={{ fontSize: "14px", width: "100px" }}
+            />
+          )}
         </div>
       </Link>
       <div>
-        <MenuNav styleCoordinate="translate3d(80px, -74.4px, 0px)">
+        <MenuNav>
           <MenuNavItem handleExtra={() => navigate(url)}>
             Change password
           </MenuNavItem>
@@ -48,8 +64,6 @@ const SideUserInfo = ({ url = "/profile/", avatar, username, email }) => {
 SideUserInfo.propTypes = {
   url: PropTypes.string,
   avatar: PropTypes.string,
-  username: PropTypes.string.isRequired,
-  email: PropTypes.string,
 };
 
 export default SideUserInfo;

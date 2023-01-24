@@ -34,7 +34,7 @@ const PersonalPage = () => {
   useEffect(() => {
     currentUser && dispatch(userProfile(id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser, id]);
+  }, []);
   const { loading, error, userInfo, yourSelf } = useSelector(
     (state) => state.users.profile
   );

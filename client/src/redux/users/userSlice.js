@@ -1,10 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  getUserList,
-  userFriend,
-  userProfile,
-  userFilter,
-} from "./userRequest";
+import { userFriend, userProfile } from "./userRequest";
 
 const initProfile = {
   loading: true,
@@ -42,6 +37,13 @@ const userSlice = createSlice({
     getSearchHistory: (state, { payload }) => {
       state.searchHistory = payload.slice(0, 5);
     },
+    updateImageProfile: (state, { payload }) => {
+      const { userInfo } = state.profile;
+      if (userInfo)
+        state.profile.userInfo.listUpload = userInfo.listUpload.filter(
+          (img) => img._id !== payload
+        );
+    },
   },
   extraReducers: (builder) => {
     // Personal profile
@@ -78,7 +80,12 @@ const userSlice = createSlice({
   },
 });
 
-export const { resetProfile, filterUser, statusFriend, getSearchHistory } =
-  userSlice.actions;
+export const {
+  resetProfile,
+  filterUser,
+  statusFriend,
+  getSearchHistory,
+  updateImageProfile,
+} = userSlice.actions;
 
 export default userSlice.reducer;
