@@ -6,6 +6,7 @@ const FriendModel = require("../models/FriendModel");
 const ImageModel = require("../models/ImageModel");
 const cloudinary = require("../config/cloudinary");
 const shuffleArray = require("../utils/shuffleArray");
+const ChatModel = require("../models/ChatModel");
 
 let monthNames = [
   "January",
@@ -107,12 +108,17 @@ const getUserDetail = asyncHandler(async (req, res) => {
           createdAt: dateJoin,
           listUpload,
           listUserFriend,
+          chatID:
+            username.email != userDetail.email &&
+            (await ChatModel.findOne({
+              participant: { $all: [username._id, req.params.id] },
+            })),
         },
         listFriend: await getAllFriend(username),
         yourSelf: username.email == userDetail.email,
         postCount,
       });
-    } else res.status(400).json("User ID is not valid");
+    } else res.status(400).json("User is not valid");
   } catch (error) {
     res.status(500).json(error);
   }

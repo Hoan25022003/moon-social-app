@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { socket } from "api/axios";
 import { Button, TextareaAutosize } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 
 const CommentForm = ({
   placeholder = "Comment your reply about this post",

@@ -32,11 +32,11 @@ const HomePage = () => {
         linkInfo={"/profile/" + currentUser?._id}
       ></PostFeature>
       <PostList dataLength={countItem} next={fetchMoreData} hasMore={hasMore}>
-        {currentUser && !getPostLoading ? (
+        {listPost?.length > 0 && !getPostLoading ? (
           listPost.map(
             (post, i) =>
               i < countItem && (
-                <PostItem key={post?._id} postInfo={post}></PostItem>
+                <PostItem key={post._id} postInfo={post}></PostItem>
               )
           )
         ) : (

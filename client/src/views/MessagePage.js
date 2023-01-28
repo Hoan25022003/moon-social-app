@@ -8,12 +8,10 @@ import BackPage from "components/common/BackPage";
 import MessageForm from "modules/messages/MessageForm";
 import MessageProfile from "modules/messages/MessageProfile";
 import MessageItem from "modules/messages/MessageItem";
-import { useLoadingContext } from "react-router-loading";
 import MessageSkeleton from "components/skeleton/MessageSkeleton";
 import LoadingType from "components/loading/LoadingType";
 
 const MessagePage = () => {
-  const loadingContext = useLoadingContext();
   const { currentUser } = useSelector((state) => state.auth.login);
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -54,28 +52,33 @@ const MessagePage = () => {
     if (typing) setTyping(false);
   }, 2000);
 
-  if (!participant) return;
-
   document.title = `${participant?.firstName} ${participant?.lastName} | Moon Stars`;
-  if (listMessage.length > 0) document.body.scrollIntoView(false);
-  if (!loading) {
-    loadingContext.done();
-  }
+
+  useEffect(() => {
+    listMessage?.length > 0 && document.body.scrollIntoView(false);
+  }, [listMessage]);
+
+  if (!participant) return;
   return (
     <>
       <BackPage turnSwitchTab="/chats">
         <div className="flex flex-col">
           <h4 className="text-lg font-bold">
-            {participant.firstName + " " + participant.lastName}
+            {!loading
+              ? participant.firstName + " " + participant.lastName
+              : "Waiting ..."}
           </h4>
           <p className="text-[13px] font-normal text-text4">
             {participant.isActive ? "Active" : "No Active"}
           </p>
         </div>
       </BackPage>
-      <div className="flex flex-col pt-3 gap-y-5">
-        <MessageProfile userInfo={participant}></MessageProfile>
-        <div className="flex flex-col w-full px-5 gap-y-3 min-h-[333px]">
+      <div className="flex flex-col pt-3">
+        <MessageProfile
+          userInfo={participant}
+          loading={loading}
+        ></MessageProfile>
+        <div className="flex flex-col w-full px-5 mt-4 mb-3 gap-y-3 min-h-[333px]">
           {!loading ? (
             listMessage.length > 0 &&
             listMessage.map((mess) => (
@@ -92,6 +95,8 @@ const MessagePage = () => {
             ))
           ) : (
             <>
+              <MessageSkeleton yourself />
+              <MessageSkeleton yourself={false} />
               <MessageSkeleton yourself />
               <MessageSkeleton yourself={false} />
             </>

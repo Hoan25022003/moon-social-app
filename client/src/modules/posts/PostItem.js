@@ -100,7 +100,7 @@ const PostItem = ({ postInfo }) => {
           <PostMeta timer={renderTime(createdAt)} author={authorID}></PostMeta>
           <div className="flex items-center gap-x-1">
             <PostSaved isSaved={saved} postID={_id}></PostSaved>
-            {currentUser._id === authorID._id && (
+            {currentUser?._id === authorID._id && (
               <MenuNav>
                 <MenuNavItem handleExtra={handleModeComment}>
                   {modeComment ? "Disable" : "Enable"} comment

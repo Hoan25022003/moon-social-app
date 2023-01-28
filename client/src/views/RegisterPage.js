@@ -14,7 +14,6 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { registerUser } from "redux/auth/authRequest";
 import { useDispatch, useSelector } from "react-redux";
-import { useCheckUser } from "hooks/useCheckLogin";
 
 const schema = yup.object({
   firstName: yup

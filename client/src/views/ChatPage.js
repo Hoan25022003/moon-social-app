@@ -91,8 +91,11 @@ const ChatPage = () => {
                     chat.participant.firstName + " " + chat.participant.lastName
                   }
                   latestMessage={
-                    chat.latestMessage?.content ||
-                    "✌️ Let's send message to get acquainted new friend"
+                    chat.latestMessage?.content
+                      ? chat.latestMessage.sender === currentUser._id
+                        ? "You: " + chat.latestMessage.content
+                        : chat.latestMessage.content
+                      : "✌️ Let's send message to get acquainted new friend"
                   }
                 ></ChatItem>
               ))

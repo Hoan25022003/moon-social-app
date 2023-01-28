@@ -64,6 +64,26 @@ const handleLogin = asyncHandler(async (req, res) => {
   }
 });
 
+const handleChangePassword = asyncHandler(async (req, res) => {
+  const username = req.username;
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const checkPassword = await bcrypt.compare(
+      currentPassword,
+      username.password
+    );
+    if (checkPassword) {
+      const hash = await bcrypt.hash(newPassword, 10);
+      await UserModel.findByIdAndUpdate(username._id, {
+        password: hash,
+      });
+      res.json("Correct password");
+    } else res.status(400).json("Current password is incorrect!");
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 const handleLogout = asyncHandler((req, res) => {
   try {
     res.clearCookie("tokens");
@@ -77,4 +97,5 @@ module.exports = {
   handleRegister,
   handleLogin,
   handleLogout,
+  handleChangePassword,
 };

@@ -11,6 +11,7 @@ import SideFriend from "./rightSidebar/SideFriend";
 import useCheckLogin from "hooks/useCheckLogin";
 import { addUserActive } from "redux/chats/chatSlice";
 import SideSearchInput from "./rightSidebar/SideSearchInput";
+import SidePassword from "./leftSidebar/SidePassword";
 
 const MainLayout = () => {
   const { currentUser } = useCheckLogin();
@@ -27,7 +28,7 @@ const MainLayout = () => {
   return (
     <div className="max-w-[1200px] mx-auto">
       <div className="relative flex items-start justify-between w-[1200px] gap-x-8">
-        <div className="sticky top-0 h-[100vh] flex-[1] flex flex-col justify-between z-50 py-8">
+        <div className="sticky top-0 h-[100vh] flex-[1] flex flex-col justify-between z-[120] py-8">
           <div>
             <Link to={"/home"} className="flex items-center gap-x-4">
               <img src="/moon.png" alt="" className="w-10 h-10" />
@@ -45,13 +46,15 @@ const MainLayout = () => {
               }
               email={currentUser?.email}
               url={"/profile/" + currentUser?._id}
-            ></SideUserInfo>
+            >
+              <SidePassword />
+            </SideUserInfo>
           </div>
         </div>
         <div className="flex-[2.5] border-b border-x border-graySoft min-h-screen">
           <Outlet></Outlet>
         </div>
-        <div className="sticky top-0 flex-[1.5] z-50 overflow-auto h-[100vh] py-4 scroll-custom">
+        <div className="sticky top-0 flex-[1.5] z-40 overflow-auto h-[100vh] py-4 scroll-custom">
           <SideSearchInput />
           <RightContainer path={location.pathname} />
         </div>

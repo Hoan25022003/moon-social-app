@@ -5,10 +5,11 @@ import LinkIcon from "@mui/icons-material/Link";
 import SendIcon from "@mui/icons-material/Send";
 import ProfileEdit from "./ProfileEdit";
 import FriendStatus from "modules/friends/FriendStatus";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const ProfileFeature = ({ yourSelf, status = 3, isSender = true }) => {
+const ProfileFeature = ({ yourSelf, status = 3, isSender = true, chatID }) => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const classGeneral = "px-4 py-1 font-semibold";
   const [showEdit, setShowEdit] = useToggle(false);
   return (
@@ -38,8 +39,11 @@ const ProfileFeature = ({ yourSelf, status = 3, isSender = true }) => {
           </Button>
         ) : (
           <>
-            {status === 1 && (
-              <Tooltip title="Send Message">
+            {status === 1 && chatID && (
+              <Tooltip
+                title="Send Message"
+                onClick={() => navigate("/chats/t/" + chatID?._id)}
+              >
                 <IconButton
                   className="hover:bg-graySoft"
                   style={{ border: "1px solid #ddd" }}

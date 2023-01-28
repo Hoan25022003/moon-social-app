@@ -16,7 +16,7 @@ import LoadingType from "components/loading/LoadingType";
 import { Link } from "react-router-dom";
 import EmptyLayout from "layout/EmptyLayout";
 
-const CommentFeature = ({ modalComment, handleHideModal, post }) => {
+const CommentFeature = ({ handleHideModal, post }) => {
   const { _id, authorID } = post;
   const { currentUser } = useSelector((state) => state.auth.login);
   const [isTyping, setIsTyping] = useState(false);

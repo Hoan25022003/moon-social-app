@@ -6,13 +6,21 @@ import ChatLatestMessage from "./parts/ChatLatestMessage";
 import TextLight from "components/text/TextLight";
 import renderTime from "utils/renderTime";
 
+function formatTime(time = "") {
+  if (time.includes("previous")) {
+    const item = time.split(" ");
+    return item[0] + item[1].slice(0, 1) + " previous";
+  }
+  return time;
+}
+
 const ChatItem = ({
+  id = "",
   avatar,
   username,
   latestMessage = "",
-  createdAt,
-  id = "1234",
   isActive,
+  createdAt,
 }) => {
   const navigate = useNavigate();
   return (
@@ -20,7 +28,7 @@ const ChatItem = ({
       onClick={() => navigate("/chats/t/" + id)}
       className="flex items-center justify-between px-4 transition-all cursor-pointer rounded-xl hover:bg-whiteSoft "
     >
-      <div className="flex items-start py-3 gap-x-5">
+      <div className="flex items-start py-3 gap-x-4">
         <ChatAvatar
           avatar={avatar}
           size={50}
@@ -31,7 +39,7 @@ const ChatItem = ({
           <div className="flex items-center gap-x-2">
             <TextUsername>{username}</TextUsername>
             <TextLight className="text-text4 text-[13px]">
-              {renderTime(createdAt) || ""}
+              {formatTime(renderTime(createdAt))}
             </TextLight>
           </div>
           <ChatLatestMessage>{latestMessage}</ChatLatestMessage>

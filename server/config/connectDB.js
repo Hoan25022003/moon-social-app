@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 mongoose
   .connect(
-    "mongodb+srv://hoan2003:hoan1234@cluster0.mratp.mongodb.net/moon-social?retryWrites=true&w=majority",
+    `mongodb+srv://${process.env.ACCOUNT_MONGO_DB}:${process.env.PASSWORD_MONGO_DB}@cluster0.mratp.mongodb.net/moon-social?retryWrites=true&w=majority`,
     () => {
       console.log("Database connected");
     }

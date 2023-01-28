@@ -47,6 +47,11 @@ function App() {
             loading
           ></Route>
           <Route
+            path="/groups/:id"
+            element={<GroupPage></GroupPage>}
+            loading
+          ></Route>
+          <Route
             path="/profile/:id"
             element={<ProfilePage></ProfilePage>}
             loading

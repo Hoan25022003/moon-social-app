@@ -39,10 +39,9 @@ export const registerUser = createAsyncThunk(
       navigate("/login");
       return res.data;
     } catch (error) {
-      if (error.response.status === 400)
-        if (error.response.status === 400) {
-          setError("email", { message: "This email already existed" });
-        }
+      if (error.response.status === 400) {
+        setError("email", { message: "This email already existed" });
+      }
     }
   }
 );

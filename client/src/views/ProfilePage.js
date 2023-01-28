@@ -51,15 +51,10 @@ const PersonalPage = () => {
       <BackPage turnSwitchTab={switchTab}>
         <div className="flex flex-col">
           <h4 className="text-lg font-bold">
-            {fullName || (
-              <Skeleton
-                variant="text"
-                sx={{ fontSize: "18px", width: "100px" }}
-              />
-            )}
+            {!loading ? fullName : "Waiting ..."}
           </h4>
           <p className="text-[13px] font-normal text-text4">
-            {userInfo ? (
+            {!loading ? (
               userInfo?.postCount + " posts"
             ) : (
               <Skeleton
@@ -90,6 +85,7 @@ const PersonalPage = () => {
               yourSelf={yourSelf}
               isSender={userInfo?.isSender}
               status={userInfo?.status}
+              chatID={userInfo?.chatID}
             ></ProfileFeature>
             <div className="flex flex-col mt-6">
               <TextHeading>{fullName}</TextHeading>
