@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { userFriend, userProfile } from "./userRequest";
+import { updateUserProfile, userFriend, userProfile } from "./userRequest";
 
 const initProfile = {
   loading: true,
@@ -76,6 +76,14 @@ const userSlice = createSlice({
       .addCase(userFriend.rejected, (state, { payload }) => {
         state.friend.loading = false;
         state.friend.error = payload;
+      });
+
+    builder
+      .addCase(updateUserProfile.fulfilled, (state) => {
+        state.profile.loading = false;
+      })
+      .addCase(updateUserProfile.pending, (state) => {
+        state.profile.loading = true;
       });
   },
 });

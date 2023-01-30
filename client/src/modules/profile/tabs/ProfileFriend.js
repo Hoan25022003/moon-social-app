@@ -21,19 +21,6 @@ const ProfileFriend = ({ listUserFriend }) => {
   });
   return (
     <div className="p-4">
-      {/* <Search
-        isSuggested={false}
-        placeholder="Search friend"
-        onChange={handleChange}
-      ></Search>
-      <FriendList className="my-3">
-        <FriendItem
-          src="https://images.unsplash.com/photo-1667114790847-7653bc249e82?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
-          fullName="Hoan Do"
-          email="hoan@gmail.com"
-        ></FriendItem>
-      </FriendList> */}
-
       {listFriend.length > 0 ? (
         <TableContainer component={Paper}>
           <Table sx={{ width: "100%" }} aria-label="simple table">
@@ -50,6 +37,7 @@ const ProfileFriend = ({ listUserFriend }) => {
               {listFriend.map((user) => (
                 <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  key={user._id}
                 >
                   <TableCell>
                     <Avatar src={user.avatar} alt="" />

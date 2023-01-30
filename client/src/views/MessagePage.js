@@ -52,7 +52,9 @@ const MessagePage = () => {
     if (typing) setTyping(false);
   }, 2000);
 
-  document.title = `${participant?.firstName} ${participant?.lastName} | Moon Stars`;
+  document.title = `${participant?.firstName || "Waiting"} ${
+    participant?.lastName || "..."
+  } | Moon Stars`;
 
   useEffect(() => {
     listMessage?.length > 0 && document.body.scrollIntoView(false);

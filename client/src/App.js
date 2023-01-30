@@ -54,7 +54,7 @@ function App() {
           <Route
             path="/profile/:id"
             element={<ProfilePage></ProfilePage>}
-            loading
+            // loading
           ></Route>
           <Route
             path="/search"

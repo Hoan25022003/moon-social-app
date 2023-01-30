@@ -1,20 +1,28 @@
 import React from "react";
 import useToggle from "hooks/useToggle";
-import { Button, IconButton, Tooltip } from "@mui/material";
+import { Button, IconButton, Snackbar, Tooltip } from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
 import SendIcon from "@mui/icons-material/Send";
 import ProfileEdit from "./ProfileEdit";
 import FriendStatus from "modules/friends/FriendStatus";
 import { useNavigate, useParams } from "react-router-dom";
+import useSnackbarInfo from "hooks/useSnackbarInfo";
 
 const ProfileFeature = ({ yourSelf, status = 3, isSender = true, chatID }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const classGeneral = "px-4 py-1 font-semibold";
   const [showEdit, setShowEdit] = useToggle(false);
+  const { action, handleClose, stateOpen } = useSnackbarInfo();
+  const [open, setOpen] = stateOpen;
   return (
     <>
-      {showEdit && <ProfileEdit handleHideModal={setShowEdit}></ProfileEdit>}
+      {showEdit && (
+        <ProfileEdit
+          handleHideModal={setShowEdit}
+          setOpenSnackbar={setOpen}
+        ></ProfileEdit>
+      )}
       <div className="flex items-center justify-end py-3 gap-x-3">
         <Tooltip title="Copy link to profile">
           <IconButton
@@ -62,35 +70,15 @@ const ProfileFeature = ({ yourSelf, status = 3, isSender = true, chatID }) => {
           </>
         )}
       </div>
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        message="Updated successful"
+        action={action}
+      />
     </>
   );
 };
-
-// status === 1 ? (
-//   <>
-//     <Tooltip title="Send Message">
-//       <IconButton
-//         className="hover:bg-graySoft border-strock"
-//         aria-label="send message"
-//       >
-//         <SendIcon className="text-lg text-iconColor" />
-//       </IconButton>
-//     </Tooltip>
-//     <Button
-//       variant="outlined"
-//       className={`${classGeneral} hover:bg-graySoft text-primary border-primary`}
-//     >
-//       Unfriend
-//     </Button>
-//   </>
-// ) : (
-//   <Button
-//     variant="contained"
-//     className={`${classGeneral} text-white bg-primary`}
-//     onClick={setToggleInvite}
-//   >
-//     {toggleInvite ? "Pending" : "Add friend"}
-//   </Button>
-// )
 
 export default ProfileFeature;

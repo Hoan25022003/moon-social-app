@@ -93,6 +93,8 @@ const getUserDetail = asyncHandler(async (req, res) => {
       }).count();
       const listUpload = await ImageModel.find({
         userID: req.params.id,
+      }).sort({
+        createdAt: -1,
       });
       const listUserFriend = await FriendModel.find({
         $or: [
@@ -184,13 +186,13 @@ const handleDeleteImage = asyncHandler(async (req, res) => {
 });
 
 const handleUpdateInfo = asyncHandler(async (req, res) => {
+  const username = req.username;
   try {
-    const username = req.username;
     const files = req.files;
     let newAvatar;
     let newCoverImg;
     if (files) {
-      const { avatar, cover } = files;
+      const { avatar, coverImg } = files;
 
       if (avatar) {
         const data = await cloudinary.upload(avatar[0].path, {
@@ -205,11 +207,10 @@ const handleUpdateInfo = asyncHandler(async (req, res) => {
         await newAvatar.save();
       }
 
-      if (cover) {
-        const data = await cloudinary.upload(cover[0].path, {
+      if (coverImg) {
+        const data = await cloudinary.upload(coverImg[0].path, {
           folder: "moon-stars",
         });
-        console.log("COVER IMAGE: ", data);
         newCoverImg = new ImageModel({
           name: data.original_filename,
           link: data.url,
@@ -221,19 +222,19 @@ const handleUpdateInfo = asyncHandler(async (req, res) => {
     }
 
     await UserModel.findByIdAndUpdate(username._id, {
-      avatar: newAvatar.link || username.avatar || "",
-      coverImg: newCoverImg.link || username.coverImg || "",
-      firstName: req.body.firstName || username.firstName,
-      lastName: req.body.lastName || username.lastName,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      avatar: newAvatar ? newAvatar.link : username.avatar,
+      coverImg: newCoverImg ? newCoverImg.link : username.coverImg,
       detailInfo: {
-        birthday: req.body.birthday || "",
-        workAt: req.body.workAt || "",
-        desc: req.body.desc || "",
+        birthday: req.body.birthday === "dd/mm/yy" ? "" : req.body.birthday,
+        workAt: req.body.workAt,
+        desc: req.body.desc,
       },
     });
-    res.json(`Update info successful`);
+    res.json("Update success");
   } catch (error) {
-    res.status(500).json("Server error");
+    res.status(500).json(error);
   }
 });
 

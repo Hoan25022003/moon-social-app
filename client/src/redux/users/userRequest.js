@@ -53,15 +53,15 @@ export const userFriend = createAsyncThunk(
 
 export const updateUserProfile = createAsyncThunk(
   "users/update",
-  async (data, { dispatch }) => {
+  async ({ data, userID, dispatch }) => {
     try {
-      const formData = new FormData();
+      var formData = new FormData();
       for (const [key, value] of Object.entries(data)) {
-        formData.append(key, value);
+        if (value) formData.append(key, value);
       }
 
-      const res = await axios({
-        method: "POST",
+      await axios({
+        method: "PUT",
         url: "/users/update-info",
         data: formData,
         headers: {
@@ -69,30 +69,12 @@ export const updateUserProfile = createAsyncThunk(
           authorization: "Bearer " + Cookies.get("tokens"),
         },
       });
-      console.log("UPDATE USER SUCCESS: ", res.data);
-      dispatch(userProfile());
+      dispatch(userProfile(userID));
     } catch (err) {
       console.log("UPDATE USER ERROR: ", err);
     }
   }
 );
-
-// export const userFilter = createAsyncThunk("users/filter", async (keyName) => {
-//   try {
-//     const res = await axios.get(`/users?name=${keyName}`, {
-//       headers: {
-//         authorization: "Bearer " + Cookies.get("tokens"),
-//       },
-//     });
-//     let { listUser, listFriend } = res.data;
-//     listUser = listUser.map((user) => {
-//       return verifyFriend(listFriend, user);
-//     });
-//     return listUser;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
 
 function verifyFriend(listFriend, user) {
   const checkList = listFriend.filter((friend) => friend._id === user._id)[0];

@@ -7,8 +7,8 @@ export const addNewPost = createAsyncThunk(
   async ({ data, navigate, reset }) => {
     try {
       if (data?.type === "image") {
-        const { content, publicImg, type } = data;
         var formData = new FormData();
+        const { content, publicImg, type } = data;
         formData.append("content", content);
         formData.append("type", type);
         if (publicImg && publicImg.length > 0) {

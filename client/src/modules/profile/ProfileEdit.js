@@ -18,6 +18,9 @@ import ModalLine from "components/modal/ModalLine";
 import { updateUserProfile } from "../../redux/users/userRequest";
 import { useDispatch, useSelector } from "react-redux";
 import DropdownItem from "components/dropdown/DropdownItem";
+import { useState } from "react";
+import ErrorMessage from "components/form/ErrorMessage";
+import convertLineBreak from "utils/convertLineBreak";
 
 const schema = yup.object({
   firstName: yup
@@ -32,26 +35,57 @@ const schema = yup.object({
   workAt: yup.string().max(50),
 });
 
-const ProfileEdit = ({ handleHideModal }) => {
+const ProfileEdit = ({ handleHideModal = () => {}, setOpenSnackbar }) => {
   const {
-    userInfo: { avatar, coverImg, firstName, lastName, detailInfo },
+    userInfo: { avatar, coverImg, firstName, lastName, detailInfo, _id },
+    loading,
   } = useSelector((state) => state.users.profile);
+  const date = detailInfo?.birthday.split("/") || [];
   const {
     control,
     handleSubmit,
     register,
     watch,
     setValue,
-    formState: { errors, isDirty, isSubmitting },
+    formState: { errors, isDirty },
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
+    defaultValues: {
+      firstName,
+      lastName,
+      desc: "",
+      day: date.length === 0 || date[0] === "dd" ? "" : date[0],
+      month: date.length === 0 || date[1] === "mm" ? "" : date[1],
+      year: date.length === 0 || date[2] === "yy" ? "" : date[2],
+      workAt: detailInfo?.workAt || "",
+    },
   });
   const dispatch = useDispatch();
   const watchDesc = watch("desc");
+  const [preview, setPreview] = useState({
+    avatar: null,
+    coverImg: null,
+  });
+  const handleSelectedFile = (e) => {
+    const file = e.target.files[0];
+    const name = e.target.getAttribute("name");
+    let image = URL.createObjectURL(file);
+    setValue(name, file);
+    setPreview({
+      ...preview,
+      [name]: image,
+    });
+  };
   const handleEditProfile = (values) => {
-    console.log(values);
-    // dispatch(updateUserProfile(values));
+    const { day, month, year, ...others } = values;
+    const data = {
+      ...others,
+      desc: values.desc ? convertLineBreak(values.desc) : "",
+      birthday: `${day || "dd"}/${month || "mm"}/${year || "yy"}`,
+    };
+    dispatch(updateUserProfile({ data, userID: _id, dispatch }));
+    setOpenSnackbar(true);
   };
   return (
     <Overlay handleHideModal={handleHideModal} alignCenter={true}>
@@ -63,23 +97,29 @@ const ProfileEdit = ({ handleHideModal }) => {
         <form onSubmit={handleSubmit(handleEditProfile)}>
           <div className="max-h-[500px] overflow-auto">
             <div className="relative">
-              <PictureCover src={coverImg}>
+              <PictureCover src={preview.coverImg || coverImg}>
                 <div className="absolute inset-0 flex items-center bg-black bg-opacity-25">
                   <PictureUpload
                     className="flex items-center justify-center w-12 h-12 mx-auto transition-all bg-black bg-opacity-50 rounded-full hover:bg-opacity-40"
                     control={control}
                     name="coverImg"
+                    onChange={handleSelectedFile}
                   >
                     <CameraAltOutlinedIcon className="text-white" />
                   </PictureUpload>
                 </div>
               </PictureCover>
-              <PictureAvatarBig avatar={avatar} alt="avatar" size={110}>
+              <PictureAvatarBig
+                avatar={preview.avatar || avatar}
+                alt="avatar"
+                size={110}
+              >
                 <div className="absolute inset-0 flex items-center bg-black bg-opacity-25 rounded-full cursor-default">
                   <PictureUpload
                     className="flex items-center justify-center w-10 h-10 mx-auto transition-all bg-black bg-opacity-50 rounded-full hover:bg-opacity-40"
                     control={control}
                     name="avatar"
+                    onChange={handleSelectedFile}
                   >
                     <CameraAltOutlinedIcon className="text-white" />
                   </PictureUpload>
@@ -89,29 +129,41 @@ const ProfileEdit = ({ handleHideModal }) => {
             <div className="flex flex-col px-5 mt-16 gap-y-4">
               <div className="grid grid-cols-2 gap-x-6">
                 <FormGroup>
-                  <Label name="firstName" className="mb-2">
+                  <Label name="firstName" className="mb-2 text-[15px]">
                     First Name
                   </Label>
                   <Input
                     control={control}
                     name="firstName"
-                    placeholder={firstName}
+                    placeholder="This is required field"
+                    error={errors?.firstName}
+                    className="text-[15px]"
                   ></Input>
+                  {errors?.firstName && (
+                    <ErrorMessage>{errors.firstName?.message}</ErrorMessage>
+                  )}
                 </FormGroup>
                 <FormGroup>
-                  <Label name="lastName" className="mb-2">
+                  <Label name="lastName" className="mb-2 text-[15px]">
                     Last Name
                   </Label>
                   <Input
                     control={control}
                     name="lastName"
-                    placeholder={lastName}
+                    placeholder="This is required field"
+                    error={errors?.lastName}
+                    className="text-[15px]"
                   ></Input>
+                  {errors?.lastName && (
+                    <ErrorMessage>{errors.lastName?.message}</ErrorMessage>
+                  )}
                 </FormGroup>
               </div>
               <FormGroup>
                 <div className="flex items-center justify-between mb-2">
-                  <Label name="desc">Description</Label>
+                  <Label name="desc" className="text-[15px]">
+                    Description
+                  </Label>
                   <span
                     className={`text-sm font-normal ${
                       watchDesc?.length > 150 ? "text-errorColor" : "text-text3"
@@ -122,12 +174,8 @@ const ProfileEdit = ({ handleHideModal }) => {
                 </div>
                 <TextareaAutosize
                   aria-label="empty textarea"
-                  placeholder={
-                    detailInfo?.desc
-                      ? detailInfo?.desc
-                      : "Let's describe to yourself!"
-                  }
-                  className="w-full px-5 py-4 text-base transition-all border border-strock rounded-xl focus:border-primary"
+                  placeholder="Let's describe to yourself!"
+                  className="w-full px-5 py-4 transition-all border border-strock rounded-xl focus:border-primary text-[15px]"
                   name="desc"
                   minRows={3}
                   maxRows={10}
@@ -135,7 +183,7 @@ const ProfileEdit = ({ handleHideModal }) => {
                 />
               </FormGroup>
               <FormGroup>
-                <Label className="mb-2">Birthday</Label>
+                <Label className="mb-2 text-[15px]">Birthday</Label>
                 <div className="grid grid-cols-3 gap-x-4">
                   <Dropdown label="Day" value={watch("day")}>
                     {Array(31)
@@ -185,25 +233,32 @@ const ProfileEdit = ({ handleHideModal }) => {
                 </div>
               </FormGroup>
               <FormGroup>
-                <Label className="mb-2" name="workAt">
+                <Label className="mb-2 text-[15px]" name="workAt">
                   Work At
                 </Label>
                 <Input
-                  control={control}
                   name="workAt"
                   placeholder="Place work/study"
+                  className="text-[15px]"
+                  control={control}
+                  error={errors?.workAt}
                 ></Input>
+                {errors?.workAt && (
+                  <ErrorMessage>{errors.workAt?.message}</ErrorMessage>
+                )}
               </FormGroup>
             </div>
           </div>
           <div className="my-5 text-center">
             <ButtonGradient
               className={`w-[200px] py-4 rounded-xl font-bold text-base ${
-                (Object.keys(errors).length > 0 || !isDirty) &&
+                !preview.avatar &&
+                !preview.coverImg &&
+                !isDirty &&
                 "opacity-30 pointer-events-none"
               } transition-all`}
               type="submit"
-              isLoading={isSubmitting}
+              isLoading={loading}
             >
               Update
             </ButtonGradient>

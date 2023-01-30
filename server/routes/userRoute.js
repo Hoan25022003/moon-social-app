@@ -24,7 +24,7 @@ router.put(
   verifyToken,
   upload.fields([
     { name: "avatar", maxCount: 1 },
-    { name: "cover", maxCount: 1 },
+    { name: "coverImg", maxCount: 1 },
   ]),
   handleUpdateInfo
 );

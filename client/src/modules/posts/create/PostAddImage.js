@@ -1,12 +1,12 @@
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import ButtonGradient from "components/button/ButtonGradient";
 import PictureUpload from "components/picture/PictureUpload";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import CloseIcon from "@mui/icons-material/Close";
 import ButtonRemoveAll from "components/button/ButtonRemoveAll";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { addNewPost } from "redux/posts/postRequest";
 import convertLineBreak from "utils/convertLineBreak";
 

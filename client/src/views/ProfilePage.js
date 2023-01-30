@@ -32,7 +32,7 @@ const PersonalPage = () => {
   const { keyName: tabName, switchTab } = useTurnSwitch("tab");
   const { handleShowBackdrop, ...others } = useBackdropPicture();
   useEffect(() => {
-    currentUser && dispatch(userProfile(id));
+    dispatch(userProfile(id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const { loading, error, userInfo, yourSelf } = useSelector(
@@ -93,6 +93,9 @@ const PersonalPage = () => {
               <ProfileGeneral
                 dateJoin={userInfo?.createdAt}
                 friendCount={userInfo?.listUserFriend.length}
+                desc={userInfo?.detailInfo?.desc}
+                birthday={userInfo?.detailInfo?.birthday}
+                workAt={userInfo?.detailInfo?.workAt}
               ></ProfileGeneral>
             </div>
           </div>
