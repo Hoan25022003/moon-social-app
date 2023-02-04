@@ -2,7 +2,7 @@ import React from "react";
 import { Avatar, Skeleton } from "@mui/material";
 import TextUsername from "components/text/TextUsername";
 
-const MessageProfile = ({ userInfo, loading = false }) => {
+const MessageProfile = ({ userInfo = {}, loading = false }) => {
   const { avatar, firstName, lastName, email } = userInfo;
   return (
     <div className="flex flex-col items-center justify-center my-10">

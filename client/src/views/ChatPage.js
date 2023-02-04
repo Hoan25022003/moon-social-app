@@ -31,9 +31,7 @@ const ChatPage = () => {
           if (user.show)
             return {
               ...user,
-              participant: user.participant.filter(
-                (i) => i._id !== currentUser?._id
-              )[0],
+              participant: user.participant.filter((i) => i._id !== userID)[0],
             };
         });
         dispatch(newChatList(listChatNew));

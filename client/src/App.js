@@ -54,13 +54,8 @@ function App() {
           <Route
             path="/profile/:id"
             element={<ProfilePage></ProfilePage>}
-            // loading
           ></Route>
-          <Route
-            path="/search"
-            element={<FilterPage></FilterPage>}
-            loading
-          ></Route>
+          <Route path="/search" element={<FilterPage></FilterPage>}></Route>
           <Route
             path="/post-saved"
             element={<SavedPage></SavedPage>}

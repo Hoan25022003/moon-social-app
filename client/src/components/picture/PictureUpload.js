@@ -1,5 +1,4 @@
 import React from "react";
-import { useController } from "react-hook-form";
 
 const PictureUpload = ({
   children,
@@ -9,10 +8,6 @@ const PictureUpload = ({
   onChange,
   ...props
 }) => {
-  // const { field } = useController({
-  //   control,
-  //   name,
-  // });
   return (
     <label className={className + " cursor-pointer"}>
       <input
@@ -21,7 +16,6 @@ const PictureUpload = ({
         className="hidden"
         onChange={onChange}
         {...props}
-        // {...field}
       />
       {children}
     </label>

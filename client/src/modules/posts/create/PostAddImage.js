@@ -11,6 +11,7 @@ import { addNewPost } from "redux/posts/postRequest";
 import convertLineBreak from "utils/convertLineBreak";
 
 const PostAddImage = () => {
+  const { currentUser } = useSelector((state) => state.auth.login);
   const {
     handleSubmit,
     control,
@@ -35,18 +36,22 @@ const PostAddImage = () => {
 
   const handleSelectFile = (e) => {
     setLoadPreview(true);
-    const files = e.target.files;
-
+    const files = [...e.target.files].filter(
+      (file) => file.type.split("/")[0] === "image"
+    );
     let images = [];
     for (let i = 0; i < files.length; i++) {
       images.push(URL.createObjectURL(files[i]));
     }
 
     watchSelectedFile
-      ? setValue("publicImg", [...watchSelectedFile, ...e.target.files])
-      : setValue("publicImg", e.target.files);
-    setPreview([...preview, ...images]);
-    setLoadPreview(false);
+      ? setValue("publicImg", [...watchSelectedFile, ...files])
+      : setValue("publicImg", files);
+
+    setTimeout(() => {
+      setPreview([...preview, ...images]);
+      setLoadPreview(false);
+    }, 3000);
   };
 
   const handleDeleteFile = (i) => {
@@ -77,7 +82,7 @@ const PostAddImage = () => {
           aria-label="empty textarea"
           minRows={3}
           maxRows={8}
-          placeholder="Hi Hoan, what are you thinking?"
+          placeholder={`Hi ${currentUser?.lastName}, what are you thinking?`}
           className="w-full mb-8 overflow-auto text-base font-normal scroll-custom"
           {...register("content")}
         />

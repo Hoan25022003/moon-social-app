@@ -13,16 +13,20 @@ const SideFriend = () => {
   const [selectedGender, setSelectedGender] = useState(
     getParamName("sex") || "all"
   );
+  const [selectedStatus, setSelectedStatus] = useState(
+    getParamName("status") || "all"
+  );
   const dispatch = useDispatch();
   useEffect(() => {
     const condition = {
       ...filters,
       gender: selectedGender === "all" ? "" : selectedGender,
+      status: selectedStatus === "all" ? null : Number(selectedStatus),
     };
     dispatch(userFriend(condition));
     dispatch(filterUser(condition));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedGender]);
+  }, [selectedGender, selectedStatus]);
   const handleFilterByParams = (
     [value, setValue],
     param = "sex",
@@ -34,35 +38,86 @@ const SideFriend = () => {
     setSearchParams(searchParams);
   };
   return (
-    <div className="px-4 py-3 mt-5 border border-graySoft rounded-xl">
-      <TextHeading>Gender</TextHeading>
-      <div className="flex flex-col my-3 gap-y-1">
-        <FilterRadio
-          selectedValue={selectedGender}
-          handleChange={(e) =>
-            handleFilterByParams([e.target.value, setSelectedGender])
-          }
-          value="all"
-          label="All"
-        />
-        <FilterRadio
-          selectedValue={selectedGender}
-          handleChange={(e) =>
-            handleFilterByParams([e.target.value, setSelectedGender])
-          }
-          value="male"
-          label="Male"
-        />
-        <FilterRadio
-          selectedValue={selectedGender}
-          handleChange={(e) =>
-            handleFilterByParams([e.target.value, setSelectedGender])
-          }
-          value="female"
-          label="Female"
-        />
+    <>
+      <div className="px-4 py-3 mt-5 border border-graySoft rounded-xl">
+        <TextHeading>Gender</TextHeading>
+        <div className="flex flex-col my-3 gap-y-1">
+          <FilterRadio
+            selectedValue={selectedGender}
+            handleChange={(e) =>
+              handleFilterByParams([e.target.value, setSelectedGender])
+            }
+            value="all"
+            label="All"
+          />
+          <FilterRadio
+            selectedValue={selectedGender}
+            handleChange={(e) =>
+              handleFilterByParams([e.target.value, setSelectedGender])
+            }
+            value="male"
+            label="Male"
+          />
+          <FilterRadio
+            selectedValue={selectedGender}
+            handleChange={(e) =>
+              handleFilterByParams([e.target.value, setSelectedGender])
+            }
+            value="female"
+            label="Female"
+          />
+        </div>
       </div>
-    </div>
+      <div className="px-4 py-3 mt-5 border border-graySoft rounded-xl">
+        <TextHeading>Other options</TextHeading>
+        <div className="flex flex-col my-3 gap-y-1">
+          <FilterRadio
+            selectedValue={selectedStatus}
+            handleChange={(e) =>
+              handleFilterByParams(
+                [e.target.value, setSelectedStatus],
+                "status"
+              )
+            }
+            value="all"
+            label="All"
+          />
+          <FilterRadio
+            selectedValue={selectedStatus}
+            handleChange={(e) =>
+              handleFilterByParams(
+                [e.target.value, setSelectedStatus],
+                "status"
+              )
+            }
+            value="1"
+            label="My friend"
+          />
+          <FilterRadio
+            selectedValue={selectedStatus}
+            handleChange={(e) =>
+              handleFilterByParams(
+                [e.target.value, setSelectedStatus],
+                "status"
+              )
+            }
+            value="2"
+            label="Sent invitation"
+          />
+          <FilterRadio
+            selectedValue={selectedStatus}
+            handleChange={(e) =>
+              handleFilterByParams(
+                [e.target.value, setSelectedStatus],
+                "status"
+              )
+            }
+            value="3"
+            label="Unfriended"
+          />
+        </div>
+      </div>
+    </>
   );
 };
 

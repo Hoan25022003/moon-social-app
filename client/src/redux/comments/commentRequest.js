@@ -17,5 +17,3 @@ export const getCommentList = createAsyncThunk(
     }
   }
 );
-
-export const addNewPost = createAsyncThunk("comments/create", (data) => {});

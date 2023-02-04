@@ -67,11 +67,11 @@ const MessagePage = () => {
         <div className="flex flex-col">
           <h4 className="text-lg font-bold">
             {!loading
-              ? participant.firstName + " " + participant.lastName
+              ? participant?.firstName + " " + participant?.lastName
               : "Waiting ..."}
           </h4>
           <p className="text-[13px] font-normal text-text4">
-            {participant.isActive ? "Active" : "No Active"}
+            {participant?.isActive ? "Active" : "No Active"}
           </p>
         </div>
       </BackPage>

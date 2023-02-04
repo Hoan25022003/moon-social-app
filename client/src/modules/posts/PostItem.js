@@ -21,6 +21,7 @@ import { deletePost, setModeComment } from "redux/posts/postSlice";
 import { Snackbar } from "@mui/material";
 import useSnackbarInfo from "hooks/useSnackbarInfo";
 import AlertDialog from "components/alert/AlertDialog";
+import PostVideo from "./parts/PostVideo";
 
 const PostItem = ({ postInfo }) => {
   const { currentUser } = useSelector((state) => state.auth.login);
@@ -33,6 +34,7 @@ const PostItem = ({ postInfo }) => {
     authorID,
     modeComment,
     commentCount,
+    linkVideo,
     type,
     listImg,
     listHeart,
@@ -117,7 +119,11 @@ const PostItem = ({ postInfo }) => {
         ) : (
           <>
             <PostContent>{content}</PostContent>
-            <PostImage src={listImg[0]} listImg={listImg}></PostImage>
+            {type === "image" ? (
+              <PostImage src={listImg[0]} listImg={listImg}></PostImage>
+            ) : (
+              <PostVideo src={linkVideo}></PostVideo>
+            )}
           </>
         )}
         <div className="py-3 ">

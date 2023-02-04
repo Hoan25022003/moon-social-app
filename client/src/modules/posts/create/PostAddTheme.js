@@ -10,14 +10,8 @@ import { useNavigate } from "react-router-dom";
 import convertLineBreak from "utils/convertLineBreak";
 
 const PostAddTheme = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { isDirty },
-    reset,
-    setValue,
-    watch,
-  } = useForm({
+  const { currentUser } = useSelector((state) => state.auth.login);
+  const { register, handleSubmit, reset, setValue, watch } = useForm({
     mode: "onChange",
     defaultValues: {
       content: "",
@@ -27,7 +21,7 @@ const PostAddTheme = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const watchTheme = watch("theme");
-  const { loading, error } = useSelector((state) => state.posts.createPost);
+  const { loading } = useSelector((state) => state.posts.createPost);
   const handleAddPost = async (value) => {
     const data = {
       ...value,
@@ -42,7 +36,7 @@ const PostAddTheme = () => {
         {!watchTheme ? (
           <textarea
             className="w-full min-h-[140px] text-xl font-medium scroll-custom bg-transparent"
-            placeholder="Hi Hoan, what are you thinking?"
+            placeholder={`Hi ${currentUser?.lastName}, what are you thinking?`}
             {...register("content")}
           ></textarea>
         ) : (
@@ -50,7 +44,7 @@ const PostAddTheme = () => {
             <img src={watchTheme?.linkImg} alt="" />
             <textarea
               className={`absolute w-full min-h-[220px] scroll-custom p-4 text-xl font-medium text-center bg-transparent top-5 ${watchTheme?.textColor}`}
-              placeholder="Hi Hoan, what are you thinking?"
+              placeholder={`Hi ${currentUser?.lastName}, what are you thinking?`}
               {...register("content")}
             ></textarea>
           </div>
@@ -90,7 +84,7 @@ const PostAddTheme = () => {
         type="submit"
         isLoading={loading}
         className={`w-full py-3 mt-4 text-base font-bold rounded-md ${
-          !isDirty && "pointer-events-none opacity-40"
+          !watch("content") && "pointer-events-none opacity-40"
         }`}
       >
         Post

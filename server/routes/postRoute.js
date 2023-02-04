@@ -22,7 +22,10 @@ router.put("/mode-comment/:id", verifyToken, handleModeComment);
 router.post(
   "/public",
   verifyToken,
-  upload.array("publicImg", 10),
+  upload.fields([
+    { name: "publicImg", maxCount: 10 },
+    { name: "videoUpload", maxCount: 1 },
+  ]),
   handleCreatePost
 );
 

@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import Overlay from "components/common/Overlay";
 import PostMeta from "./parts/PostMeta";
 import ModalHeading from "components/modal/ModalHeading";
@@ -6,27 +7,26 @@ import PostAddTheme from "./create/PostAddTheme";
 import PostAddImage from "./create/PostAddImage";
 import ModalLine from "components/modal/ModalLine";
 import AlertInfo from "components/alert/AlertInfo";
-import { useSelector } from "react-redux";
+import PostAddVideo from "./create/PostAddVideo";
 
 const SelectPostType = ({ type }) => {
   switch (type) {
     case "image":
-      return <PostAddImage></PostAddImage>;
+      return <PostAddImage />;
 
     case "video":
-      return <>Hello World</>;
+      return <PostAddVideo />;
 
     default:
-      return <PostAddTheme></PostAddTheme>;
+      return <PostAddTheme />;
   }
 };
 
-const PostAddNew = ({ handleHideModal, type, author }) => {
+const PostAddNew = ({ handleHideModal, type }) => {
   const { success } = useSelector((state) => state.posts.createPost);
   const { currentUser } = useSelector((state) => state.auth.login);
   return (
     <Overlay handleHideModal={handleHideModal}>
-      {success && <AlertInfo>Create success post</AlertInfo>}
       <div className="w-[550px] mx-auto bg-white z-50 rounded-xl show-modal">
         <ModalHeading handleHideModal={handleHideModal}>
           Create new post
@@ -37,6 +37,7 @@ const PostAddNew = ({ handleHideModal, type, author }) => {
           <SelectPostType type={type}></SelectPostType>
         </div>
       </div>
+      {success && <AlertInfo open>Create success post</AlertInfo>}
     </Overlay>
   );
 };

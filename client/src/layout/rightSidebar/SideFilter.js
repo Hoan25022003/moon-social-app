@@ -7,19 +7,16 @@ const SideFilter = () => {
   const [searchParams, setSearchParams] = useSearchParams("");
   const getParamName = (name) => searchParams.get(name);
   const [filterPost, setFilterPost] = useState(getParamName("by") || "latest");
-  const [selectedValue, setSelectedValue] = useState("all");
+  const [selectedValue, setSelectedValue] = useState(
+    getParamName("list") || "all"
+  );
   useEffect(() => {
-    setSelectedValue(getParamName("list") || "all");
     if (selectedValue === "post") {
       searchParams.set("by", filterPost);
     } else searchParams.delete("by");
     setSearchParams(searchParams);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedValue]);
-  useEffect(() => {
-    setSelectedValue("all");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getParamName("q")]);
   function handleFilterByParams(
     [value, setValue],
     param = "list",
@@ -67,22 +64,6 @@ const SideFilter = () => {
           value="post"
           label="Post"
         />
-        {/* {selectedValue === "post" && (
-          <div className="flex flex-col">
-            <FilterCheckbox
-              label="Comment"
-              checked={filterPost.includes("comment")}
-              handleChange={(e) =>
-                handleFilterPost(e.target.checked, "comment")
-              }
-            />
-            <FilterCheckbox
-              label="Latest"
-              checked={filterPost.includes("latest")}
-              handleChange={(e) => handleFilterPost(e.target.checked, "latest")}
-            />
-          </div>
-        )} */}
       </FilterOption>
       {getParamName("list") === "post" && (
         <FilterOption heading="Sort by">

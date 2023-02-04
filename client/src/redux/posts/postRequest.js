@@ -6,14 +6,17 @@ export const addNewPost = createAsyncThunk(
   "posts/create",
   async ({ data, navigate, reset }) => {
     try {
-      if (data?.type === "image") {
-        var formData = new FormData();
-        const { content, publicImg, type } = data;
+      var formData = new FormData();
+      const { type } = data;
+      if (type === "image") {
+        const { publicImg, content } = data;
         formData.append("content", content);
         formData.append("type", type);
         if (publicImg && publicImg.length > 0) {
           for (const img of publicImg) formData.append("publicImg", img);
         }
+      } else if (type === "video") {
+        for (const key in data) formData.append(key, data[key]);
       }
       await axios({
         method: "POST",
@@ -28,6 +31,7 @@ export const addNewPost = createAsyncThunk(
         content: "",
         theme: "",
         publicImg: null,
+        videoUpload: null,
       });
       setTimeout(() => {
         navigate(0);

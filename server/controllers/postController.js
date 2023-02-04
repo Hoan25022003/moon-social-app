@@ -153,7 +153,7 @@ const handleCreatePost = asyncHandler(async (req, res) => {
       });
       res.json({ mess: "Create success post theme" });
     } else if (type === "image") {
-      const files = req.files;
+      const files = req.files.publicImg;
       var listImg = [];
       for (const file of files) {
         const data = await cloudinary.upload(file.path, {
@@ -171,7 +171,19 @@ const handleCreatePost = asyncHandler(async (req, res) => {
         authorID: username._id,
         listImg,
       });
-      res.json("Add success post");
+      res.json("Upload image and create success post");
+    } else if (type === "video") {
+      const file = req.files.videoUpload[0];
+      const data = await cloudinary.upload(file.path, {
+        folder: "moon-stars",
+        resource_type: "video",
+      });
+      await PostModel.create({
+        ...req.body,
+        authorID: username._id,
+        linkVideo: data.url,
+      });
+      res.json("Upload video and create success post");
     } else res.status(400).json("Invalid post type");
   } catch (error) {
     res.status(500).json({ error, mess: "Error server" });
