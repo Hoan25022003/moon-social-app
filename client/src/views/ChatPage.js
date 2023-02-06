@@ -4,7 +4,6 @@ import BackPage from "components/common/BackPage";
 import ChatItem from "modules/chats/ChatItem";
 import { chatUserList } from "redux/chats/chatRequest";
 import { socket } from "api/axios";
-import { useLoadingContext } from "react-router-loading";
 import ChatSkeleton from "components/skeleton/ChatSkeleton";
 import EmptyLayout from "layout/EmptyLayout";
 import { newChatList } from "redux/chats/chatSlice";
@@ -12,7 +11,6 @@ import ButtonGradient from "components/button/ButtonGradient";
 import { useNavigate } from "react-router-dom";
 
 const ChatPage = () => {
-  const loadingContext = useLoadingContext();
   const { currentUser } = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,13 +38,11 @@ const ChatPage = () => {
 
     return () => {
       socket.disconnect();
-      socket.off();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!currentUser) return;
-  if (!loading) loadingContext.done();
   return (
     <>
       <BackPage haveBackBtn={false}>

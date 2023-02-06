@@ -47,6 +47,7 @@ const MessagePage = () => {
   const { listMessage, loading, participant } = useSelector(
     (state) => state.chats.messageInfo
   );
+  const { listUserActive } = useSelector((state) => state.chats.chatInfo);
 
   setTimeout(() => {
     if (typing) setTyping(false);
@@ -61,6 +62,9 @@ const MessagePage = () => {
   }, [listMessage]);
 
   if (!participant) return;
+  const checkActive = !!listUserActive?.filter(
+    (user) => user._id === participant?._id
+  )[0];
   return (
     <>
       <BackPage turnSwitchTab="/chats">
@@ -71,7 +75,7 @@ const MessagePage = () => {
               : "Waiting ..."}
           </h4>
           <p className="text-[13px] font-normal text-text4">
-            {participant?.isActive ? "Active" : "No Active"}
+            {checkActive ? "Active" : "No Active"}
           </p>
         </div>
       </BackPage>

@@ -36,7 +36,7 @@ const PostAddTheme = () => {
         {!watchTheme ? (
           <textarea
             className="w-full min-h-[140px] text-xl font-medium scroll-custom bg-transparent"
-            placeholder={`Hi ${currentUser?.lastName}, what are you thinking?`}
+            placeholder={`Hi ${currentUser?.firstName}, what are you thinking?`}
             {...register("content")}
           ></textarea>
         ) : (
@@ -44,7 +44,7 @@ const PostAddTheme = () => {
             <img src={watchTheme?.linkImg} alt="" />
             <textarea
               className={`absolute w-full min-h-[220px] scroll-custom p-4 text-xl font-medium text-center bg-transparent top-5 ${watchTheme?.textColor}`}
-              placeholder={`Hi ${currentUser?.lastName}, what are you thinking?`}
+              placeholder={`Hi ${currentUser?.firstName}, what are you thinking?`}
               {...register("content")}
             ></textarea>
           </div>

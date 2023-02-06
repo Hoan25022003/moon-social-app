@@ -72,6 +72,7 @@ const FilterPage = () => {
       dispatch(userFriend({ name: keyName }));
       dispatch(getPostList(`?keyword=${keyName}`));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keyName, listQuery, sortBy]);
 
   if (!loadPost && !loadUser) {

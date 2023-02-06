@@ -82,7 +82,7 @@ const PostAddImage = () => {
           aria-label="empty textarea"
           minRows={3}
           maxRows={8}
-          placeholder={`Hi ${currentUser?.lastName}, what are you thinking?`}
+          placeholder={`Hi ${currentUser?.firstName}, what are you thinking?`}
           className="w-full mb-8 overflow-auto text-base font-normal scroll-custom"
           {...register("content")}
         />

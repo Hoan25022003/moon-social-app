@@ -18,19 +18,40 @@ const MainLayout = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   useEffect(() => {
-    socket.emit("client-connect", currentUser);
-    socket.on("user-active", (data) => {
-      dispatch(addUserActive(data));
+    socket.connect();
+
+    window.addEventListener("beforeunload", function () {
+      socket.emit("client-disconnect", currentUser);
     });
+
+    setInterval(() => {
+      socket.emit("client-connect", currentUser);
+      socket.on("user-active", (data) => {
+        dispatch(addUserActive(data));
+      });
+    }, 10000);
+
+    return () => {
+      socket.disconnect();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+  }, []);
 
   return (
     <div className="max-w-[1200px] mx-auto">
-      <div className="relative flex items-start justify-between w-[1200px] gap-x-8">
+      <div className="relative flex items-start justify-between gap-x-8">
         <div className="sticky top-0 h-[100vh] flex-[1] flex flex-col justify-between z-[120] py-8">
           <div>
-            <Link to={"/home"} className="flex items-center gap-x-4">
+            <Link
+              to={"/home"}
+              onClick={() =>
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                })
+              }
+              className="flex items-center gap-x-4"
+            >
               <img src="/moon.png" alt="" className="w-10 h-10" />
               <h3 className="text-2xl font-bold text-text2">Moon Star</h3>
             </Link>

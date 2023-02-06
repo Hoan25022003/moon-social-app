@@ -17,6 +17,9 @@ const authSlice = createSlice({
     loginRefresh: (state, { payload }) => {
       state.login.currentUser = payload;
     },
+    resetRegister: (state) => {
+      state.register.success = false;
+    },
   },
   extraReducers: (builder) => {
     /* Login */
@@ -46,6 +49,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { loginRefresh, logoutAccount } = authSlice.actions;
+export const { loginRefresh, logoutAccount, resetRegister } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -84,6 +84,7 @@ const ProfileEdit = ({ handleHideModal = () => {}, setOpenSnackbar }) => {
       desc: values.desc ? convertLineBreak(values.desc) : "",
       birthday: `${day || "dd"}/${month || "mm"}/${year || "yy"}`,
     };
+
     dispatch(updateUserProfile({ data, userID: _id, dispatch }));
     setOpenSnackbar(true);
   };

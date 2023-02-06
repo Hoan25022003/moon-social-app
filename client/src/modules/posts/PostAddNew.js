@@ -6,7 +6,6 @@ import ModalHeading from "components/modal/ModalHeading";
 import PostAddTheme from "./create/PostAddTheme";
 import PostAddImage from "./create/PostAddImage";
 import ModalLine from "components/modal/ModalLine";
-import AlertInfo from "components/alert/AlertInfo";
 import PostAddVideo from "./create/PostAddVideo";
 
 const SelectPostType = ({ type }) => {
@@ -23,7 +22,6 @@ const SelectPostType = ({ type }) => {
 };
 
 const PostAddNew = ({ handleHideModal, type }) => {
-  const { success } = useSelector((state) => state.posts.createPost);
   const { currentUser } = useSelector((state) => state.auth.login);
   return (
     <Overlay handleHideModal={handleHideModal}>
@@ -37,7 +35,6 @@ const PostAddNew = ({ handleHideModal, type }) => {
           <SelectPostType type={type}></SelectPostType>
         </div>
       </div>
-      {success && <AlertInfo open>Create success post</AlertInfo>}
     </Overlay>
   );
 };

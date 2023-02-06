@@ -176,8 +176,8 @@ const handleDeleteImage = asyncHandler(async (req, res) => {
       userID: username._id,
     });
     if (pictureInfo) {
-      const publicID = pictureInfo.link.split("/").pop().split(".")[0];
-      await cloudinary.destroy("moon-stars/" + publicID);
+      // const publicID = pictureInfo.link.split("/").pop().split(".")[0];
+      // await cloudinary.destroy("moon-stars/" + publicID);
       res.json("Deleted successful image");
     } else res.status(400).json("Delete failed");
   } catch (error) {
@@ -189,9 +189,8 @@ const handleUpdateInfo = asyncHandler(async (req, res) => {
   const username = req.username;
   try {
     const files = req.files;
-    let newAvatar;
-    let newCoverImg;
-    if (files) {
+    let newAvatar, newCoverImg;
+    if (Object.keys(files).length > 0) {
       const { avatar, coverImg } = files;
 
       if (avatar) {
@@ -234,6 +233,7 @@ const handleUpdateInfo = asyncHandler(async (req, res) => {
     });
     res.json("Update success");
   } catch (error) {
+    console.log("error: ", error);
     res.status(500).json(error);
   }
 });
