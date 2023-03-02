@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import BackPage from "components/common/BackPage";
 import ChatItem from "modules/chats/ChatItem";
 import { chatUserList } from "redux/chats/chatRequest";
-import { socket } from "api/axios";
+import { socket } from "api/config";
 import ChatSkeleton from "components/skeleton/ChatSkeleton";
 import EmptyLayout from "layout/EmptyLayout";
 import { newChatList } from "redux/chats/chatSlice";
 import ButtonGradient from "components/button/ButtonGradient";
 import { useNavigate } from "react-router-dom";
+import ChatItemActive from "modules/chats/ChatItemActive";
 
 const ChatPage = () => {
   const { currentUser } = useSelector((state) => state.auth.login);
@@ -17,12 +18,13 @@ const ChatPage = () => {
   const { listUserActive, listChats, loading } = useSelector(
     (state) => state.chats.chatInfo
   );
+
   useEffect(() => {
     document.title = "Moon Chat | Moon Stars";
-    dispatch(chatUserList());
     socket.connect();
+    dispatch(chatUserList());
 
-    socket.on("receive-info", ({ listChat, userID }) => {
+    socket.on("receive-info", ({ userID, listChat }) => {
       if (userID === currentUser?._id) {
         // eslint-disable-next-line array-callback-return
         const listChatNew = listChat.map((user) => {
@@ -42,7 +44,14 @@ const ChatPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!currentUser) return;
+  const listFriendActive = listChats.filter((chat) => {
+    return (
+      listUserActive &&
+      listUserActive.length > 0 &&
+      listUserActive.some((user) => user._id === chat.participant._id)
+    );
+  });
+
   return (
     <>
       <BackPage haveBackBtn={false}>
@@ -53,20 +62,18 @@ const ChatPage = () => {
           </p>
         </div>
       </BackPage>
-      <div className="px-4 py-3">
-        {/* <div className="grid grid-cols-5 mb-3 gap-x-2">
-          <div
-            onClick={() => navigate("/")}
-            className="flex flex-col items-center p-2 rounded-lg cursor-pointer gap-y-1 hover:bg-whiteSoft"
-          >
-            <ChatAvatar
-              avatar={"uploads/avatar-man.png"}
-              isActive={true}
-              alt="Hoan Do"
-            ></ChatAvatar>
-            <TextUsername className="line-clamp-2">Hoan Do</TextUsername>
+      <div className="p-3">
+        {listFriendActive && listFriendActive?.length > 0 && (
+          <div className="grid grid-cols-5 mb-3 gap-x-2">
+            {listFriendActive.map((chat) => (
+              <ChatItemActive
+                key={chat._id}
+                userInfo={chat.participant}
+                chatId={chat._id}
+              ></ChatItemActive>
+            ))}
           </div>
-        </div> */}
+        )}
         <div className="flex flex-col">
           {!loading ? (
             listChats?.length > 0 ? (
@@ -76,17 +83,15 @@ const ChatPage = () => {
                   id={chat._id}
                   avatar={chat.participant.avatar}
                   createdAt={chat.latestMessage?.createdAt}
-                  isActive={
-                    !!listUserActive?.filter(
-                      (user) => user._id === chat.participant._id
-                    )[0]
-                  }
+                  isActive={listUserActive?.some(
+                    (user) => user._id === chat.participant._id
+                  )}
                   username={
                     chat.participant.firstName + " " + chat.participant.lastName
                   }
                   latestMessage={
                     chat.latestMessage?.content
-                      ? chat.latestMessage.sender === currentUser._id
+                      ? chat.latestMessage.sender === currentUser?._id
                         ? "You: " + chat.latestMessage.content
                         : chat.latestMessage.content
                       : "✌️ Let's send message to get acquainted new friend"
@@ -112,7 +117,10 @@ const ChatPage = () => {
               </EmptyLayout>
             )
           ) : (
-            <ChatSkeleton></ChatSkeleton>
+            <>
+              <ChatSkeleton></ChatSkeleton>
+              <ChatSkeleton></ChatSkeleton>
+            </>
           )}
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "api/axios";
+import axios from "api/config";
 import Cookies from "js-cookie";
 
 export const chatUserList = createAsyncThunk("chat/list", async () => {

@@ -1,14 +1,10 @@
-import axios from "api/axios";
+import axios, { socket } from "api/config";
 import Cookies from "js-cookie";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { statusFriend } from "redux/users/userSlice";
 
 export default function useAddFriend(userID = "", status) {
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [newStatus, setNewStatus] = useState(status);
-  const dispatch = useDispatch();
-  // const { filters } = useSelector((state) => state.users?.friend);
 
   // Send invitation
   const handleInvite = async () => {
@@ -21,21 +17,11 @@ export default function useAddFriend(userID = "", status) {
           authorization: "Bearer " + Cookies.get("tokens"),
         },
       });
-      // dispatch(
-      //   statusFriend({
-      //     type: "success",
-      //     message: "Sent invitation",
-      //   })
-      // );
       setLoadingBtn(false);
       setNewStatus(2);
+      socket.emit("send-notify-friend", userID);
     } catch (error) {
-      dispatch(
-        statusFriend({
-          type: "error",
-          message: "Error, please try again!",
-        })
-      );
+      throw new Error(error);
     }
   };
 
@@ -50,23 +36,10 @@ export default function useAddFriend(userID = "", status) {
           authorization: "Bearer " + Cookies.get("tokens"),
         },
       });
-      // dispatch(userFriend(filters));
-      // dispatch(
-      //   statusFriend({
-      //     type: "success",
-      //     message: "Add successful friend",
-      //   })
-      // );
       setLoadingBtn(false);
       setNewStatus(1);
     } catch (error) {
-      console.log(error);
-      dispatch(
-        statusFriend({
-          type: "error",
-          message: "Error, please try again!",
-        })
-      );
+      throw new Error(error);
     }
   };
 
@@ -80,10 +53,9 @@ export default function useAddFriend(userID = "", status) {
           authorization: "Bearer " + Cookies.get("tokens"),
         },
       });
-      // dispatch(userFriend(filters));
       setNewStatus(3);
     } catch (error) {
-      console.log(error);
+      throw new Error(error);
     }
   };
 

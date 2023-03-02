@@ -29,7 +29,10 @@ const AlertDialog = ({
     >
       <DialogTitle id="alert-dialog-title">{textConfirm}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
+        <DialogContentText
+          id="alert-dialog-description"
+          className="dark:text-text3"
+        >
           {textSupport}
         </DialogContentText>
       </DialogContent>

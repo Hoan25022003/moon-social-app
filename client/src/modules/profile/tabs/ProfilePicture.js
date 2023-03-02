@@ -5,7 +5,7 @@ import PictureDialog from "components/picture/PictureDialog";
 import EmptyLayout from "layout/EmptyLayout";
 import MenuNav from "components/menu/MenuNav";
 import MenuNavItem from "components/menu/MenuNavItem";
-import axios from "api/axios";
+import axios from "api/config";
 import Cookies from "js-cookie";
 import AlertDialog from "components/alert/AlertDialog";
 import { updateImageProfile } from "redux/users/userSlice";

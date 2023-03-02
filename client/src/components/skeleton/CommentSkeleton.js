@@ -3,7 +3,7 @@ import React from "react";
 
 const CommentSkeleton = () => {
   return (
-    <div className="flex items-start gap-x-3">
+    <div className="flex items-start gap-x-3 dark-skeleton">
       <div className="w-[52px]">
         <Skeleton variant="circular" width={52} height={52} />
       </div>

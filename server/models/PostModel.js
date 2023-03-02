@@ -22,10 +22,6 @@ const PostSchema = mongoose.Schema(
       type: String,
       ref: "users",
     },
-    groupID: {
-      type: String,
-      ref: "groups",
-    },
   },
   { timestamps: true }
 );

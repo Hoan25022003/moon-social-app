@@ -1,8 +1,7 @@
-import axios from "api/axios";
+import axios from "api/config";
 import Cookies from "js-cookie";
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { getSearchHistory } from "redux/users/userSlice";
 import SearchClose from "./SearchClose";
 
@@ -27,7 +26,7 @@ const SearchSuggest = ({ children, onClick }) => {
 
   return (
     <li
-      className="flex items-center justify-between p-4 transition-all cursor-pointer hover:bg-whiteSoft"
+      className="flex items-center justify-between p-4 transition-all cursor-pointer hover:dark:bg-darkSoft hover:bg-whiteSoft"
       onClick={onClick}
     >
       {children}

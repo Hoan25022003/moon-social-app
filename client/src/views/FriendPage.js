@@ -10,11 +10,9 @@ import FriendItem from "modules/friends/FriendItem";
 import FriendList from "modules/friends/FriendList";
 import FriendSkeleton from "components/skeleton/FriendSkeleton";
 import { filterUser } from "redux/users/userSlice";
-import { useLoadingContext } from "react-router-loading";
 import useFetchMore from "hooks/useFetchMore";
 
 const FriendPage = () => {
-  const loadingContext = useLoadingContext();
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.users?.friend);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -40,9 +38,6 @@ const FriendPage = () => {
     6,
     4
   );
-  if (!loading) {
-    loadingContext.done();
-  }
   return (
     <>
       <BackPage haveBackBtn={false}>
@@ -97,11 +92,6 @@ const FriendPage = () => {
           ></EmptyLayout>
         )}
       </div>
-      {/* {message && (
-        <AlertInfo severity={type} open={!!message}>
-          {message}
-        </AlertInfo>
-      )} */}
     </>
   );
 };

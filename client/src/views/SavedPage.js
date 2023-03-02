@@ -6,12 +6,10 @@ import PostItem from "modules/posts/PostItem";
 import PostSkeleton from "components/skeleton/PostSkeleton";
 import useFetchMore from "hooks/useFetchMore";
 import PostList from "modules/posts/PostList";
-import { useLoadingContext } from "react-router-loading";
 import EmptyLayout from "layout/EmptyLayout";
 
 const SavedPage = () => {
   const { currentUser } = useSelector((state) => state.auth.login);
-  const loadingContext = useLoadingContext();
   const dispatch = useDispatch();
   useEffect(() => {
     document.title = "Saved Post | Moon Stars";
@@ -20,10 +18,7 @@ const SavedPage = () => {
   }, []);
   const { listPost, loading } = useSelector((state) => state.posts.getPost);
   const { hasMore, countItem, fetchMoreData } = useFetchMore(listPost?.length);
-  if (!currentUser) return;
-  if (!loading) {
-    loadingContext.done();
-  }
+
   return (
     <>
       <BackPage haveBackBtn={false}>
@@ -33,7 +28,7 @@ const SavedPage = () => {
         </div>
       </BackPage>
       <div className="px-4 my-3">
-        {!loading && listPost.length === 0 ? (
+        {!loading && listPost?.length === 0 ? (
           <EmptyLayout
             linkImg="/img/profile-empty.png"
             info="You haven't already saved any the post"

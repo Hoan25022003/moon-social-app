@@ -1,4 +1,4 @@
-import axios from "api/axios";
+import axios from "api/config";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 import { useEffect } from "react";
@@ -9,8 +9,8 @@ import { loginRefresh } from "redux/auth/authSlice";
 export default function useCheckLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const tokens = Cookies.get("tokens");
   const { currentUser } = useSelector((state) => state.auth.login);
+  const tokens = Cookies.get("tokens");
   useEffect(() => {
     if (tokens) {
       async function getUserByToken(id) {
@@ -30,16 +30,4 @@ export default function useCheckLogin() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return { currentUser };
-}
-
-export function useCheckUser() {
-  const tokens = Cookies.get("tokens");
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (tokens) {
-      const decodedToken = jwtDecode(tokens);
-      decodedToken && navigate("/home");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 }

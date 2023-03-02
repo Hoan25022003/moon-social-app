@@ -7,7 +7,6 @@ import PictureUpload from "components/picture/PictureUpload";
 import CloseIcon from "@mui/icons-material/Close";
 import { addNewPost } from "redux/posts/postRequest";
 import { useNavigate } from "react-router-dom";
-import convertLineBreak from "utils/convertLineBreak";
 
 const PostAddVideo = () => {
   const { currentUser } = useSelector((state) => state.auth.login);
@@ -51,7 +50,6 @@ const PostAddVideo = () => {
   const handlePostVideo = (values) => {
     const data = {
       ...values,
-      content: convertLineBreak(values.content),
       type: "video",
     };
     dispatch(addNewPost({ data, navigate, reset }));
@@ -59,13 +57,13 @@ const PostAddVideo = () => {
   };
   return (
     <form onSubmit={handleSubmit(handlePostVideo)} className="mt-3 select-none">
-      <div className="max-h-[420px] overflow-auto scroll-custom">
+      <div className="max-h-[60vh] overflow-auto scroll-custom">
         <TextareaAutosize
           aria-label="empty textarea"
           minRows={2}
           maxRows={6}
           placeholder={`Hi ${currentUser?.firstName}, what are you thinking?`}
-          className="w-full mb-8 overflow-auto text-base font-normal scroll-custom"
+          className="w-full mb-8 overflow-auto text-base font-normal bg-transparent scroll-custom"
           {...register("content")}
         />
       </div>
@@ -85,9 +83,9 @@ const PostAddVideo = () => {
         </div>
       ) : (
         <PictureUpload
-          className={`h-[220px] flex flex-col justify-center bg-whiteSoft items-center rounded-lg ${
+          className={`h-[220px] flex flex-col justify-center bg-whiteSoft dark:bg-gray-700 items-center rounded-lg ${
             loadPreview && "pointer-events-none"
-          } hover:bg-graySoft`}
+          } hover:bg-graySoft hover:dark:bg-gray-600`}
           name="videoUpload"
           onChange={handleSelectFile}
           multiple={false}

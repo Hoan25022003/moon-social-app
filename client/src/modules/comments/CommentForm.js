@@ -1,26 +1,24 @@
 import React, { useEffect } from "react";
-import { socket } from "api/axios";
-import { Button, TextareaAutosize } from "@mui/material";
+import { Button, CircularProgress, TextareaAutosize } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { addNewComment } from "redux/comments/commentRequest";
 
-const CommentForm = ({
-  placeholder = "Comment your reply about this post",
-  emitTyping,
-  emitStopTyping,
-  isTyping,
-}) => {
+const CommentForm = ({ postID = "", emitTyping, emitStopTyping }) => {
+  const dispatch = useDispatch();
   const {
     register,
     reset,
     watch,
-    formState: { isDirty, errors, isSubmitting },
+    formState: { isDirty, errors },
     handleSubmit,
   } = useForm({ mode: "onChange" });
-  const handleComment = (values) => {
-    socket.emit("sendComment", values);
-    reset();
-  };
+  const { loading, error } = useSelector((state) => state.comments.addComment);
   const content = watch("content");
+  const handleComment = (values) => {
+    dispatch(addNewComment({ postID, content: values.content.trim() }));
+    reset({ content: "" });
+  };
 
   useEffect(() => {
     const timer1 = setTimeout(() => {
@@ -48,9 +46,9 @@ const CommentForm = ({
       <TextareaAutosize
         aria-label="minimum height"
         minRows={3}
-        placeholder={placeholder}
+        placeholder="Comment your reply about this post"
         autoFocus={true}
-        className="px-4 py-3 transition-all border text-text2 rounded-xl border-strock focus:border-primary"
+        className="px-4 py-3 transition-all bg-transparent border text-text2 dark:text-white rounded-xl border-strock dark:border-gray-600 focus:border-primary"
         {...register("content", { required: true })}
       />
       <div className="my-3 text-right">
@@ -58,12 +56,19 @@ const CommentForm = ({
           variant="contained"
           type="submit"
           className={`w-[100px] bg-primary rounded-full py-[6px] transition-all ${
-            isSubmitting && "pointer-events-none bg-opacity-30"
+            loading && "pointer-events-none bg-opacity-30"
           } ${
             (!isDirty || errors?.content) && "pointer-events-none opacity-30"
           }`}
         >
-          Reply
+          {loading ? (
+            <CircularProgress
+              style={{ width: "25px", height: "25px" }}
+              className="text-whiteSoft2 opacity-80"
+            />
+          ) : (
+            "Reply"
+          )}
         </Button>
       </div>
     </form>

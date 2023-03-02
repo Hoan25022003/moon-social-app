@@ -25,9 +25,6 @@ const userSlice = createSlice({
     searchHistory: null,
   },
   reducers: {
-    statusFriend: (state, { payload }) => {
-      state.alertInfo = { ...state.alertInfo, ...payload };
-    },
     filterUser: (state, { payload }) => {
       state.friend.filters = { ...state.friend.filters, ...payload };
     },
@@ -91,7 +88,6 @@ const userSlice = createSlice({
 export const {
   resetProfile,
   filterUser,
-  statusFriend,
   getSearchHistory,
   updateImageProfile,
 } = userSlice.actions;

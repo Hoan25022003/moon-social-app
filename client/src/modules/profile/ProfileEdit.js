@@ -90,7 +90,7 @@ const ProfileEdit = ({ handleHideModal = () => {}, setOpenSnackbar }) => {
   };
   return (
     <Overlay handleHideModal={handleHideModal} alignCenter={true}>
-      <div className="w-[600px] mx-auto bg-white z-50 rounded-xl show-modal">
+      <div className="w-[600px] mx-auto bg-white dark:bg-darkSoft z-50 rounded-xl show-modal">
         <ModalHeading handleHideModal={handleHideModal}>
           Edit profile
         </ModalHeading>
@@ -113,6 +113,7 @@ const ProfileEdit = ({ handleHideModal = () => {}, setOpenSnackbar }) => {
               <PictureAvatarBig
                 avatar={preview.avatar || avatar}
                 alt="avatar"
+                className="absolute bottom-0 p-1 left-5 translate-y-2/4"
                 size={110}
               >
                 <div className="absolute inset-0 flex items-center bg-black bg-opacity-25 rounded-full cursor-default">
@@ -167,7 +168,9 @@ const ProfileEdit = ({ handleHideModal = () => {}, setOpenSnackbar }) => {
                   </Label>
                   <span
                     className={`text-sm font-normal ${
-                      watchDesc?.length > 150 ? "text-errorColor" : "text-text3"
+                      watchDesc?.length > 150
+                        ? "text-errorColor"
+                        : "text-text3 dark:text-text4"
                     } `}
                   >
                     {watchDesc?.length || 0}/150
@@ -176,7 +179,7 @@ const ProfileEdit = ({ handleHideModal = () => {}, setOpenSnackbar }) => {
                 <TextareaAutosize
                   aria-label="empty textarea"
                   placeholder="Let's describe to yourself!"
-                  className="w-full px-5 py-4 transition-all border border-strock rounded-xl focus:border-primary text-[15px]"
+                  className="w-full px-5 py-4 transition-all bg-transparent border border-strock dark:border-gray-600 rounded-xl focus:border-primary focus:dark:border-primary text-[15px]"
                   name="desc"
                   minRows={3}
                   maxRows={10}

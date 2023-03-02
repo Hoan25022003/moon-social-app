@@ -12,7 +12,10 @@ const ButtonMenu = () => {
       aria-controls={open ? "composition-menu" : undefined}
       aria-expanded={open ? "true" : undefined}
       aria-haspopup="true"
-      onClick={setOpen}
+      onClick={(e) => {
+        e.stopPropagation();
+        setOpen();
+      }}
       sx={{
         minWidth: 0,
         padding: "6px",

@@ -1,15 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";
 import { useSearchParams } from "react-router-dom";
 
-const ProfileTabList = ({
-  children,
-  listTab = [],
-  // setSearchParams,
-  // searchParams,
-}) => {
+const ProfileTabList = ({ children, listTab = [] }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [value, setValue] = React.useState(
     searchParams.get("tab") || "picture"
@@ -29,10 +24,15 @@ const ProfileTabList = ({
         aria-label="secondary tabs example"
       >
         {listTab.map((tab, i) => (
-          <Tab value={tab} label={tab} key={i} />
+          <Tab
+            value={tab}
+            label={tab}
+            key={i}
+            className="capitalize transition-all rounded-sm hover:bg-graySoft hover:dark:bg-darkSoft"
+          />
         ))}
       </Tabs>
-      <div className="w-full h-[1px] bg-graySoft"></div>
+      <div className="w-full h-[1px] bg-graySoft dark:bg-gray-800"></div>
       {children}
     </div>
   );

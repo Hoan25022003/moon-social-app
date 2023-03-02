@@ -8,7 +8,7 @@ import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
 import ModalLine from "components/modal/ModalLine";
 import CommentItem from "./CommentItem";
-import { socket } from "api/axios";
+import { socket } from "api/config";
 import { getCommentList } from "redux/comments/commentRequest";
 import { deleteComment, newComment } from "redux/comments/commentSlice";
 import CommentSkeleton from "components/skeleton/CommentSkeleton";
@@ -40,9 +40,8 @@ const CommentFeature = ({ handleHideModal, post }) => {
       setIsTyping(false);
     });
 
-    socket.on("comment", ({ user, comment, time }) => {
-      const addedComment = { ...comment, userID: user };
-      dispatch(newComment(addedComment));
+    socket.on("comment", (comment) => {
+      dispatch(newComment(comment));
       const el = document.querySelector(".commentList");
       el.scrollTop = el.scrollHeight;
     });
@@ -69,12 +68,12 @@ const CommentFeature = ({ handleHideModal, post }) => {
 
   return (
     <Overlay handleHideModal={handleHideModal}>
-      <div className="w-[600px] mx-auto bg-white z-50 rounded-xl show-modal ">
+      <div className="w-[600px] mx-auto bg-white dark:bg-darkSoft z-50 rounded-xl show-modal ">
         <ModalHeading handleHideModal={handleHideModal}>
           Post comments
         </ModalHeading>
         <ModalLine />
-        <div className="flex flex-col px-5 py-4 max-h-[550px] overflow-auto">
+        <div className="flex flex-col px-5 py-4 max-h-[80vh] overflow-auto">
           <PostMeta
             timer="22 minutes previous"
             sizeAvatar={52}
@@ -82,19 +81,20 @@ const CommentFeature = ({ handleHideModal, post }) => {
           ></PostMeta>
           <div className="px-[26px] my-2 flex items-center">
             <div className="h-[45px] w-[2px] bg-[#ddd]"></div>
-            <p className="ml-5 text-sm text-text3">
-              Replying to <b className="text-thirdColor">Hoan Do</b>
+            <p className="ml-5 text-sm text-text3 dark:text-text4">
+              Replying to <b className="text-thirdColor">{authorID.lastName}</b>
             </p>
           </div>
           <div className="flex items-start gap-x-3">
             <Link to={"/profile/" + currentUser._id}>
               <Avatar
-                alt="Hoan"
+                alt={currentUser.firstName + " " + currentUser.lastName}
                 src={currentUser.avatar}
                 sx={{ width: 52, height: 52 }}
               />
             </Link>
             <CommentForm
+              postID={_id}
               isTyping={isTyping}
               emitTyping={emitTyping}
               emitStopTyping={emitStopTyping}
@@ -109,7 +109,11 @@ const CommentFeature = ({ handleHideModal, post }) => {
             )}
             {!loading && listComment?.length > 0 ? (
               listComment.map((comment) => (
-                <CommentItem key={comment._id} comment={comment} />
+                <CommentItem
+                  key={comment._id}
+                  comment={comment}
+                  isAuthor={authorID._id === comment?.userID._id}
+                />
               ))
             ) : (
               <EmptyLayout

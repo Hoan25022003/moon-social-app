@@ -1,7 +1,7 @@
 import React from "react";
 import SendIcon from "@mui/icons-material/Send";
 import { useForm } from "react-hook-form";
-import { socket } from "api/axios";
+import { socket } from "api/config";
 import { useParams } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -10,7 +10,12 @@ const schema = yup.object({
   content: yup.string().required(),
 });
 
-const MessageForm = ({ yourID, userInfo }) => {
+const MessageForm = ({
+  yourID,
+  reply = null,
+  onCloseReply = () => {},
+  userID = "",
+}) => {
   const {
     register,
     formState: { isDirty },
@@ -22,7 +27,17 @@ const MessageForm = ({ yourID, userInfo }) => {
   });
   const { id } = useParams();
   const handleChatMessage = (values) => {
-    socket.emit("send-message", { ...values, chatID: id, sender: yourID });
+    onCloseReply();
+    socket.emit("send-message", {
+      ...values,
+      chatID: id,
+      sender: yourID,
+      reply,
+    });
+    const audio = new Audio("/audio/message-124468.mp3");
+    audio.play();
+    socket.emit("rerender-chat", userID);
+    socket.emit("send-notify-message", userID);
     reset({
       content: "",
     });
@@ -33,30 +48,21 @@ const MessageForm = ({ yourID, userInfo }) => {
   };
   return (
     <form
-      className={`flex items-center w-full gap-x-3 px-5 py-3 sticky bottom-0 left-0 bg-white bg-opacity-95`}
+      className={`flex items-center gap-x-2`}
       onSubmit={handleSubmit(handleChatMessage)}
       autoComplete="off"
     >
-      {/* <TextareaAutosize
-        minRows={1}
-        maxRows={5}
-        placeholder="Type message in here"
-        autoFocus={true}
-        name="content"
-        className="w-full px-4 py-3 text-sm transition-all border border-none rounded-3xl text-text2 bg-whiteSoft focus:bg-graySoft"
-        {...register("content")}
-      /> */}
       <input
         type="text"
         placeholder="Type message in here"
         autoFocus={true}
         name="content"
-        className="w-full px-4 py-3 text-sm transition-all border border-none rounded-3xl text-text2 bg-whiteSoft focus:bg-graySoft"
+        className="w-full px-4 py-3 text-sm transition-all border border-none rounded-3xl text-text2 dark:text-white dark:bg-darkSoft bg-whiteSoft focus:bg-graySoft focus:dark:bg-gray-700"
         onKeyDown={handleTypingChat}
         {...register("content")}
       />
       <button
-        className={`flex items-center justify-center p-2 transition-all bg-transparent rounded-full cursor-pointer hover:bg-graySoft ${
+        className={`flex items-center justify-center p-2 transition-all bg-transparent rounded-full cursor-pointer hover:bg-graySoft hover:dark:bg-gray-700 ${
           !isDirty && "pointer-events-none"
         }`}
       >

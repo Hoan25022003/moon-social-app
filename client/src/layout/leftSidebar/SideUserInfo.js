@@ -7,7 +7,7 @@ import Avatar from "@mui/material/Avatar";
 import MenuNav from "components/menu/MenuNav";
 import MenuNavItem from "components/menu/MenuNavItem";
 import TextLight from "components/text/TextLight";
-import { socket } from "api/axios";
+import { socket } from "api/config";
 import { Skeleton } from "@mui/material";
 import useToggle from "hooks/useToggle";
 import Overlay from "components/common/Overlay";
@@ -30,7 +30,7 @@ const SideUserInfo = ({
   };
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between dark-skeleton">
         <Link to={url} className="flex items-center gap-x-3 w-fit">
           {avatar ? (
             <Avatar
@@ -43,7 +43,11 @@ const SideUserInfo = ({
           )}
           <div>
             {username ? (
-              <h3 className="text-[15px] font-semibold">{username || ""}</h3>
+              <h3 className="text-[15px] font-semibold">
+                {username.length > 10
+                  ? username.slice(0, 14) + "..."
+                  : username}
+              </h3>
             ) : (
               <Skeleton
                 variant="text"
@@ -73,7 +77,7 @@ const SideUserInfo = ({
       </div>
       {modalPassword && (
         <Overlay handleHideModal={setModalPassword} alignCenter={true}>
-          <div className="w-[550px] mx-auto bg-white z-50 rounded-xl show-modal">
+          <div className="w-[550px] mx-auto bg-white dark:bg-darkSoft z-50 rounded-xl show-modal">
             <ModalHeading handleHideModal={setModalPassword}>
               Change Password
             </ModalHeading>

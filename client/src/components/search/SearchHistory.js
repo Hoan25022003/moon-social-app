@@ -5,7 +5,7 @@ import SearchHeading from "./SearchHeading";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchHistory } from "redux/users/userSlice";
 import Cookies from "js-cookie";
-import axios from "api/axios";
+import axios from "api/config";
 import { useNavigate } from "react-router-dom";
 import EmptyLayout from "layout/EmptyLayout";
 
@@ -38,7 +38,7 @@ const SearchHistory = ({ stateFocus }) => {
   const checkEmpty = searchHistory && searchHistory.length > 0;
 
   return (
-    <div className="absolute left-0 w-full overflow-hidden translate-y-2 bg-white border rounded-lg shadow-md border-graySoft top-full">
+    <div className="absolute left-0 w-full overflow-hidden translate-y-2 bg-white border rounded-lg shadow-md dark:shadow-gray-500 dark:border-gray-700 dark:bg-darkSecondary border-graySoft top-full">
       <SearchHeading>
         {checkEmpty && (
           <ButtonRemoveAll onClick={handleRemoveAllSearch}>

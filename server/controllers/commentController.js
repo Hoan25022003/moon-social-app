@@ -3,7 +3,6 @@ const CommentModel = require("../models/CommentModel");
 const PostModel = require("../models/PostModel");
 
 const getCommentByPostID = asyncHandler(async (req, res) => {
-  const username = req.username;
   try {
     const listComment = await CommentModel.find({
       postID: req.params.id,
@@ -21,15 +20,16 @@ const handleAddComments = asyncHandler(async (req, res) => {
     if (!req.body.content || req.body.content.trim().length == 0) {
       return res.status(400).json("Comment must have 1 character at least");
     }
-    const { modeComment } = await PostModel.findById(req.params.id);
+    const { modeComment, authorID } = await PostModel.findById(req.params.id);
     if (!modeComment) res.status(400).json("Mode comment is turned off");
     else {
-      await CommentModel.create({
+      const { _id } = await CommentModel.create({
         ...req.body,
         userID: username._id,
         postID: req.params.id,
       });
-      res.json("Create successful!");
+      const newComment = await CommentModel.findById(_id).populate("userID");
+      res.json({ ...newComment._doc, authorID });
     }
   } catch (error) {
     res.status(500).json(error);

@@ -1,6 +1,9 @@
-import axios from "api/axios";
+import axios from "api/config";
 import Cookies from "js-cookie";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import verifyFriend from "utils/verifyFriend";
+import { loginRefresh } from "redux/auth/authSlice";
 
 export const userProfile = createAsyncThunk(
   "user/info",
@@ -44,7 +47,10 @@ export const userFriend = createAsyncThunk(
       let { listUser, listFriend } = res.data;
       listUser = listUser.map((user) => verifyFriend(listFriend, user));
       if (status) listUser = listUser.filter((user) => user.status === status);
-      return fulfillWithValue(listUser);
+      return fulfillWithValue([
+        ...listUser.filter((user) => user.status === 2),
+        ...listUser.filter((user) => user.status !== 2),
+      ]);
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -60,7 +66,7 @@ export const updateUserProfile = createAsyncThunk(
         if (value) formData.append(key, value);
       }
 
-      await axios({
+      const res = await axios({
         method: "PUT",
         url: "/users/update-info",
         data: formData,
@@ -69,37 +75,31 @@ export const updateUserProfile = createAsyncThunk(
           authorization: "Bearer " + Cookies.get("tokens"),
         },
       });
+      toast.success("Update successfully profile", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       dispatch(userProfile(userID));
+      dispatch(loginRefresh(res?.data));
+      return 1;
     } catch (err) {
-      console.log("UPDATE USER ERROR: ", err);
+      toast.error("Failed. Please try again!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      throw new Error(err);
     }
   }
 );
-
-function verifyFriend(listFriend, user) {
-  const checkList = listFriend.filter((friend) => friend._id === user._id)[0];
-  if (statusFriend(checkList?.isConfirmed) < 3) {
-    return {
-      ...user,
-      status: statusFriend(checkList?.isConfirmed),
-      isSender: checkList?.isSender,
-    };
-  }
-  return {
-    ...user,
-    status: 3,
-  };
-}
-
-function statusFriend(isConfirmed) {
-  switch (isConfirmed) {
-    case true:
-      return 1;
-
-    case false:
-      return 2;
-
-    default:
-      return 3;
-  }
-}

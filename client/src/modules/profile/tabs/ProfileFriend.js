@@ -22,7 +22,7 @@ const ProfileFriend = ({ listUserFriend }) => {
   return (
     <div className="p-4">
       {listFriend.length > 0 ? (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} className="dark:bg-darkSoft">
           <Table sx={{ width: "100%" }} aria-label="simple table">
             <TableHead>
               <TableRow>

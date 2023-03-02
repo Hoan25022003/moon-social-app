@@ -4,14 +4,15 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const http = require("http");
-const { Server } = require("socket.io");
-const UserModel = require("./models/UserModel");
+const socketIO = require("socket.io");
 const chatsHandler = require("./socket_io/chatsHandler");
 const commentHandler = require("./socket_io/commentHandler");
+const notifyHandler = require("./socket_io/notifyHandler");
+const userHandler = require("./socket_io/userHandler");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
+const io = socketIO(server, {
   cors: {
     origin: process.env.URL_CLIENT,
   },
@@ -31,81 +32,17 @@ app.use("/api/friends", require("./routes/friendRoute"));
 app.use("/api/posts", require("./routes/postRoute"));
 app.use("/api/comments", require("./routes/commentRoute"));
 app.use("/api/chats", require("./routes/chatRoute"));
+app.use("/api/notify", require("./routes/notifyRoute"));
 
 /* Socket handler */
 io.on("connection", (socket) => {
-  socket.on("client-connect", async (currentUser) => {
-    if (!currentUser) return;
-    try {
-      await UserModel.findByIdAndUpdate(currentUser._id, {
-        isActive: true,
-      });
-      const listActive = await UserModel.find(
-        {
-          isActive: true,
-        },
-        {
-          listSaved: 0,
-          coverImg: 0,
-          detailInfo: 0,
-          password: 0,
-        }
-      );
-      socket.broadcast.emit("user-active", listActive);
-    } catch (error) {
-      socket.emit("error", error);
-    }
-  });
-
-  socket.on("client-disconnect", async (currentUser) => {
-    if (!currentUser) return;
-    try {
-      await UserModel.findByIdAndUpdate(currentUser._id, {
-        isActive: false,
-      });
-      const listActive = await UserModel.find(
-        {
-          isActive: true,
-        },
-        {
-          listSaved: 0,
-          coverImg: 0,
-          detailInfo: 0,
-          password: 0,
-        }
-      );
-      socket.broadcast.emit("user-active", listActive);
-    } catch (error) {
-      socket.emit("error", error);
-    }
-  });
-
-  socket.on("logout-active", async (currentUser) => {
-    if (!currentUser) return;
-    try {
-      await UserModel.findByIdAndUpdate(currentUser._id, {
-        isActive: false,
-      });
-      const listActive = await UserModel.find(
-        {
-          isActive: true,
-        },
-        {
-          listSaved: 0,
-          coverImg: 0,
-          detailInfo: 0,
-          password: 0,
-        }
-      );
-      socket.broadcast.emit("user-active", listActive);
-    } catch (error) {
-      socket.emit("error", error);
-    }
-  });
+  userHandler(socket, io);
 
   chatsHandler(socket, io);
 
   commentHandler(socket, io);
+
+  notifyHandler(socket, io);
 
   socket.on("disconnect", async (reason) => {
     console.log("User 1 disconnected because " + reason);

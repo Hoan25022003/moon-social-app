@@ -15,6 +15,7 @@ const MessageSchema = mongoose.Schema(
       trim: true,
       required: true,
     },
+    reply: Object,
   },
   { timestamps: true }
 );

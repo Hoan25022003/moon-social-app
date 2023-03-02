@@ -1,12 +1,14 @@
 const asyncHandler = require("express-async-handler");
-const removeTones = require("../utils/removeTones");
 const UserModel = require("../models/UserModel");
 const PostModel = require("../models/PostModel");
 const FriendModel = require("../models/FriendModel");
 const ImageModel = require("../models/ImageModel");
 const cloudinary = require("../config/cloudinary");
-const shuffleArray = require("../utils/shuffleArray");
 const ChatModel = require("../models/ChatModel");
+const NotifyModel = require("../models/NotifyModel");
+const shuffleArray = require("../utils/shuffleArray");
+const removeTones = require("../utils/removeTones");
+const getAllFriend = require("../utils/getAllFriend");
 
 let monthNames = [
   "January",
@@ -23,31 +25,6 @@ let monthNames = [
   "December",
 ];
 
-async function getAllFriend(username) {
-  const listFriend = await FriendModel.find({
-    $or: [
-      {
-        from: username._id,
-      },
-      { to: username._id },
-    ],
-  }).populate(["from", "to"]);
-  var listUser = [];
-  listFriend.map((item) => {
-    if (item.from.email === username.email)
-      listUser = [
-        ...listUser,
-        { ...item.to._doc, isConfirmed: item.isConfirmed, isSender: true },
-      ];
-    else
-      listUser = [
-        ...listUser,
-        { ...item.from._doc, isConfirmed: item.isConfirmed, isSender: false },
-      ];
-  });
-  return listUser;
-}
-
 function searchListByName(str, name) {
   return removeTones(str.toLowerCase()).includes(
     removeTones(name.toLowerCase())
@@ -57,7 +34,7 @@ function searchListByName(str, name) {
 const getUserList = asyncHandler(async (req, res) => {
   const username = req.username;
   try {
-    const { gender, name, status } = req.query;
+    const { gender, name } = req.query;
     const filterQuery = (key, query) => query && { [key]: query };
     let listUser = await UserModel.find(
       {
@@ -103,6 +80,7 @@ const getUserDetail = asyncHandler(async (req, res) => {
           },
           { to: req.params.id },
         ],
+        isConfirmed: true,
       }).populate(["from", "to"]);
       res.json({
         userInfo: {
@@ -231,9 +209,9 @@ const handleUpdateInfo = asyncHandler(async (req, res) => {
         desc: req.body.desc,
       },
     });
-    res.json("Update success");
+    const userInfo = await UserModel.findById(username._id);
+    res.json(userInfo);
   } catch (error) {
-    console.log("error: ", error);
     res.status(500).json(error);
   }
 });

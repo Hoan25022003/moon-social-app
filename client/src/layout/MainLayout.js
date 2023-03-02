@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { socket } from "api/axios";
+import { socket } from "api/config";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import SideNav from "./leftSidebar/SideNav";
@@ -12,6 +12,9 @@ import useCheckLogin from "hooks/useCheckLogin";
 import { addUserActive } from "redux/chats/chatSlice";
 import SideSearchInput from "./rightSidebar/SideSearchInput";
 import SidePassword from "./leftSidebar/SidePassword";
+import { toast } from "react-toastify";
+import jwtDecode from "jwt-decode";
+import Cookies from "js-cookie";
 
 const MainLayout = () => {
   const { currentUser } = useCheckLogin();
@@ -20,22 +23,43 @@ const MainLayout = () => {
   useEffect(() => {
     socket.connect();
 
+    socket.on("receive-notify-message", (userID) => {
+      const decodedToken = jwtDecode(Cookies.get("tokens"));
+      if (userID === decodedToken?._id) {
+        const audio = new Audio("/audio/new-message.mp3");
+        audio.play();
+        if (!location.pathname.includes("/chats")) {
+          toast.info("You have a new message", {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      }
+    });
+
     window.addEventListener("beforeunload", function () {
       socket.emit("client-disconnect", currentUser);
     });
 
-    setInterval(() => {
-      socket.emit("client-connect", currentUser);
-      socket.on("user-active", (data) => {
-        dispatch(addUserActive(data));
-      });
-    }, 10000);
+    socket.on("user-active", (data) => {
+      dispatch(addUserActive(data));
+    });
 
     return () => {
       socket.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    currentUser && socket.emit("client-connect", currentUser);
+  }, [currentUser]);
 
   return (
     <div className="max-w-[1200px] mx-auto">
@@ -53,7 +77,9 @@ const MainLayout = () => {
               className="flex items-center gap-x-4"
             >
               <img src="/moon.png" alt="" className="w-10 h-10" />
-              <h3 className="text-2xl font-bold text-text2">Moon Star</h3>
+              <h3 className="text-2xl font-bold text-text2 dark:text-text4">
+                Moon Star
+              </h3>
             </Link>
             <SideNav></SideNav>
           </div>
@@ -72,7 +98,7 @@ const MainLayout = () => {
             </SideUserInfo>
           </div>
         </div>
-        <div className="flex-[2.5] border-b border-x border-graySoft min-h-screen">
+        <div className="flex-[2.5] border-b border-x border-graySoft dark:border-gray-700 min-h-screen">
           <Outlet></Outlet>
         </div>
         <div className="sticky top-0 flex-[1.5] z-40 overflow-auto h-[100vh] py-4 scroll-custom">

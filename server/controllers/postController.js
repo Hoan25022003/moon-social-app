@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const cloudinary = require("../config/cloudinary");
 const CommentModel = require("../models/CommentModel");
 const ImageModel = require("../models/ImageModel");
+const NotifyModel = require("../models/NotifyModel");
 const PostModel = require("../models/PostModel");
 const UserModel = require("../models/UserModel");
 const removeTones = require("../utils/removeTones");
@@ -24,24 +25,8 @@ function searchListByContent(str, content) {
   );
 }
 
-function mergeArrayUnique(Arr1, Arr2) {
-  const Arr = [...Arr1, ...Arr2];
-  const ArToObj = {};
-  const res = [];
-  for (const item of Arr) {
-    ArToObj[item._id] = item;
-  }
-
-  for (const [key, value] of Object.entries(ArToObj)) {
-    res.push(value);
-  }
-  return res;
-}
-
 const getPostList = asyncHandler(async (req, res) => {
   const username = req.username;
-  const { keyword, by } = req.query;
-
   try {
     let listPost = await PostModel.find({}).populate("authorID", [
       "_id",
@@ -50,6 +35,8 @@ const getPostList = asyncHandler(async (req, res) => {
       "lastName",
       "avatar",
     ]);
+
+    const { keyword, by } = req.query;
     if (keyword) {
       listPost = listPost.filter((post) =>
         searchListByContent(post.content, keyword)
@@ -96,27 +83,48 @@ const getPostPersonal = asyncHandler(async (req, res) => {
   const username = req.username;
   try {
     const { id } = req.params;
-    const { by } = req.query;
     const userInfo = await UserModel.findById(id);
+    let postDetail = await PostModel.findById(id).populate("authorID", [
+      "_id",
+      "email",
+      "firstName",
+      "lastName",
+      "avatar",
+    ]);
     if (userInfo) {
-      const condition = !by ? { authorID: id } : {};
-      let listPost = await PostModel.find(condition).populate("authorID", [
-        "_id",
-        "email",
-        "firstName",
-        "lastName",
-        "avatar",
-      ]);
-      let listNewPost = await checkSavedAndLiked(listPost, username);
+      const { by } = req.query;
+      const condition = !by
+        ? { authorID: id }
+        : {
+            listHeart: id,
+          };
+      let listPost = await PostModel.find(condition)
+        .populate("authorID", [
+          "_id",
+          "email",
+          "firstName",
+          "lastName",
+          "avatar",
+        ])
+        .sort({ createdAt: -1 });
+
       if (by) {
-        listNewPost = listNewPost.filter((post) => {
-          if (by === "liked") return post.isLiked;
-          return post.saved;
-        });
+        if (by === "liked") {
+          listPost = await checkSavedAndLiked(listPost, userInfo);
+          listPost = listPost.filter((post) => post.isLiked);
+        } else {
+          listPost = await checkSavedAndLiked(listPost, username);
+          listPost = listPost.filter((post) => {
+            return post.saved;
+          });
+        }
       }
       res.json({
-        listPost: listNewPost,
+        listPost: await checkSavedAndLiked(listPost, username),
       });
+    } else if (postDetail) {
+      postDetail = (await checkSavedAndLiked([postDetail], username))[0];
+      res.json(postDetail);
     } else res.status(400).json("User invalid");
   } catch (error) {
     res.status(500).json(error);
@@ -145,45 +153,48 @@ const handleCreatePost = asyncHandler(async (req, res) => {
   const username = req.username;
   try {
     const { type } = req.body;
+    let newPost;
     if (type === "theme") {
-      await PostModel.create({
+      newPost = await PostModel.create({
         ...req.body,
         authorID: username._id,
         theme: req.body.theme || { linkImg: null },
       });
-      res.json({ mess: "Create success post theme" });
+      res.json(newPost);
     } else if (type === "image") {
       const files = req.files.publicImg;
       var listImg = [];
-      for (const file of files) {
-        const data = await cloudinary.upload(file.path, {
-          folder: "moon-stars",
-        });
-        await ImageModel.create({
-          name: data.original_filename,
-          link: data.url,
-          userID: username._id,
-        });
-        listImg.push(data.url);
+      if (files && files.length > 0) {
+        for (const file of files) {
+          const data = await cloudinary.upload(file.path, {
+            folder: "moon-stars",
+          });
+          await ImageModel.create({
+            name: data.original_filename,
+            link: data.url,
+            userID: username._id,
+          });
+          listImg.push(data.url);
+        }
       }
-      await PostModel.create({
+      newPost = await PostModel.create({
         ...req.body,
         authorID: username._id,
         listImg,
       });
-      res.json("Upload image and create success post");
+      res.json(newPost);
     } else if (type === "video") {
       const file = req.files.videoUpload[0];
       const data = await cloudinary.upload(file.path, {
         folder: "moon-stars",
         resource_type: "video",
       });
-      await PostModel.create({
+      newPost = await PostModel.create({
         ...req.body,
         authorID: username._id,
         linkVideo: data.url,
       });
-      res.json("Upload video and create success post");
+      res.json(newPost);
     } else res.status(400).json("Invalid post type");
   } catch (error) {
     res.status(500).json({ error, mess: "Error server" });
@@ -241,7 +252,10 @@ const handleDeletePost = asyncHandler(async (req, res) => {
     });
     if (postInfo) {
       await CommentModel.deleteMany({
-        postID: postInfo._id,
+        postID: req.params.id,
+      });
+      await NotifyModel.deleteOne({
+        postID: req.params.id,
       });
       const listUserSavedPost = await UserModel.find({
         listSaved: req.params.id,
@@ -250,6 +264,10 @@ const handleDeletePost = asyncHandler(async (req, res) => {
         await UserModel.findByIdAndUpdate(user._id, {
           listSaved: user.listSaved.filter((postID) => postID != req.params.id),
         });
+      }
+      if (postInfo.type === "video") {
+        const publicID = postInfo.linkVideo.split("/").pop().split(".")[0];
+        await cloudinary.destroy("moon-stars/" + publicID);
       }
       res.json("Delete success");
     } else res.status(400).json("Catch error");

@@ -1,7 +1,8 @@
-import axios from "api/axios";
+import axios from "api/config";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { logoutAccount } from "./authSlice";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 export const loginUser = createAsyncThunk(
   "auth/login",
@@ -37,6 +38,16 @@ export const registerUser = createAsyncThunk(
       });
       reset(initialValue);
       navigate("/login");
+      toast.success("Register success", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       return res.data;
     } catch (error) {
       if (error.response.status === 400) {
@@ -49,9 +60,9 @@ export const registerUser = createAsyncThunk(
 export const logoutUser = async (dispatch) => {
   try {
     await axios.post("/auth/logout");
+    dispatch(logoutAccount());
     Cookies.remove("tokens");
     window.location.href = "/login";
-    dispatch(logoutAccount());
   } catch (error) {
     console.log(error);
   }

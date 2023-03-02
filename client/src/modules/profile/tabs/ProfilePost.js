@@ -22,7 +22,7 @@ const ProfilePost = ({ yourSelf }) => {
         <PostFeature
           linkInfo={"/profile/" + currentUser?._id}
           avatar={currentUser?.avatar}
-          username={currentUser?.firstName}
+          username={currentUser?.lastName}
         ></PostFeature>
       )}
       {loading ? (
@@ -30,14 +30,14 @@ const ProfilePost = ({ yourSelf }) => {
           <PostSkeleton></PostSkeleton>
           <PostSkeleton></PostSkeleton>
         </>
-      ) : listPost.length > 0 ? (
+      ) : listPost?.length > 0 ? (
         listPost.map((post) => (
           <PostItem key={post._id} postInfo={post}></PostItem>
         ))
       ) : (
         <EmptyLayout
           linkImg="/img/profile-empty.png"
-          info="This user has not liked any posts yet"
+          info="This user has not liked or posted yet"
           support="Please switch to other page."
         ></EmptyLayout>
       )}

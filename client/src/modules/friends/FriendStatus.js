@@ -1,6 +1,6 @@
-import { Button, CircularProgress } from "@mui/material";
-import useAddFriend from "hooks/useAddFriend";
 import React from "react";
+import useAddFriend from "hooks/useAddFriend";
+import { Button, CircularProgress } from "@mui/material";
 
 const FriendStatus = ({ className = "", status, isSender, userID }) => {
   const classGeneral = `${className} capitalize rounded-full`;
@@ -11,7 +11,7 @@ const FriendStatus = ({ className = "", status, isSender, userID }) => {
       return (
         <Button
           variant="outlined"
-          className={`${classGeneral} hover:bg-graySoft text-primary border-primary`}
+          className={`${classGeneral} hover:bg-graySoft hover:dark:bg-gray-700 text-primary border-primary`}
           onClick={handleCancel}
         >
           Unfriend
@@ -40,7 +40,10 @@ const FriendStatus = ({ className = "", status, isSender, userID }) => {
             </Button>
             <Button
               variant="contained"
-              className={classGeneral + "  bg-strock text-text1"}
+              className={
+                classGeneral +
+                "  bg-strock text-text1 dark:bg-darkStroke dark:text-white"
+              }
               onClick={handleCancel}
             >
               Cancel

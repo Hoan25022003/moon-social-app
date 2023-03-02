@@ -6,7 +6,6 @@ const UserModel = require("../models/UserModel");
 
 module.exports = function commentHandler(socket, io) {
   socket.on("join", ({ user, post }) => {
-    // console.log("new user join");
     const newUser = userJoin(socket.id, user, post);
     socket.join(newUser.post);
   });
@@ -33,32 +32,8 @@ module.exports = function commentHandler(socket, io) {
   socket.on("sendComment", async (comment) => {
     const currentUser = getCurrentUser(socket.id)[0];
     try {
-      if (!comment || !currentUser) {
-        return socket.emit("error", "Server error");
-      }
-      const post = await PostModel.findById(currentUser.post);
-      if (!post?.modeComment) {
-        return socket.emit("error", "Server error");
-      } else {
-        const addComment = await CommentModel.create({
-          ...comment,
-          userID: currentUser.user,
-          postID: currentUser.post,
-        });
-        const newComment = await CommentModel.findById(addComment._id).populate(
-          "userID"
-        );
-        // newComment.save(function (err, comment) {
-        //   console.log(comment);
-        //   newComment._id = comment._id;
-        // });
-        // const newComment = CommentModel.findById
-        const user = await UserModel.findById(currentUser.user);
-        io.to(currentUser.post).emit(
-          "comment",
-          formatComment(user, newComment)
-        );
-      }
+      if (!currentUser) socket.emit("error", "Invalid user");
+      io.to(currentUser.post).emit("comment", comment);
     } catch (err) {
       socket.emit("error", err);
     }
@@ -68,8 +43,6 @@ module.exports = function commentHandler(socket, io) {
     const currentUser = getCurrentUser(socket.id)[0];
     try {
       const deleteComment = await CommentModel.findById(commentId);
-      // console.log("DELETE COMMENT: ", deleteComment);
-      // console.log(currentUser.user);
       if (!deleteComment && currentUser.user !== deleteComment.userID) {
         return socket.emit("error", "Authorization");
       }

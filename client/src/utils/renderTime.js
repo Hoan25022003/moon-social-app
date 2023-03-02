@@ -6,15 +6,15 @@ export default function renderTime(time) {
       case livingTime < 3:
         return "Just now";
       case livingTime < 60:
-        return `${Math.floor(livingTime)} minutes previous`;
+        return `${Math.floor(livingTime)} minutes ago`;
       case livingTime < 1440:
-        return `${Math.floor(livingTime / 60)} hours previous`;
+        return `${Math.floor(livingTime / 60)} hours ago`;
       case livingTime < 44640:
-        return `${Math.floor(livingTime / 1440)} days previous`;
+        return `${Math.floor(livingTime / 1440)} days ago`;
       case livingTime < 525600:
-        return `${Math.floor(livingTime / 43200)} months previous`;
+        return `${Math.floor(livingTime / 43200)} months ago`;
       default:
-        return `${Math.floor(livingTime / 525600)} years previous`;
+        return `${Math.floor(livingTime / 525600)} years ago`;
     }
   }
   return time;

@@ -28,9 +28,14 @@ const chatSlice = createSlice({
       state.messageInfo.listMessage.push(payload);
     },
     removeMessage: (state, { payload }) => {
-      state.messageInfo.listMessage = state.messageInfo.listMessage.filter(
-        (mess) => mess._id !== payload._id
-      );
+      state.messageInfo.listMessage = state.messageInfo.listMessage
+        .filter((mess) => mess._id !== payload._id)
+        // eslint-disable-next-line array-callback-return
+        .map((mess) => {
+          return mess.reply && payload._id === mess.reply.id
+            ? { ...mess, reply: null }
+            : mess;
+        });
     },
     newChatList: (state, { payload }) => {
       state.chatInfo.listChats = payload;

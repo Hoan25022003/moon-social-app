@@ -1,5 +1,5 @@
 import useToggle from "hooks/useToggle";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef } from "react";
 
 const MenuContext = createContext();
 function MenuProvider({ ...props }) {

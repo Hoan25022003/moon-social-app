@@ -7,7 +7,7 @@ const MessageProfile = ({ userInfo = {}, loading = false }) => {
   return (
     <div className="flex flex-col items-center justify-center my-10">
       {loading ? (
-        <>
+        <div className="dark-skeleton">
           <Skeleton variant="circular" width={100} height={100} />
           <Skeleton
             variant="text"
@@ -17,7 +17,7 @@ const MessageProfile = ({ userInfo = {}, loading = false }) => {
             variant="text"
             sx={{ fontSize: "18px", width: "120px", marginTop: "4px" }}
           />
-        </>
+        </div>
       ) : (
         <>
           <Avatar src={avatar} sx={{ width: 100, height: 100 }}></Avatar>

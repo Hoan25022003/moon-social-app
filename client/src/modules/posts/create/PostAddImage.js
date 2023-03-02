@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import ButtonGradient from "components/button/ButtonGradient";
 import PictureUpload from "components/picture/PictureUpload";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import CloseIcon from "@mui/icons-material/Close";
 import ButtonRemoveAll from "components/button/ButtonRemoveAll";
 import { addNewPost } from "redux/posts/postRequest";
-import convertLineBreak from "utils/convertLineBreak";
 
 const PostAddImage = () => {
   const { currentUser } = useSelector((state) => state.auth.login);
@@ -29,7 +27,6 @@ const PostAddImage = () => {
   });
   let watchSelectedFile = watch("publicImg");
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { loading } = useSelector((state) => state.posts.createPost);
   const [preview, setPreview] = useState([]);
   const [loadPreview, setLoadPreview] = useState(false);
@@ -70,20 +67,18 @@ const PostAddImage = () => {
   const handlePostImage = (value) => {
     const data = {
       ...value,
-      content: convertLineBreak(value.content),
       type: "image",
     };
-    dispatch(addNewPost({ data, navigate, reset }));
+    dispatch(addNewPost({ data, reset }));
   };
   return (
     <form onSubmit={handleSubmit(handlePostImage)} className="mt-3 select-none">
-      <div className="max-h-[420px] overflow-auto scroll-custom">
+      <div className="max-h-[60vh] overflow-auto scroll-custom">
         <TextareaAutosize
           aria-label="empty textarea"
           minRows={3}
-          maxRows={8}
           placeholder={`Hi ${currentUser?.firstName}, what are you thinking?`}
-          className="w-full mb-8 overflow-auto text-base font-normal scroll-custom"
+          className="w-full mb-8 overflow-auto text-base font-normal bg-transparent scroll-custom"
           {...register("content")}
         />
         <div className="relative flex flex-col gap-y-5">
@@ -115,9 +110,9 @@ const PostAddImage = () => {
             </>
           )}
           <PictureUpload
-            className={`h-[200px] flex flex-col justify-center bg-whiteSoft items-center rounded-lg ${
+            className={`h-[210px] flex flex-col justify-center bg-whiteSoft dark:bg-gray-700 items-center rounded-lg ${
               loadPreview && "pointer-events-none"
-            } hover:bg-graySoft`}
+            } hover:bg-graySoft hover:dark:bg-gray-600`}
             name="publicImg"
             control={control}
             onChange={handleSelectFile}

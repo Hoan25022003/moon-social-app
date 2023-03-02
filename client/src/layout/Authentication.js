@@ -1,19 +1,20 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { colorGradient } from "utils/constant";
-import AlertInfo from "components/alert/AlertInfo";
-import { useDispatch, useSelector } from "react-redux";
-import { useCheckUser } from "hooks/useCheckLogin";
-import { resetRegister } from "redux/auth/authSlice";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import jwtDecode from "jwt-decode";
 
 const Authentication = ({ children, heading }) => {
-  useCheckUser();
-  const { success } = useSelector((state) => state.auth.register);
-  const dispatch = useDispatch();
+  const tokens = Cookies.get("tokens");
+  const navigate = useNavigate();
   useEffect(() => {
-    if (success) setTimeout(() => dispatch(resetRegister()), 3000);
+    if (tokens) {
+      const decodedToken = jwtDecode(tokens);
+      decodedToken && navigate("/home");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [success]);
+  }, []);
   return (
     <div className="w-full h-[100vh] flex items-start">
       <div className="w-[1200px] mx-auto grid gap-x-8 grid-cols-[1fr,1.5fr] mt-10">
@@ -45,7 +46,6 @@ const Authentication = ({ children, heading }) => {
           </div>
         </div>
       </div>
-      <AlertInfo open={success}>Register successful</AlertInfo>
     </div>
   );
 };

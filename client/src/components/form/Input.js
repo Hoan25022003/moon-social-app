@@ -20,11 +20,11 @@ const Input = ({
       type={type}
       placeholder={placeholder}
       id={name}
-      className={`w-full px-5 py-4 transition-all border rounded-lg ${
+      className={`w-full px-5 py-4 transition-all bg-transparent border rounded-lg ${
         error
-          ? "border-errorColor bg-red-50"
-          : "border-strock focus:border-primary"
-      } ${className}`}
+          ? "border-errorColor bg-red-50 dark:bg-red-400 dark:bg-opacity-10"
+          : "border-strock dark:border-gray-600 focus:border-primary focus:dark:border-primary"
+      }${className}`}
       {...field}
       {...props}
     />

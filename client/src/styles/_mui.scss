@@ -1,32 +1,23 @@
 // Customize Radio
-.MuiFormControlLabel-root {
-  .css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
-    @apply text-primary;
+.MuiRadio-root {
+  &.MuiRadio-colorPrimary {
+    @apply text-text4 dark:text-text2;
+    &.Mui-checked {
+      @apply text-primary;
+    }
   }
-}
-
-.css-vqmohf-MuiButtonBase-root-MuiRadio-root {
-  &.Mui-checked {
-    color: #0072ff !important;
-  }
-  // .css-hyxlzm {
-  //   @apply items-center justify-center;
-  // }
-  .css-1hbvpl3-MuiSvgIcon-root {
-    @apply w-5 h-5;
-  }
-  .css-11zohuh-MuiSvgIcon-root {
+  & .MuiSvgIcon-root {
     @apply w-5 h-5;
   }
 }
 
 // Customize checkbox
-.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root {
+.MuiCheckbox-root {
   &.Mui-checked,
   &.MuiCheckbox-indeterminate {
-    color: #0072ff !important;
+    @apply text-primary;
   }
-  color: #a2a2a8 !important;
+  @apply text-iconColor;
 }
 
 // Customize Switch
@@ -41,48 +32,48 @@
 }
 
 // Customize Menu
-.css-c58f4n-MuiButtonBase-root-MuiButton-root {
-  @apply p-1 min-w-0 text-graySoft h-10 w-10;
-}
-
-// Customize Tabs
-.css-1ujnqem-MuiTabs-root {
-  .css-11yukd5-MuiTabs-indicator {
-    @apply bg-primary h-[3px] rounded-xl;
-  }
-  .css-1a4cg4j-MuiButtonBase-root-MuiTab-root {
-    @apply text-text3 capitalize flex-1 hover:bg-graySoft transition-all font-body;
-    &.Mui-selected {
-      @apply text-primary pointer-events-none;
+.MuiPopperUnstyled-root {
+  & .MuiPaper-root {
+    @apply dark:bg-darkSoft2 dark:text-white;
+    & .MuiMenuItem-root {
+      @apply hover:dark:bg-gray-700;
     }
   }
 }
 
-// Custom dropdown
-.MuiFormControl-root {
-  .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
-    border-radius: 12px;
-  }
-  .css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
-    border-radius: 8px;
+// Customize Skeleton
+.dark-skeleton {
+  & .MuiSkeleton-root {
+    @apply dark:bg-gray-600;
   }
 }
 
-.css-6hp17o-MuiList-root-MuiMenu-list {
-  max-height: 160px;
+// Customize Tabs
+.MuiTabs-root {
+  & .MuiButtonBase-root {
+    @apply text-text3 dark:text-text4;
+    &.Mui-selected {
+      @apply text-primary pointer-events-none;
+    }
+  }
+  & .MuiTabs-indicator {
+    height: 3px;
+    @apply bg-primary rounded-xl;
+  }
 }
 
 // Custom Dialog
-.css-hz1bth-MuiDialog-container {
-  .css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+.MuiDialog-container {
+  .MuiPaper-root {
     width: 400px;
     max-width: 450px;
+    @apply dark:bg-darkSecondary dark:text-white;
   }
 }
 
 // Custom Table
-.css-gh8rj1-MuiTable-root {
-  .css-1ex1afd-MuiTableCell-root {
-    @apply py-3;
+.MuiTableRow-root {
+  & .MuiTableCell-root {
+    @apply dark:text-white p-3 dark:border-b-gray-600;
   }
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Switch from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -51,10 +51,22 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 }));
 
 const SideDarkMode = () => {
-  const [checked, setChecked] = React.useState(false);
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem("dark-mode");
+    setChecked(storedTheme === "true");
+  }, []);
+
+  useEffect(() => {
+    checked
+      ? document.querySelector("html").classList.add("dark")
+      : document.querySelector("html").classList.remove("dark");
+  }, [checked]);
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
+    localStorage.setItem("dark-mode", event.target.checked);
   };
 
   return (

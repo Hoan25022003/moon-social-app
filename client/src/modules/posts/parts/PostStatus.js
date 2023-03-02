@@ -12,7 +12,7 @@ const PostStatus = ({
 }) => {
   return (
     <div
-      className={`flex items-center cursor-pointer group gap-x-2 select-none text-text3 ${className}`}
+      className={`flex items-center cursor-pointer group gap-x-2 select-none text-text3 dark:text-text4 ${className}`}
       title={title}
       onClick={onClick}
     >

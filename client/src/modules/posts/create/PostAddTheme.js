@@ -7,7 +7,6 @@ import { Navigation } from "swiper";
 import { listTheme } from "utils/constant";
 import ButtonGradient from "components/button/ButtonGradient";
 import { useNavigate } from "react-router-dom";
-import convertLineBreak from "utils/convertLineBreak";
 
 const PostAddTheme = () => {
   const { currentUser } = useSelector((state) => state.auth.login);
@@ -25,7 +24,6 @@ const PostAddTheme = () => {
   const handleAddPost = async (value) => {
     const data = {
       ...value,
-      content: convertLineBreak(value.content),
       type: "theme",
     };
     dispatch(addNewPost({ data, navigate, reset }));
@@ -43,7 +41,7 @@ const PostAddTheme = () => {
           <div className="relative w-full max-h-[300px] overflow-hidden rounded-xl scroll-custom">
             <img src={watchTheme?.linkImg} alt="" />
             <textarea
-              className={`absolute w-full min-h-[220px] scroll-custom p-4 text-xl font-medium text-center bg-transparent top-5 ${watchTheme?.textColor}`}
+              className={`absolute w-full min-h-[220px] scroll-custom p-4 text-xl font-medium text-center bg-transparent top-5 placeholder:text-text4 ${watchTheme?.textColor}`}
               placeholder={`Hi ${currentUser?.firstName}, what are you thinking?`}
               {...register("content")}
             ></textarea>
@@ -59,7 +57,7 @@ const PostAddTheme = () => {
           >
             <SwiperSlide>
               <div
-                className={`h-10 rounded-md cursor-pointer bg-graySoft ${
+                className={`h-10 rounded-md cursor-pointer bg-graySoft dark:bg-gray-700 ${
                   !watchTheme && "theme-active"
                 }`}
                 onClick={(e) => setValue("theme", "")}

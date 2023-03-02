@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { socket } from "api/axios";
+import { socket } from "api/config";
 import { Avatar, Tooltip } from "@mui/material";
 import TextUsername from "components/text/TextUsername";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -8,8 +8,9 @@ import { Link } from "react-router-dom";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import AlertDialog from "components/alert/AlertDialog";
 import renderTime from "utils/renderTime";
+import parse from "html-react-parser";
 
-const CommentItem = ({ comment }) => {
+const CommentItem = ({ comment, isAuthor = false }) => {
   const { currentUser } = useSelector((state) => state.auth.login);
   const { content, userID, createdAt } = comment;
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -28,24 +29,31 @@ const CommentItem = ({ comment }) => {
           />
         </Link>
         <div>
-          <div className="flex items-center gap-x-2">
+          <div className="flex items-center gap-x-1">
             <TextUsername>{fullName}</TextUsername>
-            {/* <Tooltip title="Author">
-              <VerifiedIcon className="text-xl text-primary" />
-            </Tooltip> */}
-            <p className="text-[13px] font-normal text-text4">
+            {isAuthor && (
+              <VerifiedIcon
+                className="text-xl text-primary"
+                titleAccess="Author"
+              />
+            )}
+            <p className="text-[13px] font-normal text-text4 ml-1">
               {renderTime(createdAt)}
             </p>
           </div>
           <div className="flex items-start mt-1 gap-x-2">
-            <h5 className="text-[15px] font-normal text-text2">{content}</h5>
+            <h5 className="text-[15px] font-normal text-text2 dark:text-whiteSoft">
+              {parse(content)}
+            </h5>
             {userID?._id === currentUser?._id && (
               <Tooltip
-                title="Delete comment"
                 className="cursor-pointer opacity-80"
                 onClick={() => setOpenDialog(true)}
               >
-                <DeleteIcon className="text-xl text-iconColor" />
+                <DeleteIcon
+                  className="text-xl text-iconColor"
+                  titleAccess="Delete comment"
+                />
               </Tooltip>
             )}
           </div>

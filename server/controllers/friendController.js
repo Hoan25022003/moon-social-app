@@ -85,7 +85,6 @@ const handleCancelFriend = asyncHandler(async (req, res) => {
   try {
     const friendExisted = await checkExisted(username._id, req.params.id);
     if (friendExisted) {
-      console.log(friendExisted);
       await FriendModel.findByIdAndDelete(friendExisted._id);
       const chatInfo = await ChatModel.findOneAndUpdate(
         {

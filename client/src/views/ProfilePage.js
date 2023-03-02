@@ -3,7 +3,6 @@ import useTurnSwitch from "hooks/useTurnSwitch";
 import { useDispatch, useSelector } from "react-redux";
 import { userProfile } from "redux/users/userRequest";
 import { useNavigate, useParams } from "react-router-dom";
-import { useLoadingContext } from "react-router-loading";
 import BackPage from "components/common/BackPage";
 import ProfileFeature from "modules/profile/ProfileFeature";
 import ProfileGeneral from "modules/profile/ProfileGeneral";
@@ -20,21 +19,22 @@ import Skeleton from "@mui/material/Skeleton";
 import ProfileLoading from "modules/profile/ProfileLoading";
 import PictureDialog from "components/picture/PictureDialog";
 import useBackdropPicture from "hooks/useBackropPicture";
+import { resetProfile } from "redux/users/userSlice";
 
 const listTab = ["picture", "posts", "friends", "likes"];
 
 const PersonalPage = () => {
-  const loadingContext = useLoadingContext();
   const { currentUser } = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
-  const { keyName: tabName, switchTab } = useTurnSwitch("tab");
+  const { keyName: tabName, switchTab } = useTurnSwitch("tab", "picture");
   const { handleShowBackdrop, ...others } = useBackdropPicture();
   useEffect(() => {
     dispatch(userProfile(id));
+    return () => dispatch(resetProfile());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id]);
   const { loading, error, userInfo, yourSelf } = useSelector(
     (state) => state.users.profile
   );
@@ -45,10 +45,9 @@ const PersonalPage = () => {
     else error && navigate("/home");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo, error]);
-  if (!loading) loadingContext.done();
   return (
     <>
-      <BackPage turnSwitchTab={switchTab}>
+      <BackPage turnSwitchTab={switchTab + 1}>
         <div className="flex flex-col">
           <h4 className="text-lg font-bold">
             {!loading ? fullName : "Waiting ..."}
@@ -77,6 +76,7 @@ const PersonalPage = () => {
             <PictureAvatarBig
               avatar={userInfo?.avatar}
               alt={fullName}
+              className="absolute bottom-0 p-1 left-5 translate-y-2/4"
               onClick={() => handleShowBackdrop(userInfo?.avatar)}
             />
           </div>

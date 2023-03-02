@@ -3,7 +3,7 @@ import React from "react";
 
 const ChatSkeleton = () => {
   return (
-    <div className="flex items-center justify-between px-4 rounded-xl bg-whiteSoft">
+    <div className="flex items-center justify-between px-4 mb-1 bg-transparent rounded-xl dark-skeleton">
       <div className="flex items-start py-3 gap-x-5">
         <Skeleton variant="circular" width={50} height={50} />
         <div className="flex flex-col">

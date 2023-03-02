@@ -11,7 +11,7 @@ import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutline
 import CommentsDisabledIcon from "@mui/icons-material/CommentsDisabled";
 import PostTheme from "./parts/PostTheme";
 import CommentFeature from "modules/comments/CommentFeature";
-import axios from "api/axios";
+import axios from "api/config";
 import Cookies from "js-cookie";
 import renderTime from "utils/renderTime";
 import MenuNav from "components/menu/MenuNav";
@@ -97,7 +97,7 @@ const PostItem = ({ postInfo }) => {
   };
   return (
     <>
-      <div className="flex flex-col px-4 rounded-xl bg-whiteSoft">
+      <div className="flex flex-col px-4 rounded-xl bg-whiteSoft dark:bg-darkSoft">
         <div className="flex items-start justify-between mt-5 mb-3">
           <PostMeta timer={renderTime(createdAt)} author={authorID}></PostMeta>
           <div className="flex items-center gap-x-1">

@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userFriend } from "redux/users/userRequest";
 import { filterUser } from "redux/users/userSlice";
+import FilterOption from "components/filter/FilterOption";
 
 const SideFriend = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -39,7 +40,7 @@ const SideFriend = () => {
   };
   return (
     <>
-      <div className="px-4 py-3 mt-5 border border-graySoft rounded-xl">
+      <FilterOption>
         <TextHeading>Gender</TextHeading>
         <div className="flex flex-col my-3 gap-y-1">
           <FilterRadio
@@ -67,8 +68,8 @@ const SideFriend = () => {
             label="Female"
           />
         </div>
-      </div>
-      <div className="px-4 py-3 mt-5 border border-graySoft rounded-xl">
+      </FilterOption>
+      <FilterOption>
         <TextHeading>Other options</TextHeading>
         <div className="flex flex-col my-3 gap-y-1">
           <FilterRadio
@@ -116,7 +117,7 @@ const SideFriend = () => {
             label="Unfriended"
           />
         </div>
-      </div>
+      </FilterOption>
     </>
   );
 };

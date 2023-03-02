@@ -26,7 +26,7 @@ const ChatItem = ({
   return (
     <div
       onClick={() => navigate("/chats/t/" + id)}
-      className="flex items-center justify-between px-4 transition-all cursor-pointer rounded-xl hover:bg-whiteSoft "
+      className="flex items-center justify-between px-4 transition-all rounded-md cursor-pointer hover:dark:bg-darkSoft hover:bg-whiteSoft"
     >
       <div className="flex items-start py-3 gap-x-4">
         <ChatAvatar
@@ -38,7 +38,7 @@ const ChatItem = ({
         <div className="flex flex-col">
           <div className="flex items-center gap-x-2">
             <TextUsername>{username}</TextUsername>
-            <TextLight className="text-text4 text-[13px]">
+            <TextLight className="text-text4 dark:text-text3 text-[13px]">
               {formatTime(renderTime(createdAt))}
             </TextLight>
           </div>

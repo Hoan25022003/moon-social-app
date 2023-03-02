@@ -25,7 +25,7 @@ const PostAddNew = ({ handleHideModal, type }) => {
   const { currentUser } = useSelector((state) => state.auth.login);
   return (
     <Overlay handleHideModal={handleHideModal}>
-      <div className="w-[550px] mx-auto bg-white z-50 rounded-xl show-modal">
+      <div className="w-[550px] mx-auto bg-white dark:bg-darkSoft z-50 rounded-xl show-modal">
         <ModalHeading handleHideModal={handleHideModal}>
           Create new post
         </ModalHeading>

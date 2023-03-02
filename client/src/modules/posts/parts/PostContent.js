@@ -8,15 +8,15 @@ const PostContent = ({ children }) => {
   return (
     <div className="text-[15px] mb-3">
       <div
-        className={`font-normal leading-5 text-text1 ${
-          !viewAll && "line-clamp-3"
+        className={`font-normal leading-5 text-text1 dark:text-white ${
+          !viewAll && "line-clamp-4"
         }`}
       >
         {parse(children)}
       </div>
       {children.length > 200 && (
         <span
-          className="text-sm cursor-pointer text-text3"
+          className="text-sm cursor-pointer text-text4 dark:text-text3"
           onClick={setViewAll}
         >
           {viewAll ? "Hidden" : "Read more"}

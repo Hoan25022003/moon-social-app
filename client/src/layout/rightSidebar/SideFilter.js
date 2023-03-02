@@ -17,6 +17,10 @@ const SideFilter = () => {
     setSearchParams(searchParams);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedValue]);
+  useEffect(() => {
+    setSelectedValue("all");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getParamName("q")]);
   function handleFilterByParams(
     [value, setValue],
     param = "list",

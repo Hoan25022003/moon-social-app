@@ -26,8 +26,8 @@ const ProfileFeature = ({ yourSelf, status = 3, isSender = true, chatID }) => {
       <div className="flex items-center justify-end py-3 gap-x-3">
         <Tooltip title="Copy link to profile">
           <IconButton
-            className="hover:bg-graySoft"
-            style={{ border: "1px solid #ddd" }}
+            className="hover:bg-graySoft hover:dark:bg-gray-600"
+            style={{ border: "1px solid #ccc" }}
             aria-label="copy link"
             onClick={() => {
               navigator.clipboard.writeText(window.location.href);
@@ -40,7 +40,7 @@ const ProfileFeature = ({ yourSelf, status = 3, isSender = true, chatID }) => {
         {yourSelf ? (
           <Button
             variant="outlined"
-            className={`${classGeneral} rounded-full capitalize hover:bg-graySoft text-text1 border-strock`}
+            className={`${classGeneral} rounded-full capitalize hover:bg-graySoft hover:dark:bg-gray-600 text-text1 dark:text-white border-strock dark:border-gray-700`}
             onClick={setShowEdit}
           >
             Edit profile
@@ -53,8 +53,8 @@ const ProfileFeature = ({ yourSelf, status = 3, isSender = true, chatID }) => {
                 onClick={() => navigate("/chats/t/" + chatID?._id)}
               >
                 <IconButton
-                  className="hover:bg-graySoft"
-                  style={{ border: "1px solid #ddd" }}
+                  className="hover:bg-graySoft hover:dark:bg-gray-600"
+                  style={{ border: "1px solid rgb(107, 114, 128)" }}
                   aria-label="send message"
                 >
                   <SendIcon className="text-lg text-iconColor" />

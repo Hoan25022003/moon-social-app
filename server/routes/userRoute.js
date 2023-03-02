@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const path = require("path");
 const upload = require("../utils/uploadStorage");
 const {
   getUserList,

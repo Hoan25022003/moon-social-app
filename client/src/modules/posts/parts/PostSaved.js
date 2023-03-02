@@ -6,7 +6,7 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import PropTypes from "prop-types";
 import Checkbox from "@mui/material/Checkbox";
 import Snackbar from "@mui/material/Snackbar";
-import axios from "api/axios";
+import axios from "api/config";
 import Cookies from "js-cookie";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
@@ -38,6 +38,7 @@ const PostSaved = ({ isSaved = false, postID = "" }) => {
         icon={<BookmarkBorderIcon className="text-iconColor" />}
         checkedIcon={<BookmarkIcon className="text-primary" />}
         checked={saved}
+        className="dark:hover:bg-slate-700"
         onChange={handleSaved}
       />
       <Snackbar

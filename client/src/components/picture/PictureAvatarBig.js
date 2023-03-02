@@ -12,7 +12,7 @@ const PictureAvatarBig = ({
 }) => {
   return (
     <div
-      className={`absolute bottom-0 p-1 bg-white rounded-full cursor-pointer left-5 translate-y-2/4 ${className}`}
+      className={`bg-white dark:bg-darkLite rounded-full cursor-pointer ${className}`}
       onClick={onClick}
     >
       <div className="relative">

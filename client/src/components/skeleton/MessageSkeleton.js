@@ -4,7 +4,7 @@ import React from "react";
 const MessageSkeleton = ({ yourself = false }) => {
   return (
     <div
-      className={`flex ${
+      className={`flex dark-skeleton ${
         yourself && "flex-row-reverse"
       } items-start gap-x-2 group`}
     >

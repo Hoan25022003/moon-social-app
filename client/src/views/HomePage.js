@@ -6,10 +6,8 @@ import PostFeature from "modules/posts/PostFeature";
 import PostItem from "modules/posts/PostItem";
 import PostSkeleton from "components/skeleton/PostSkeleton";
 import PostList from "modules/posts/PostList";
-import { useLoadingContext } from "react-router-loading";
 
 const HomePage = () => {
-  const loadingContext = useLoadingContext();
   const { currentUser } = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -21,13 +19,10 @@ const HomePage = () => {
     (state) => state.posts.getPost
   );
   const { hasMore, countItem, fetchMoreData } = useFetchMore(listPost?.length);
-  if (!getPostLoading) {
-    loadingContext.done();
-  }
   return (
     <div className="px-4 py-3">
       <PostFeature
-        username={currentUser?.firstName}
+        username={currentUser?.lastName}
         avatar={currentUser?.avatar}
         linkInfo={"/profile/" + currentUser?._id}
       ></PostFeature>

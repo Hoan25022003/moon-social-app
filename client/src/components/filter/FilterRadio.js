@@ -6,7 +6,7 @@ import TextUsername from "components/text/TextUsername";
 const FilterRadio = ({
   selectedValue,
   handleChange,
-  className,
+  className = "",
   value = "",
   label = "",
 }) => {
@@ -21,7 +21,7 @@ const FilterRadio = ({
         onChange={handleChange}
         value={value}
         name="filter-radio"
-        className="p-[6px] text-text4"
+        className="p-[6px]"
       />
     </label>
   );

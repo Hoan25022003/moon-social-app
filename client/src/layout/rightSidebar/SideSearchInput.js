@@ -2,7 +2,7 @@ import React from "react";
 import Search from "components/search/Search";
 import Cookies from "js-cookie";
 import useChangeValue from "hooks/useChangeValue";
-import axios from "api/axios";
+import axios from "api/config";
 import { getSearchHistory } from "redux/users/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";

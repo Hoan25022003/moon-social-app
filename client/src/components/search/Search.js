@@ -26,7 +26,7 @@ const Search = ({
       <div className="relative z-50">
         <label
           className={`flex items-center w-full pl-4 overflow-hidden rounded-full ${
-            focus ? "border border-primary" : "bg-whiteSoft2"
+            focus ? "border border-primary" : "bg-whiteSoft2 dark:bg-darkSoft2"
           }`}
         >
           {icon === "search" ? (
@@ -46,7 +46,7 @@ const Search = ({
             type="text"
             onChange={onChange}
             placeholder={placeholder}
-            className={`flex-1 px-3  bg-transparent  text-sm ${className}`}
+            className={`flex-1 px-3  bg-transparent text-sm ${className}`}
             onFocus={() => setFocus(!focus)}
             {...props}
           />

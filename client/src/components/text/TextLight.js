@@ -2,7 +2,10 @@ import React from "react";
 
 const TextLight = ({ children, className = "" }) => {
   return (
-    <span className={`text-sm font-normal text-text3 ${className}`}>
+    <span
+      className={`font-normal text-text3 dark:text-iconColor ${className}`}
+      style={{ fontSize: "14px" }}
+    >
       {children}
     </span>
   );

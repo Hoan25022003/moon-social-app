@@ -26,7 +26,7 @@ const handleRegister = asyncHandler(async (req, res) => {
       res.json({ mess: "Successful" });
     }
   } catch (error) {
-    res.status(500);
+    res.sendStatus(500);
     throw new Error(error);
   }
 });

@@ -9,7 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import ErrorMessage from "components/form/ErrorMessage";
 import ButtonGradient from "components/button/ButtonGradient";
-import axios from "api/axios";
+import axios from "api/config";
 import Cookies from "js-cookie";
 
 const schema = yup.object({
@@ -84,7 +84,9 @@ const SidePassword = () => {
           error={errors?.currentPassword}
         ></Input>
         {errors?.currentPassword && (
-          <ErrorMessage>{errors.currentPassword?.message}</ErrorMessage>
+          <ErrorMessage className="-bottom-[2px]">
+            {errors.currentPassword?.message}
+          </ErrorMessage>
         )}
       </FormGroup>
       <FormGroup>
@@ -99,7 +101,9 @@ const SidePassword = () => {
           control={control}
         ></Input>
         {errors?.newPassword && (
-          <ErrorMessage>{errors.newPassword?.message}</ErrorMessage>
+          <ErrorMessage className="-bottom-[2px]">
+            {errors.newPassword?.message}
+          </ErrorMessage>
         )}
       </FormGroup>
       <FormGroup>
@@ -114,7 +118,9 @@ const SidePassword = () => {
           control={control}
         ></Input>
         {errors?.confirmPassword && (
-          <ErrorMessage>{errors.confirmPassword?.message}</ErrorMessage>
+          <ErrorMessage className="-bottom-[2px]">
+            {errors.confirmPassword?.message}
+          </ErrorMessage>
         )}
       </FormGroup>
       <div className="mb-2 text-center">

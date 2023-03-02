@@ -7,7 +7,7 @@ const postSlice = createSlice({
     getPost: {
       listPost: [],
       loading: true,
-      error: false,
+      error: null,
     },
     createPost: {
       success: false,
@@ -51,11 +51,11 @@ const postSlice = createSlice({
       })
       .addCase(getPostList.pending, (state) => {
         state.getPost.loading = true;
-        state.getPost.error = false;
+        state.getPost.error = null;
       })
-      .addCase(getPostList.rejected, (state) => {
+      .addCase(getPostList.rejected, (state, payload) => {
         state.getPost.loading = false;
-        state.getPost.error = true;
+        state.getPost.error = payload;
       });
   },
 });

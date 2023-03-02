@@ -3,19 +3,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { messageHistory } from "redux/chats/chatRequest";
 import { addMessage, removeMessage } from "redux/chats/chatSlice";
 import { useParams } from "react-router-dom";
-import { socket } from "api/axios";
+import { socket } from "api/config";
 import BackPage from "components/common/BackPage";
 import MessageForm from "modules/messages/MessageForm";
 import MessageProfile from "modules/messages/MessageProfile";
 import MessageItem from "modules/messages/MessageItem";
 import MessageSkeleton from "components/skeleton/MessageSkeleton";
 import LoadingType from "components/loading/LoadingType";
+import MessageReply from "modules/messages/MessageReply";
 
 const MessagePage = () => {
   const { currentUser } = useSelector((state) => state.auth.login);
   const { id } = useParams();
   const dispatch = useDispatch();
   const [typing, setTyping] = useState(false);
+  const [reply, setReply] = useState(null);
 
   useEffect(() => {
     socket.connect();
@@ -25,12 +27,10 @@ const MessagePage = () => {
 
     socket.on("receive-message", (data) => {
       dispatch(addMessage(data));
-      socket.emit("send-info", participant?._id);
     });
 
     socket.on("receive-again", (data) => {
       dispatch(removeMessage(data));
-      socket.emit("send-info", participant?._id);
     });
 
     socket.on("receive-typing", () => {
@@ -42,7 +42,7 @@ const MessagePage = () => {
       socket.off();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, []);
 
   const { listMessage, loading, participant } = useSelector(
     (state) => state.chats.messageInfo
@@ -65,6 +65,7 @@ const MessagePage = () => {
   const checkActive = !!listUserActive?.filter(
     (user) => user._id === participant?._id
   )[0];
+
   return (
     <>
       <BackPage turnSwitchTab="/chats">
@@ -86,7 +87,7 @@ const MessagePage = () => {
         ></MessageProfile>
         <div className="flex flex-col w-full px-5 mt-4 mb-3 gap-y-3 min-h-[333px]">
           {!loading ? (
-            listMessage.length > 0 &&
+            listMessage?.length > 0 &&
             listMessage.map((mess) => (
               <MessageItem
                 key={mess._id}
@@ -95,6 +96,14 @@ const MessagePage = () => {
                 senderInfo={mess.sender}
                 userID={{ yourID: currentUser?._id, userInfo: participant }}
                 fullName={mess.sender.firstName + " " + mess.sender.lastName}
+                replyInfo={mess.reply}
+                handleReplyMessage={() =>
+                  setReply({
+                    id: mess._id,
+                    content: mess.content,
+                    userID: mess.sender._id,
+                  })
+                }
               >
                 {mess.content}
               </MessageItem>
@@ -117,10 +126,22 @@ const MessagePage = () => {
             </MessageItem>
           )}
         </div>
-        <MessageForm
-          yourID={currentUser?._id}
-          userInfo={participant}
-        ></MessageForm>
+        <div className="sticky bottom-0 left-0 z-50 w-full px-5 py-4 bg-white shadow-sm dark:bg-gray-800 bg-opacity-95">
+          {reply && (
+            <MessageReply
+              reply={reply}
+              yourself={reply.userID === currentUser?._id}
+              participant={participant}
+              onCloseReply={() => setReply(null)}
+            ></MessageReply>
+          )}
+          <MessageForm
+            onCloseReply={() => setReply(null)}
+            yourID={currentUser?._id}
+            reply={reply}
+            userID={participant?._id}
+          ></MessageForm>
+        </div>
       </div>
     </>
   );

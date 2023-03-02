@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { Avatar, Button } from "@mui/material";
+import { Avatar } from "@mui/material";
 import TextLight from "components/text/TextLight";
 import FriendStatus from "./FriendStatus";
 import TextUsername from "components/text/TextUsername";
@@ -16,7 +16,7 @@ const FriendItem = ({
   fullName,
 }) => {
   return (
-    <div className="flex flex-col items-center justify-between p-4 h-[280px] border rounded-xl border-strock">
+    <div className="flex flex-col items-center justify-between p-4 h-[280px] border rounded-xl border-strock dark:border-darkStroke">
       <Link to={linkInfo} className="flex flex-col items-center">
         <Avatar alt={fullName} src={src} sx={{ width: 80, height: 80 }} />
         <TextUsername type="bold" className="mt-2 text-lg">

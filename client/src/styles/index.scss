@@ -2,17 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "mui";
-@import "active";
 @import "loading";
+@import "active";
+@import "mui";
 
 @layer base {
   body {
-    @apply font-body text-text1 bg-lite;
+    @apply font-body text-text1 bg-lite dark:bg-darkLite dark:text-white;
   }
   input,
   textarea {
-    @apply outline-none resize-none placeholder:font-normal placeholder:text-text4 placeholder:dark:text-text2;
+    @apply outline-none resize-none placeholder:font-normal placeholder:dark:text-text3 placeholder:text-text4;
+  }
+  video {
+    max-height: 450px;
   }
 }
 
@@ -40,8 +43,8 @@
     }
   }
 
-  .scroll-hidden {
-    overflow-y: hidden;
+  body.hide-scroll {
+    overflow: hidden;
   }
 
   .show-modal {
@@ -92,9 +95,9 @@
   }
   .swiper-button-next,
   .swiper-button-prev {
-    @apply bg-white bg-opacity-30 h-[84px] w-10 text-text2 -translate-y-1/2 transition-all;
+    @apply bg-white bg-opacity-30 h-[84px] w-10 text-text2 dark:text-text3 -translate-y-1/2 transition-all;
     &:hover {
-      @apply bg-opacity-50;
+      @apply bg-opacity-50 dark:text-text1;
     }
   }
 }

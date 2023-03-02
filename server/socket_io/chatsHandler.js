@@ -29,6 +29,12 @@ module.exports = function chatsHandler(socket, io) {
       const removeMessage = await MessageModel.findByIdAndDelete(messageID);
       if (removeMessage) {
         const listMessage = await MessageModel.find({ chatID });
+        await MessageModel.updateMany(
+          { "reply.id": messageID },
+          {
+            reply: null,
+          }
+        );
         await ChatModel.findByIdAndUpdate(chatID, {
           latestMessage: listMessage[listMessage.length - 1]._id,
         });
@@ -39,25 +45,27 @@ module.exports = function chatsHandler(socket, io) {
     }
   });
 
-  socket.on("send-info", async (userID) => {
+  socket.on("rerender-chat", async (userID) => {
     try {
-      const listChat = await ChatModel.find({
-        participant: userID,
-        show: true,
-      })
-        .sort({ updatedAt: -1 })
-        .populate("participant", [
-          "_id",
-          "email",
-          "firstName",
-          "lastName",
-          "avatar",
-          "isActive",
-        ])
-        .populate("latestMessage");
-      if (listChat.length > 0)
-        io.sockets.emit("receive-info", { listChat, userID });
-      else socket.emit("error", "Catch error");
+      setTimeout(async () => {
+        const listChat = await ChatModel.find({
+          participant: userID,
+          show: true,
+        })
+          .sort({ updatedAt: -1 })
+          .populate("participant", [
+            "_id",
+            "email",
+            "firstName",
+            "lastName",
+            "avatar",
+            "isActive",
+          ])
+          .populate("latestMessage");
+        if (listChat.length > 0)
+          io.sockets.emit("receive-info", { listChat, userID });
+        else socket.emit("error", "Catch error");
+      }, 3000);
     } catch (error) {
       socket.emit("error", error);
     }
