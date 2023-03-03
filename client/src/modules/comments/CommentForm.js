@@ -64,7 +64,7 @@ const CommentForm = ({ postID = "", emitTyping, emitStopTyping }) => {
           {loading ? (
             <CircularProgress
               style={{ width: "25px", height: "25px" }}
-              className="text-whiteSoft2 opacity-80"
+              className="text-text1 dark:text-whiteSoft2 opacity-80"
             />
           ) : (
             "Reply"

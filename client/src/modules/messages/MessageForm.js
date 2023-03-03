@@ -34,10 +34,10 @@ const MessageForm = ({
       sender: yourID,
       reply,
     });
-    const audio = new Audio("/audio/message-124468.mp3");
-    audio.play();
     socket.emit("rerender-chat", userID);
     socket.emit("send-notify-message", userID);
+    const audio = new Audio("/audio/message-124468.mp3");
+    audio.play();
     reset({
       content: "",
     });

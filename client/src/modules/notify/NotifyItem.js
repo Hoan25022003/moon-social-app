@@ -28,6 +28,7 @@ const NotifyItem = ({ postID = "", userInfo = {}, notifyInfo = {} }) => {
   const handleRemoveNotify = () => {
     dispatch(notifyRemove({ dispatch, _id, setTextAlert, setOpen }));
   };
+  if (!postID) return;
   return (
     <>
       <div className="relative transition-all rounded-lg cursor-pointer group hover:bg-graySoft hover:dark:bg-darkSoft">

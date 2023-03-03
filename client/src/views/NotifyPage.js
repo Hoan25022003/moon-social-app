@@ -31,7 +31,7 @@ const NotifyPage = () => {
               <NotifyItem
                 key={notify?._id}
                 notifyInfo={notify}
-                postID={notify.postID._id}
+                postID={notify.postID?._id}
                 userInfo={notify.from}
               ></NotifyItem>
             ))}

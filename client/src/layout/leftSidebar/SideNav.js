@@ -53,6 +53,7 @@ const SideNav = () => {
 
   useEffect(() => {
     socket.connect();
+
     socket.on("receive-notify", (to) => {
       const decodedToken = jwtDecode(Cookies.get("tokens"));
       if (to.includes(decodedToken._id)) {

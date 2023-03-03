@@ -14,7 +14,8 @@ async function getAllFriendById(authorID) {
 
 module.exports = function notifyHandler(socket, io) {
   socket.on("send-notify-message", (userID) => {
-    io.sockets.emit("receive-notify-message", userID);
+    console.log("userID: ", userID);
+    socket.broadcast.emit("receive-notify-message", userID);
   });
 
   socket.on("send-notify-post", async (data) => {

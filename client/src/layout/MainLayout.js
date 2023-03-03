@@ -43,22 +43,26 @@ const MainLayout = () => {
       }
     });
 
-    window.addEventListener("beforeunload", function () {
-      socket.emit("client-disconnect", currentUser);
-    });
-
     socket.on("user-active", (data) => {
       dispatch(addUserActive(data));
     });
 
     return () => {
       socket.disconnect();
+      socket.off();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [location.pathname]);
 
   useEffect(() => {
-    currentUser && socket.emit("client-connect", currentUser);
+    if (currentUser) {
+      setInterval(() => {
+        socket.emit("client-connect", currentUser);
+      }, 5000);
+      window.addEventListener("beforeunload", () => {
+        socket.emit("client-disconnect", currentUser);
+      });
+    }
   }, [currentUser]);
 
   return (

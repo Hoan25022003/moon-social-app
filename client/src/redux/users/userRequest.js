@@ -44,7 +44,7 @@ export const userFriend = createAsyncThunk(
           },
         }
       );
-      let { listUser, listFriend } = res.data;
+      let { listUser, listFriend } = res?.data;
       listUser = listUser.map((user) => verifyFriend(listFriend, user));
       if (status) listUser = listUser.filter((user) => user.status === status);
       return fulfillWithValue([

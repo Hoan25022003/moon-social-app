@@ -11,7 +11,7 @@ const PostImage = ({ src = "", listImg = [] }) => {
         <img
           src={src}
           onClick={() => handleShowBackdrop(listImg)}
-          className="object-cover w-full max-h-[450px] cursor-pointer group-hover:opacity-80 transition-all"
+          className="object-cover w-full max-h-[500px] cursor-pointer group-hover:opacity-80 transition-all"
           alt=""
         />
         {listImg.length > 1 && (

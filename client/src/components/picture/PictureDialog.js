@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -8,10 +8,6 @@ const PictureDialog = ({ position, openState, pictureState }) => {
   const [openBackdrop, setOpenBackdrop] = openState;
   const [pictures, setPictures] = pictureState;
   const listImg = pictures;
-  useEffect(() => {
-    if (openBackdrop) document.body.classList.add("hide-scroll");
-    else document.body.classList.remove("hide-scroll");
-  }, [openBackdrop]);
   const handleClickBackdrop = (e) => {
     const classNameElement = e.target.className;
     if (
@@ -47,7 +43,7 @@ const PictureDialog = ({ position, openState, pictureState }) => {
               <img
                 src={img}
                 alt=""
-                className="max-h-[650px] max-w-[80%] object-cover mx-auto picture-backdrop"
+                className="max-h-[90vh] min-h-[70vh] max-w-[80vw] object-cover mx-auto picture-backdrop"
               />
             </SwiperSlide>
           ))}
